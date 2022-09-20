@@ -2,11 +2,10 @@ _YELLOW="\e[38;5;226m"
 _RED="\e[38;5;9m"
 _GREEN="\e[38;5;10m" 
 
-NAME		= 
+NAME		= minishell 
 
-SRC			=
-
-OBJS		= $(SRCS:.c=.o)
+SRC			=	main.c\
+				prompt.c
 
 SRCDIR 		= ./src/
 
@@ -14,7 +13,9 @@ INCDIR 		= ./includes/
 
 SRCS 		= $(addprefix $(SRCDIR), $(SRC))
 
-CFLAGS 		= -Wall -Werror -Wextra -Ilibft -Llibft -lft -g -I $(INCDIR)
+OBJS		= $(SRCS:.c=.o)
+
+CFLAGS 		= -Wall -Werror -Wextra -g -Llibft -lft -I$(INCDIR) -Ilibft -L/usr/local/lib -I/usr/local/include -lreadline 
 
 CC			= gcc
 
@@ -25,7 +26,7 @@ all :		$(NAME)
 
 $(NAME):	$(OBJS)
 			@make -sC libft
-			@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+			@$(CC) $(OBJS) -o $(NAME) $(CFLAGS)
 			@echo $(_GREEN)
 			@echo "*************************"
 			@echo "*                       *"
