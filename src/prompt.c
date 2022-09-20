@@ -1,4 +1,4 @@
-#include "proto.h"
+#include "minishell.h"
 
 int	prompt_shell(void)
 {

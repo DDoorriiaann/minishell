@@ -5,7 +5,9 @@ _GREEN="\e[38;5;10m"
 NAME		= minishell 
 
 SRC			=	main.c\
-				prompt.c
+				prompt.c\
+				free.c\
+				paths.c\
 
 SRCDIR 		= ./src/
 

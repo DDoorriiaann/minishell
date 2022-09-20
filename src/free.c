@@ -1,4 +1,4 @@
-#include	"proto.h"
+# include "minishell.h"
 
 void	ft_free_arr(char **arr)
 {

@@ -1,15 +1,34 @@
-#include "proto.h"
+#include "minishell.h"
 
-char	*check_line_path(char **envp)
+char	**copy_envp(char **envp)
+{
+	char	**envp_l;
+	int		i;
+
+	i = 0;
+	while(envp[i])
+		i++;
+	envp_l = malloc(sizeof(char) * i + 1);
+	envp_l[i] = NULL;
+	i = 0;
+	while(envp[i])
+	{
+		envp_l[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	return (envp_l);
+}
+
+char	*check_line_path(char **envp_l)
 {
 	int		i;
 
 	i = 0;
-	while (envp[i])
+	while (envp_l[i])
 	{
-		if ((ft_strncmp(envp[i], "PATH=", 5)) == 0)
+		if ((ft_strncmp(envp_l[i], "PATH=", 5)) == 0)
 		{
-			return (envp[i] + 5);
+			return (envp_l[i] + 5);
 		}
 		i++;
 	}
