@@ -14,6 +14,7 @@ int	prompt_shell(void)
 	}*/
 	while ((buffer = readline("Mickeytotal$>")) != NULL)
 	{
+		add_history(buffer);
 		printf("cmd = %s\n", buffer);
 		write(1, "$> ", 3);
 		free(buffer);
