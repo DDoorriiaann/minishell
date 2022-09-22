@@ -8,6 +8,7 @@ SRC			=	main.c\
 				prompt.c\
 				free.c\
 				paths.c\
+				error.c\
 
 SRCDIR 		= ./src/
 
