@@ -3,6 +3,7 @@
 int	prompt_shell(void)
 {
 	char	*buffer;
+	int		argc;
 //	size_t	buf_size;
 
 //	buf_size = 2048;
@@ -14,8 +15,10 @@ int	prompt_shell(void)
 	}*/
 	while ((buffer = readline("Mickeytotal$>")) != NULL)
 	{
+		argc = parser(buffer);
 		add_history(buffer);
 		printf("cmd = %s\n", buffer);
+		printf("argc = %d\n", argc);
 		write(1, "$> ", 3);
 		free(buffer);
 	}

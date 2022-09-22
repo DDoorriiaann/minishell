@@ -9,12 +9,17 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# define ERROR -1
 
+////////FUNCTIONS
+//PROMPT
 int		prompt_shell(void);
 void	ft_free_all_arr(char **paths, char **cmd);
 char	*check_line_path(char **envp);
 char	**get_path(char *envp_path);
 void	ft_free_arr(char **arr);
 char	**get_cmd(char *cmd, char **paths);
+//PARSER
+int		parser(char *input);
 
 #endif
