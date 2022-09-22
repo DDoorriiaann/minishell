@@ -1,6 +1,30 @@
 #include "minishell.h"
 
-int	prompt_shell(void)
+void	exec_cmd(char *argv, char **envp_l)
+{
+	int		pid = 0;
+	int		status = 0;
+	char	**paths;
+	char	**cmd;
+
+	paths = get_path(check_line_path(envp_l));
+	cmd = get_cmd(argv, paths);
+	if (!cmd)
+		ft_free_arr(paths);
+	pid = fork();
+	if (pid == -1)
+		perror("fork error");
+	else if (pid > 0)
+		waitpid(pid, &status, 0);
+	else 
+	{
+		if (execve(cmd[0], cmd, NULL) == -1)
+			perror("exec error");
+		exit(1);
+	}
+}
+
+int	prompt_shell(char **envp)
 {
 	char	*buffer;
 //	size_t	buf_size;
@@ -17,6 +41,7 @@ int	prompt_shell(void)
 		add_history(buffer);
 		printf("cmd = %s\n", buffer);
 		write(1, "$> ", 3);
+		exec_cmd(buffer, envp);
 		free(buffer);
 	}
 	printf("\nHave a nice day with MickeyTotal \n");
