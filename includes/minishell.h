@@ -9,14 +9,37 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# define MULTIPLE_N 0
+# define NOT_MULTIPLE 1
 
-int		prompt_shell(char **envp_l);
-void	ft_free_all_arr(char **paths, char **cmd);
+/****
+PATHS
+****/
+
 char	*check_line_path(char **envp);
 char	**get_path(char *envp_path);
-void	ft_free_arr(char **arr);
 char	**get_cmd(char *cmd, char **paths);
-void	exec_cmd(char *argv, char **envp);
+
+/***
+FREE
+***/
+
+void	ft_free_all_arr(char **paths, char **cmd);
+void	ft_free_arr(char **arr);
+
+/****
+ERROR
+****/
+
 void	ft_error_cmd(char *str);
+
+void	exec_cmd(char *argv, char **envp);
+int		prompt_shell(char **envp_l);
+
+/******
+BUILTIN
+******/
+
+void	builtin_echo(char *buffer);
 
 #endif

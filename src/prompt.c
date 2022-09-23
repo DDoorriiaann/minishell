@@ -39,8 +39,9 @@ int	prompt_shell(char **envp)
 	while ((buffer = readline("Mickeytotal$>")) != NULL)
 	{
 		add_history(buffer);
-		printf("cmd = %s\n", buffer);
-		write(1, "$> ", 3);
+		if ((ft_strncmp(buffer, "echo", 4)) == 0)
+			builtin_echo(buffer);	
+		else
 		exec_cmd(buffer, envp);
 		free(buffer);
 	}

@@ -9,6 +9,7 @@ SRC			=	main.c\
 				free.c\
 				paths.c\
 				error.c\
+				builtin.c\
 
 SRCDIR 		= ./src/
 
