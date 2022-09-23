@@ -78,7 +78,7 @@ int	skip_spaces(char *input, int index)
 
 int	count_arguments(char *input)
 {
-	int end;
+	int	end;
 	int	argc;
 
 	argc = 0;
@@ -93,13 +93,13 @@ int	count_arguments(char *input)
 			argc++;
 			end = skip_spaces(input, end);
 		}
-		if (ft_is_quote(input[end]))
+		else if (ft_is_quote(input[end]))
 		{
-			if (find_closing_quote(input, end, input[end]) != ERROR)
+			if (find_closing_quote(input, end, input[end + 1]) != ERROR)
 			{
-				end = find_closing_quote(input, end, input[end]);
+				end = find_closing_quote(input, end, input[end + 1]);
 				argc++;
-			}	
+			}
 		}
 		end++;
 	}
