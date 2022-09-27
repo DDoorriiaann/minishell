@@ -19,6 +19,7 @@ PATHS
 char	*check_line_path(char **envp);
 char	**get_path(char *envp_path);
 char	**get_cmd(char *cmd, char **paths);
+char	**copy_envp(char **envp);
 
 /***
 FREE
@@ -33,6 +34,10 @@ ERROR
 
 void	ft_error_cmd(char *str);
 
+/***
+EXEC
+***/
+
 void	exec_cmd(char *argv, char **envp);
 int		prompt_shell(char **envp_l);
 
@@ -41,5 +46,7 @@ BUILTIN
 ******/
 
 void	builtin_echo(char *buffer);
+void	builtin_pwd(void);
+int		builtin_cd(char *buffer, char **envp_l);
 
 #endif

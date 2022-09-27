@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   paths.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ybaudoui <ybaudoui@student.42angoulem      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/27 14:27:23 by ybaudoui          #+#    #+#             */
+/*   Updated: 2022/09/27 15:32:17 by ybaudoui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**copy_envp(char **envp)
@@ -8,7 +20,7 @@ char	**copy_envp(char **envp)
 	i = 0;
 	while(envp[i])
 		i++;
-	envp_l = malloc(sizeof(char) * i + 1);
+	envp_l = malloc(sizeof(char*) * (i + 1));
 	envp_l[i] = NULL;
 	i = 0;
 	while(envp[i])
