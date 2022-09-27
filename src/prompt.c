@@ -24,9 +24,10 @@ void	exec_cmd(char *argv, char **envp_l)
 	}
 }
 
-int	prompt_shell(char **envp)
+int	prompt_shell(char **envp_l)
 {
 	char	*buffer;
+	int		i;
 //	size_t	buf_size;
 
 //	buf_size = 2048;
@@ -38,11 +39,23 @@ int	prompt_shell(char **envp)
 	}*/
 	while ((buffer = readline("Mickeytotal$>")) != NULL)
 	{
+		i = 0;
 		add_history(buffer);
 		if ((ft_strncmp(buffer, "echo", 4)) == 0)
-			builtin_echo(buffer);	
+			builtin_echo(buffer);
+		else if ((ft_strncmp(buffer, "pwd", 3)) == 0)
+			builtin_pwd();
+		else if ((ft_strncmp(buffer, "cd", 2)) == 0)
+//		{
+			builtin_cd(buffer, envp_l);
+//			while (envp_l[i] != NULL)
+//			{
+//				printf("%s\n", envp_l[i]);
+//				i++;
+//			}
+//		}
 		else
-		exec_cmd(buffer, envp);
+			exec_cmd(buffer, envp_l);
 		free(buffer);
 	}
 	printf("\nHave a nice day with MickeyTotal \n");
