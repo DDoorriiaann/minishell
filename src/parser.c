@@ -76,6 +76,13 @@ int	skip_spaces(char *input, int index)
 	return (index);
 }
 
+int	find_word_end(char *input, int index)
+{
+	while (input[index] && !ft_isspace(input[index]) && !ft_is_quote(input[index]))
+		index++;
+	return (index);
+}
+
 int	count_arguments(char *input)
 {
 	int	end;
@@ -84,20 +91,23 @@ int	count_arguments(char *input)
 	argc = 0;
 	end = 0;
 	end = skip_spaces(input, end);
-	if (input[end])
-		argc++;
 	while (input[end])
 	{
+		if (input[end] && !ft_isspace(input[end]) && !ft_is_quote(input[end]))
+		{
+			argc++;
+			end = find_word_end(input, end);
+		}
 		if (ft_isspace(input[end]))
 		{	
-			argc++;
 			end = skip_spaces(input, end);
+			continue ;
 		}
 		else if (ft_is_quote(input[end]))
 		{
-			if (find_closing_quote(input, end, input[end + 1]) != ERROR)
+			if (find_closing_quote(input, end + 1, input[end]) != ERROR)
 			{
-				end = find_closing_quote(input, end, input[end + 1]);
+				end = find_closing_quote(input, end + 1, input[end]);
 				argc++;
 			}
 		}
