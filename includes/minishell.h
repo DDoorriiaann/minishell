@@ -26,7 +26,7 @@ char	*check_line_path(char **envp);
 char	**get_path(char *envp_path);
 char	**get_cmd(char *cmd, char **paths);
 //PARSER
-int		parser(char *input);
+char	**parser(char *input);
 
 /***
 FREE
@@ -48,5 +48,14 @@ BUILTIN
 ******/
 
 void	builtin_echo(char *buffer);
+
+/******
+UTILS
+******/
+
+int		ft_isspace(char c);
+int		ft_is_quote(char c);
+int		skip_spaces(char *input, int index);
+int		find_word_end(char *input, int index);
 
 #endif

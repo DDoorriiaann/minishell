@@ -55,35 +55,7 @@ int	find_closing_quote(char *input, int end, char quote_type)
 	return (ERROR);
 }
 
-int	ft_isspace(char c)
-{
-	if ((c >= 9 && c <= 13) || c == 32)
-		return (1);
-	return (0);
-}
-
-int	ft_is_quote(char c)
-{
-	if (c == '\'' || c == '\"')
-		return (1);
-	return (0);
-}
-
-int	skip_spaces(char *input, int index)
-{
-	while (ft_isspace(input[index]))
-		index++;
-	return (index);
-}
-
-int	find_word_end(char *input, int index)
-{
-	while (input[index] && !ft_isspace(input[index]) && !ft_is_quote(input[index]))
-		index++;
-	return (index);
-}
-
-int go_to_word_end(char *input, int index, int *argc)
+int	go_to_word_end(char *input, int index, int *argc)
 {
 	if (input[index] && !ft_isspace(input[index]) && !ft_is_quote(input[index]))
 	{
@@ -93,44 +65,100 @@ int go_to_word_end(char *input, int index, int *argc)
 	return (index);
 }
 
-int	count_arguments(char *input)
+int	go_to_quote_end(char *input, int index, int *argc)
+{
+	if (find_closing_quote(input, index + 1, input[index]) != ERROR)
+	{
+		index = find_closing_quote(input, index + 1, input[index]);
+		*argc = *argc + 1;
+	}
+	else if (ft_isspace(input[index + 1]) || !input[index + 1])
+		*argc = *argc + 1;
+	return (index);
+}
+
+int	count_arguments(char *input, int argc)
 {
 	int	end;
-	int	argc;
 
-	argc = 0;
 	end = 0;
 	end = skip_spaces(input, end);
 	while (input[end])
 	{
 		end = go_to_word_end(input, end, &argc);
 		if (ft_isspace(input[end]))
-		{	
+		{
 			end = skip_spaces(input, end);
 			continue ;
 		}
 		else if (ft_is_quote(input[end]))
-		{
-			if (find_closing_quote(input, end + 1, input[end]) != ERROR)
-			{
-				end = find_closing_quote(input, end + 1, input[end]);
-				argc++;
-			}
-			else if (ft_isspace(input[end + 1]) || !input[end + 1])
-				argc++;
-		}
+			end = go_to_quote_end(input, end, &argc);
 		end++;
 	}
 	return (argc);
 }
 
-int	parser(char *input)
+char	**init_argv(int argc)
+{
+	char	**argv;
+
+	argv = malloc(sizeof(char *) * (argc + 1));
+	if (!argv)
+		return (NULL);
+	argv[argc] = NULL;
+	return (argv);
+}
+
+void	put_args_into_argv(char **argv, char *input)
+{
+	int	i;
+	int	start;
+	int	end;
+
+	i = 0;
+	start = 0;
+	start = skip_spaces(input, start);
+	while (input[start])
+	{
+		end = go_to_word_end(input, start, &i);
+		if (end != start)
+		{
+			argv[i - 1] = ft_substr(input, start, (end - start));
+			start = end;
+		}
+		if (ft_isspace(input[start]))
+		{
+			end = skip_spaces(input, start);
+			start = end;
+			continue ;
+		}
+		else if (ft_is_quote(input[start]))
+		{	
+			end = go_to_quote_end(input, start, &i);
+			argv[i - 1] = ft_substr(input, start, (end - start) + 1);
+			start = end;
+		}
+		start++;
+	}
+}
+
+char	**split_input(char *input, int argc)
+{	
+	char	**argv;
+
+	argv = init_argv(argc);
+	put_args_into_argv(argv, input);
+	return (argv);
+}
+
+char	**parser(char *input)
 {
 	int		argc;
-//	char	**args;
+	char 	**argv;
 
-	argc = count_arguments(input);
-	return (argc);
+	argc = count_arguments(input, 0);
+	argv = split_input(input, argc);
+	return (argv);
 	//args = malloc (sizeof(char *) * (args_count + 1));
 	//args = split_input(input, start);
 }

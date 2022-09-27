@@ -11,6 +11,7 @@ SRC			=	main.c\
 				parser.c\
 				error.c\
 				builtin.c\
+				utils1.c\
 
 SRCDIR 		= ./src/
 
