@@ -80,10 +80,12 @@ int	go_to_quote_end(char *input, int index, int *argc)
 int	count_arguments(char *input, int argc)
 {
 	int	end;
+	int	input_len;
 
 	end = 0;
 	end = skip_spaces(input, end);
-	while (input[end])
+	input_len = ft_strlen(input);
+	while (end < (int)input_len)
 	{
 		end = go_to_word_end(input, end, &argc);
 		if (ft_isspace(input[end]))
@@ -109,6 +111,8 @@ char	**init_argv(int argc)
 	return (argv);
 }
 
+void	split_word(char *input, char **argv,)
+
 void	put_args_into_argv(char **argv, char *input)
 {
 	int	i;
@@ -118,7 +122,7 @@ void	put_args_into_argv(char **argv, char *input)
 	i = 0;
 	start = 0;
 	start = skip_spaces(input, start);
-	while (input[start])
+	while (start < (int)ft_strlen(input))
 	{
 		end = go_to_word_end(input, start, &i);
 		if (end != start)

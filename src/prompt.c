@@ -40,24 +40,15 @@ int	prompt_shell(char **envp)
 		perror("Malloc failure");
 		return (1);
 	}*/
-	int i = 0;
 	argv = NULL;
 	while ((buffer = readline("Mickeytotal$>")) != NULL)
 	{
-		i = 0;
 		argc = 0;
 		argv = parser(buffer);
 		while (argv[argc])
 			printf("%s\n", argv[argc++]);
 		printf("argc = %d\n", argc);
-		while (argv[i])
-		{
-			free(argv[i]);
-			argv[i] = NULL;
-			i++;
-		}
-		free(argv);
-		argv = NULL;
+		free_2d_arr(argv);
 		/*add_history(buffer);
 		if ((ft_strncmp(buffer, "echo", 4)) == 0)
 			builtin_echo(buffer);

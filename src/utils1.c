@@ -1,5 +1,18 @@
 #include "minishell.h"
 
+void	free_2d_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
 int	ft_isspace(char c)
 {
 	if ((c >= 9 && c <= 13) || c == 32)

@@ -57,5 +57,6 @@ int		ft_isspace(char c);
 int		ft_is_quote(char c);
 int		skip_spaces(char *input, int index);
 int		find_word_end(char *input, int index);
+void	free_2d_arr(char **arr);
 
 #endif
