@@ -111,8 +111,6 @@ char	**init_argv(int argc)
 	return (argv);
 }
 
-void	split_word(char *input, char **argv,)
-
 void	put_args_into_argv(char **argv, char *input)
 {
 	int	i;
