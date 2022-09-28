@@ -33,6 +33,8 @@ ERROR
 ****/
 
 void	ft_error_cmd(char *str);
+void	ft_error(void);
+int		ft_error_return(void);
 
 /***
 EXEC
@@ -48,5 +50,6 @@ BUILTIN
 void	builtin_echo(char *buffer);
 void	builtin_pwd(void);
 int		builtin_cd(char *buffer, char **envp_l);
+void	builtin_export(char **envp_l);
 
 #endif
