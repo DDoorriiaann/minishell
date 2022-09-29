@@ -43,7 +43,7 @@ int	prompt_shell(char **envp_l)
 		argv = parser(buffer);
 		while (argv[argc])
 			argc++;
-		if ((ft_strncmp(buffer, "echo", 4)) == 0)
+		if ((ft_strncmp(argv[0], "echo", 4)) == 0)
 			builtin_echo(buffer);
 		else if ((ft_strncmp(buffer, "pwd", 3)) == 0)
 			builtin_pwd();
