@@ -17,5 +17,4 @@ void	ft_free_all_arr(char **paths, char **cmd)
 {
 	ft_free_arr(paths);
 	ft_free_arr(cmd);
-	exit (1);
 }

@@ -11,6 +11,7 @@ SRC			=	main.c\
 				parser.c\
 				error.c\
 				builtin.c\
+				builtin_2.c\
 				utils1.c\
 				utils2.c\
 

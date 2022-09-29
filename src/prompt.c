@@ -19,9 +19,13 @@ void	exec_cmd(char *argv, char **envp_l)
 	else 
 	{
 		if (execve(cmd[0], cmd, NULL) == -1)
+		{
+			ft_free_all_arr(paths, cmd);
 			perror("exec error");
+		}
 		exit(1);
 	}
+	ft_free_all_arr(paths, cmd);
 }
 
 int	prompt_shell(char **envp_l)
@@ -29,17 +33,7 @@ int	prompt_shell(char **envp_l)
 	char	*buffer;
 	int		argc;
 	char	**argv;
-	int		i;
 
-//	size_t	buf_size;
-
-//	buf_size = 2048;
-	/*buffer = (char *)malloc(sizeof(char) * buf_size);
-	if (!buffer)
-	{
-		perror("Malloc failure");
-		return (1);
-	}*/
 	argv = NULL;
 	while ((buffer = readline("Mickeytotal$>")) != NULL)
 	{
@@ -48,27 +42,27 @@ int	prompt_shell(char **envp_l)
 		argv = parser(buffer);
     while (argv[argc])
       argc++;
-		i = 0;
-		
 		if ((ft_strncmp(buffer, "echo", 4)) == 0)
 			builtin_echo(buffer);
 		else if ((ft_strncmp(buffer, "pwd", 3)) == 0)
 			builtin_pwd();
 		else if ((ft_strncmp(buffer, "cd", 2)) == 0)
-//		{
 			builtin_cd(buffer, envp_l);
-//			while (envp_l[i] != NULL)
-//			{
-//				printf("%s\n", envp_l[i]);
-//				i++;
-//			}
-//		}
-		else
+		else if ((ft_strncmp(buffer, "export", 6)) == 0)
+			builtin_export(envp_l);
+		else if ((ft_strncmp(buffer, "exit", 5)) == 0)
+		{
+			free(buffer);
+      free_2d_arr(argv);
+			break;
+		}
+		else if (buffer[0])
 			exec_cmd(buffer, envp_l);
     free_2d_arr(argv);
 		free(buffer);
 		buffer = NULL;
 	}
+	ft_free_arr(envp_l);
 	printf("\nHave a nice day with MickeyTotal \n");
 	return (0);
 }
