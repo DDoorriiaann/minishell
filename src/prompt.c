@@ -27,7 +27,10 @@ void	exec_cmd(char *argv, char **envp_l)
 int	prompt_shell(char **envp_l)
 {
 	char	*buffer;
+	int		argc;
+	char	**argv;
 	int		i;
+
 //	size_t	buf_size;
 
 //	buf_size = 2048;
@@ -37,10 +40,16 @@ int	prompt_shell(char **envp_l)
 		perror("Malloc failure");
 		return (1);
 	}*/
+	argv = NULL;
 	while ((buffer = readline("Mickeytotal$>")) != NULL)
 	{
+		argc = 0;
+    add_history(buffer);
+		argv = parser(buffer);
+    while (argv[argc])
+      argc++;
 		i = 0;
-		add_history(buffer);
+		
 		if ((ft_strncmp(buffer, "echo", 4)) == 0)
 			builtin_echo(buffer);
 		else if ((ft_strncmp(buffer, "pwd", 3)) == 0)
@@ -56,7 +65,9 @@ int	prompt_shell(char **envp_l)
 //		}
 		else
 			exec_cmd(buffer, envp_l);
+    free_2d_arr(argv);
 		free(buffer);
+		buffer = NULL;
 	}
 	printf("\nHave a nice day with MickeyTotal \n");
 	return (0);
