@@ -24,13 +24,13 @@ void	exec_cmd(char *argv, char **envp_l)
 	}
 }
 
-int	prompt_shell(char **envp)
+int	prompt_shell(char **envp_l)
 {
 	char	*buffer;
 	int		argc;
 	char	**argv;
+	int		i;
 
-	(void)envp;
 //	size_t	buf_size;
 
 //	buf_size = 2048;
@@ -44,16 +44,28 @@ int	prompt_shell(char **envp)
 	while ((buffer = readline("Mickeytotal$>")) != NULL)
 	{
 		argc = 0;
+    add_history(buffer);
 		argv = parser(buffer);
-		while (argv[argc])
-			printf("%s\n", argv[argc++]);
-		printf("argc = %d\n", argc);
-		free_2d_arr(argv);
-		add_history(buffer);
+    while (argv[argc])
+      argc++;
+		i = 0;
+		
 		if ((ft_strncmp(buffer, "echo", 4)) == 0)
 			builtin_echo(buffer);
+		else if ((ft_strncmp(buffer, "pwd", 3)) == 0)
+			builtin_pwd();
+		else if ((ft_strncmp(buffer, "cd", 2)) == 0)
+//		{
+			builtin_cd(buffer, envp_l);
+//			while (envp_l[i] != NULL)
+//			{
+//				printf("%s\n", envp_l[i]);
+//				i++;
+//			}
+//		}
 		else
-			exec_cmd(buffer, envp);
+			exec_cmd(buffer, envp_l);
+    free_2d_arr(argv);
 		free(buffer);
 		buffer = NULL;
 	}
