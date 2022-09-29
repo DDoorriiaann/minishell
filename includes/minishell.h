@@ -55,7 +55,7 @@ void	exec_cmd(char *argv, char **envp);
 BUILTIN
 ******/
 
-void	builtin_echo(char *buffer);
+void	builtin_echo(char **argv);
 void	builtin_pwd(void);
 int		builtin_cd(char *buffer, char **envp_l);
 void	builtin_export(char **envp_l);
