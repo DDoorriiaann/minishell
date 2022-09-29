@@ -82,7 +82,7 @@ char	**init_argv(int argc)
 void	put_args_into_argv(char **argv, char *input)
 {
 	int	i;
-	int	start;
+	int	start;	
 	int	end;
 
 	i = 0;
