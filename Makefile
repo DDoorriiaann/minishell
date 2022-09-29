@@ -8,9 +8,12 @@ SRC			=	main.c\
 				prompt.c\
 				free.c\
 				paths.c\
+				parser.c\
 				error.c\
 				builtin.c\
 				builtin_2.c\
+				utils1.c\
+				utils2.c\
 
 SRCDIR 		= ./src/
 
