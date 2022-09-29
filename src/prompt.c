@@ -49,11 +49,11 @@ int	prompt_shell(char **envp)
 			printf("%s\n", argv[argc++]);
 		printf("argc = %d\n", argc);
 		free_2d_arr(argv);
-		/*add_history(buffer);
+		add_history(buffer);
 		if ((ft_strncmp(buffer, "echo", 4)) == 0)
 			builtin_echo(buffer);
 		else
-			exec_cmd(buffer, envp);*/
+			exec_cmd(buffer, envp);
 		free(buffer);
 		buffer = NULL;
 	}

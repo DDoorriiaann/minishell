@@ -44,38 +44,6 @@ void	check_quotes_pairs(char *input, char quote_type)
 		echap_last_quote(input, quote_type, count);
 }
 */
-int	find_closing_quote(char *input, int end, char quote_type)
-{
-	while (input[end])
-	{
-		if (input[end] == quote_type)
-			return (end);
-		end++;
-	}
-	return (ERROR);
-}
-
-int	go_to_word_end(char *input, int index, int *argc)
-{
-	if (input[index] && !ft_isspace(input[index]) && !ft_is_quote(input[index]))
-	{
-		*argc = *argc + 1;
-		index = find_word_end(input, index);
-	}
-	return (index);
-}
-
-int	go_to_quote_end(char *input, int index, int *argc)
-{
-	if (find_closing_quote(input, index + 1, input[index]) != ERROR)
-	{
-		index = find_closing_quote(input, index + 1, input[index]);
-		*argc = *argc + 1;
-	}
-	else if (ft_isspace(input[index + 1]) || !input[index + 1])
-		*argc = *argc + 1;
-	return (index);
-}
 
 int	count_arguments(char *input, int argc)
 {
@@ -137,7 +105,7 @@ void	put_args_into_argv(char **argv, char *input)
 		else if (ft_is_quote(input[start]))
 		{	
 			end = go_to_quote_end(input, start, &i);
-			argv[i - 1] = ft_substr(input, start, (end - start) + 1);
+			argv[i - 1] = ft_substr(input, start + 1, (end - (start + 1)));
 			start = end;
 		}
 		start++;
@@ -156,11 +124,9 @@ char	**split_input(char *input, int argc)
 char	**parser(char *input)
 {
 	int		argc;
-	char 	**argv;
+	char	**argv;
 
 	argc = count_arguments(input, 0);
 	argv = split_input(input, argc);
 	return (argv);
-	//args = malloc (sizeof(char *) * (args_count + 1));
-	//args = split_input(input, start);
 }

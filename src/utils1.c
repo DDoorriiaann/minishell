@@ -33,11 +33,3 @@ int	skip_spaces(char *input, int index)
 		index++;
 	return (index);
 }
-
-int	find_word_end(char *input, int index)
-{
-	while (input[index]
-		&& !ft_isspace(input[index]) && !ft_is_quote(input[index]))
-		index++;
-	return (index);
-}

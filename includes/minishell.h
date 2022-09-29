@@ -58,5 +58,8 @@ int		ft_is_quote(char c);
 int		skip_spaces(char *input, int index);
 int		find_word_end(char *input, int index);
 void	free_2d_arr(char **arr);
+int		find_closing_quote(char *input, int end, char quote_type);
+int		go_to_word_end(char *input, int index, int *argc);
+int		go_to_quote_end(char *input, int index, int *argc);
 
 #endif
