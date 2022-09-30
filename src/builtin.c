@@ -56,17 +56,14 @@ void	builtin_pwd(void)
 int	builtin_cd(char *buffer, char **envp_l)
 {
 	char	**path;
-	char 	buff[2048];
+	char	buff[2048];
 	char	*old_pwd;
 	int		i;
 
 	path = ft_split(buffer, ' ');
 	i = 1;
 	if (chdir(path[i]) == -1)
-	{
-//		free(path[i]);
 		perror("chdir()");
-	}
 	i = 0;
 	while (envp_l[i])
 	{

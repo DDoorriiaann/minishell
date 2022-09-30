@@ -33,6 +33,7 @@ int	prompt_shell(char **envp_l)
 	char	*buffer;
 	int		argc;
 	char	**argv;
+	int		i;
 
 	argv = NULL;
 	buffer = readline("Mickeytotal$>");
@@ -50,7 +51,16 @@ int	prompt_shell(char **envp_l)
 		else if ((ft_strncmp(buffer, "cd", 2)) == 0)
 			builtin_cd(buffer, envp_l);
 		else if ((ft_strncmp(buffer, "export", 6)) == 0)
-			builtin_export(envp_l);
+			builtin_export(envp_l, argv, argc);
+		else if ((ft_strncmp(buffer, "env", 3)) == 0)
+		{
+			i = 0;
+			while (envp_l[i])
+			{
+				printf("%s\n", envp_l[i]);
+				i++;
+			}
+		}
 		else if ((ft_strncmp(buffer, "exit", 5)) == 0)
 		{
 			free(buffer);
