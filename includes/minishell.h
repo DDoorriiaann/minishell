@@ -12,6 +12,8 @@
 # define ERROR -1
 # define MULTIPLE_N 0
 # define NOT_MULTIPLE 1
+# define TRUE 1
+# define FALSE 0
 
 ////////FUNCTIONS
 //PROMPT
@@ -27,7 +29,7 @@ char	**get_path(char *envp_path);
 char	**get_cmd(char *cmd, char **paths);
 
 //PARSER
-char	**parser(char *input);
+char	**parser(char *input, char **envp);
 char	**copy_envp(char **envp);
 
 /***
