@@ -119,7 +119,7 @@ char	*extract_env_variable_name(char *arg, int start)
 	int		i;
 
 	end = start;
-	while (arg[end] && ft_isalnum(arg[end]))
+	while (arg[end] && (ft_isalnum(arg[end]) || arg[end] == '_'))
 		end++;
 	env_variable_name = malloc((end - start) + 2);
 	i = 0;
@@ -144,7 +144,7 @@ int	variable_found_inside_env(char *env_variable_name, char **envp)
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], env_variable_name, len) == 0)
-			return (TRUE);
+			return (i);
 		i++;
 	}
 	return (FALSE);
@@ -153,11 +153,34 @@ int	variable_found_inside_env(char *env_variable_name, char **envp)
 int	env_variable_name_exists(char *arg, int start, char **envp)
 {
 	char	*env_variable_name;
+	int		variable_index;
 
 	env_variable_name = extract_env_variable_name(arg, start);
-	if (variable_found_inside_env(env_variable_name, envp))
-		return (TRUE);
-	return (FALSE);
+	variable_index = variable_found_inside_env(env_variable_name, envp);
+	if (variable_index)
+		return (variable_index);
+	else
+		return (ERROR);
+}
+
+int	replace_env_variable_name_with_content(char *arg, int i, char **envp)
+{
+//	char	*tmp;
+	int		var_index;
+	char	*var_name;
+	char	*var_content;
+	int		var_len;
+	int		content_start;
+
+	var_index = env_variable_name_exists(arg, i + 1, envp);
+	var_len = ft_strlen(envp[var_index]);
+	var_name = extract_env_variable_name(arg, i + 1);
+	content_start = ft_strlen(var_name);
+	var_content = ft_substr(envp[var_index], content_start, var_len - content_start);
+	
+	//free(arg);
+	printf("variable content: %s\n", var_content);
+	return (i);
 }
 
 void	update_argv_with_env_variables(char *arg, char **envp)
@@ -174,9 +197,8 @@ void	update_argv_with_env_variables(char *arg, char **envp)
 				i++;
 				continue ;
 			}
-			else if (env_variable_name_exists(arg, i + 1, envp))
-				printf("variable found inside env\n");
-				//i = replace_env_variable_name_with_content(arg, i, envp);
+			else if (env_variable_name_exists(arg, i + 1, envp) != ERROR)
+				i = replace_env_variable_name_with_content(arg, i, envp);
 			//else
 				//i = delete_env_variable_name_from_string(arg, i, envp);
 		}
