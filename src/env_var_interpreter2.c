@@ -57,5 +57,6 @@ void	delete_var_inside_arg(char **argv, int start, int index)
 		updated_arg[i++] = argv[index][j++];
 	updated_arg[i] = '\0';
 	free(argv[index]);
+	free(var.name);
 	argv[index] = updated_arg;
 }
