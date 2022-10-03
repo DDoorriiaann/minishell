@@ -15,6 +15,14 @@
 # define TRUE 1
 # define FALSE 0
 
+typedef struct s_env_var
+{
+	int		index;
+	char	*name;
+	char	*value;
+	int		len;
+}	t_env_var;
+
 ////////FUNCTIONS
 //PROMPT
 void	ft_free_all_arr(char **paths, char **cmd);

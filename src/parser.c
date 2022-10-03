@@ -163,46 +163,73 @@ int	env_variable_name_exists(char *arg, int start, char **envp)
 		return (ERROR);
 }
 
-int	replace_env_variable_name_with_content(char *arg, int i, char **envp)
+void	replace_variable_by_content(char **argv, int index, int start, t_env_var var)
 {
-//	char	*tmp;
-	int		var_index;
-	char	*var_name;
-	char	*var_content;
-	int		var_len;
-	int		content_start;
-
-	var_index = env_variable_name_exists(arg, i + 1, envp);
-	var_len = ft_strlen(envp[var_index]);
-	var_name = extract_env_variable_name(arg, i + 1);
-	content_start = ft_strlen(var_name);
-	var_content = ft_substr(envp[var_index], content_start, var_len - content_start);
-	
-	//free(arg);
-	printf("variable content: %s\n", var_content);
-	return (i);
-}
-
-void	update_argv_with_env_variables(char *arg, char **envp)
-{
-	int	i;
+	char	*updated_arg;
+	int		i;
 
 	i = 0;
-	while (arg[i])
+	updated_arg = malloc(var.len - (ft_strlen(var.name)) + 1);
+	updated_arg[var.len - ft_strlen(var.name)] = '\0';
+	while (i < start)
 	{
-		if (arg[i] == '$')
+		updated_arg[i] = argv[index][i];
+		i++;
+	}
+	while (*var.value)
+	{
+		updated_arg[i] = *var.value;
+		var.value++;
+		i++;
+	}
+	start = start + ft_strlen(var.name);
+	while (argv[index][start])
+	{
+		updated_arg[i] = argv[index][start];
+		start++;
+		i++;
+	}
+	free(argv[index]);
+	argv[index] = updated_arg;
+}
+
+int	replace_env_variable_name_with_content(char **argv, int start, int arg_index, char **envp)
+{
+//	char	*tmp;
+	t_env_var	var;
+	int	value_start;
+
+	var.index = env_variable_name_exists(argv[arg_index], start + 1, envp);
+	var.len = (int)ft_strlen(envp[var.index]);
+	var.name = extract_env_variable_name(argv[arg_index], start + 1);
+	value_start = ft_strlen(var.name);
+	var.value = ft_substr(envp[var.index], value_start, var.len - value_start);
+	replace_variable_by_content(argv, arg_index, start, var);
+	return (start + ft_strlen(var.name));
+}
+
+void	update_argv_with_env_variables(int index, char **argv, char **envp)
+{
+	int		start;
+	char	*arg;
+
+	arg = argv[index];
+	start = 0;
+	while (arg[start])
+	{
+		if (arg[start] == '$')
 		{	
-			if (!arg[i + 1] || ft_isspace(arg[i + 1]))
+			if (!arg[start + 1] || ft_isspace(arg[start + 1]))
 			{
-				i++;
+				start++;
 				continue ;
 			}
-			else if (env_variable_name_exists(arg, i + 1, envp) != ERROR)
-				i = replace_env_variable_name_with_content(arg, i, envp);
+			else if (env_variable_name_exists(arg, start + 1, envp) != ERROR)
+				start = replace_env_variable_name_with_content(argv, start, index, envp);
 			//else
 				//i = delete_env_variable_name_from_string(arg, i, envp);
 		}
-		i++;
+		start++;
 	}
 }
 
@@ -213,7 +240,7 @@ void	interpret_env_variables(char **argv, char **envp)
 	i = 0;
 	while (argv[i])
 	{	
-		update_argv_with_env_variables(argv[i], envp);
+		update_argv_with_env_variables(i, argv, envp);
 		i++;
 	}
 }
