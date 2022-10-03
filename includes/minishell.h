@@ -39,6 +39,10 @@ char	**get_cmd(char *cmd, char **paths);
 //PARSER
 char	**parser(char *input, char **envp);
 char	**copy_envp(char **envp);
+void	interpret_env_variables(char **argv, char **envp);
+char	*extract_env_variable_name(char *arg, int start);
+int		variable_found_inside_env(char *env_variable_name, char **envp);
+void	delete_var_inside_arg(char **argv, int start, int index);
 
 /***
 FREE
