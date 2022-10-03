@@ -7,6 +7,7 @@ int	env_variable_name_exists(char *arg, int start, char **envp)
 
 	env_variable_name = extract_env_variable_name(arg, start);
 	variable_index = variable_found_inside_env(env_variable_name, envp);
+	free(env_variable_name);
 	if (variable_index)
 		return (variable_index);
 	else
@@ -44,6 +45,7 @@ int	interpret_env_variable(char **argv, int start, int arg_index, char **envp)
 {
 	t_env_var	var;
 	int			value_start;
+	int			value_len;
 
 	var.index = env_variable_name_exists(argv[arg_index], start + 1, envp);
 	var.len = ft_strlen(envp[var.index]);
@@ -51,7 +53,10 @@ int	interpret_env_variable(char **argv, int start, int arg_index, char **envp)
 	value_start = ft_strlen(var.name);
 	var.value = ft_substr(envp[var.index], value_start, var.len - value_start);
 	replace_var_by_content(argv, arg_index, start, var);
-	return (start + ft_strlen(var.value));
+	value_len = ft_strlen(var.value);
+	free(var.value);
+	free(var.name);
+	return (start + value_len);
 }
 
 void	update_argv_with_env_variables(int index, char **argv, char **envp)
