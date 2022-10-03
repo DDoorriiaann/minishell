@@ -75,12 +75,25 @@ void	update_argv_with_env_variables(int index, char **argv, char **envp)
 			else
 			{
 				delete_var_inside_arg(argv, start, index);
+				arg = argv[index];
 				continue ;
 			}		
 		}
 		arg = argv[index];
 		start++;
 	}
+}
+
+void	remove_arg(char **argv, int i)
+{
+	while (argv[i + 1])
+	{
+		free(argv[i]);
+		argv[i] = ft_strdup(argv[i + 1]);
+		i++;
+	}
+	free(argv[i]);
+	argv[i] = NULL;
 }
 
 void	interpret_env_variables(char **argv, char **envp)
@@ -91,6 +104,11 @@ void	interpret_env_variables(char **argv, char **envp)
 	while (argv[i])
 	{	
 		update_argv_with_env_variables(i, argv, envp);
+		if (!argv[i][0])
+		{	
+			remove_arg(argv, i);
+			continue ;
+		}
 		i++;
 	}
 }
