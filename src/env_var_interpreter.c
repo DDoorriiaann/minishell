@@ -51,7 +51,7 @@ int	interpret_env_variable(char **argv, int start, int arg_index, char **envp)
 	value_start = ft_strlen(var.name);
 	var.value = ft_substr(envp[var.index], value_start, var.len - value_start);
 	replace_var_by_content(argv, arg_index, start, var);
-	return (start + ft_strlen(var.name));
+	return (start + ft_strlen(var.value));
 }
 
 void	update_argv_with_env_variables(int index, char **argv, char **envp)
@@ -71,13 +71,14 @@ void	update_argv_with_env_variables(int index, char **argv, char **envp)
 				continue ;
 			}
 			else if (env_variable_name_exists(arg, start + 1, envp) != ERROR)
-				start = interpret_env_variable(argv, start, index, envp);
+				start = interpret_env_variable(argv, start, index, envp) - 1;
 			else
 			{
 				delete_var_inside_arg(argv, start, index);
 				continue ;
 			}		
 		}
+		arg = argv[index];
 		start++;
 	}
 }

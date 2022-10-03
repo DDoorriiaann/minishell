@@ -49,13 +49,13 @@ void	delete_var_inside_arg(char **argv, int start, int index)
 	var.name = extract_env_variable_name(argv[index], start + 1);
 	var_name_len = ft_strlen(var.name);
 	updated_arg = malloc(ft_strlen(argv[index]) - var_name_len + 1);
-	updated_arg[ft_strlen(argv[index]) - var_name_len] = '\0';
 	i = -1;
 	while (++i < start)
 		updated_arg[i] = argv[index][i];
 	j = start + var_name_len;
 	while (argv[index][j])
 		updated_arg[i++] = argv[index][j];
+	updated_arg[i] = '\0';
 	free(argv[index]);
 	argv[index] = updated_arg;
 }
