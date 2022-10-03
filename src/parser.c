@@ -82,7 +82,7 @@ char	**init_argv(int argc)
 void	put_args_into_argv(char **argv, char *input)
 {
 	int	i;
-	int	start;
+	int	start;	
 	int	end;
 
 	i = 0;
@@ -103,7 +103,7 @@ void	put_args_into_argv(char **argv, char *input)
 			continue ;
 		}
 		else if (ft_is_quote(input[start]))
-		{	
+		{
 			end = go_to_quote_end(input, start, &i);
 			argv[i - 1] = ft_substr(input, start + 1, (end - (start + 1)));
 			start = end;
@@ -111,9 +111,8 @@ void	put_args_into_argv(char **argv, char *input)
 		start++;
 	}
 }
-
 char	**split_input(char *input, int argc)
-{	
+{
 	char	**argv;
 
 	argv = init_argv(argc);
@@ -121,12 +120,13 @@ char	**split_input(char *input, int argc)
 	return (argv);
 }
 
-char	**parser(char *input)
+char	**parser(char *input, char **envp)
 {
 	int		argc;
 	char	**argv;
 
 	argc = count_arguments(input, 0);
 	argv = split_input(input, argc);
+	interpret_env_variables(argv, envp);
 	return (argv);
 }

@@ -14,6 +14,8 @@ SRC			=	main.c\
 				builtin_2.c\
 				utils1.c\
 				utils2.c\
+				env_var_interpreter.c\
+				env_var_interpreter2.c\
 
 SRCDIR 		= ./src/
 

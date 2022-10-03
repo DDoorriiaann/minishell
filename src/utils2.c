@@ -5,7 +5,12 @@ int	find_closing_quote(char *input, int end, char quote_type)
 	while (input[end])
 	{
 		if (input[end] == quote_type)
-			return (end);
+		{
+			if (input[end + 1] && ft_is_quote(input[end + 1]))
+				end = find_closing_quote(input, end + 2, input[end + 1]);
+			else
+				return (end);
+		}
 		end++;
 	}
 	return (ERROR);
@@ -15,9 +20,11 @@ int	find_word_end(char *input, int index)
 {
 	while (input[index] && !ft_isspace(input[index]))
 	{
-		if (ft_is_quote(input[index])
-			&& find_closing_quote(input, index + 1, input[index]) != ERROR)
-			break ;
+		if (ft_is_quote(input[index]))
+		{	
+			if (find_closing_quote(input, index + 1, input[index]) != ERROR)
+				index = find_closing_quote(input, index + 1, input[index]);
+		}
 		index++;
 	}
 	return (index);

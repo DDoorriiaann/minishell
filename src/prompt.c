@@ -40,7 +40,7 @@ int	prompt_shell(char **envp_l)
 	{
 		argc = 0;
 		add_history(buffer);
-		argv = parser(buffer);
+		argv = parser(buffer, envp_l);
 		while (argv[argc])
 			argc++;
 		if ((ft_strncmp(argv[0], "echo", 4)) == 0)
@@ -57,8 +57,8 @@ int	prompt_shell(char **envp_l)
 			free_2d_arr(argv);
 			break ;
 		}
-		else if (buffer[0])
-			exec_cmd(buffer, envp_l);
+		//else if (buffer[0])
+		//	exec_cmd(buffer, envp_l);
 		free_2d_arr(argv);
 		free(buffer);
 		buffer = NULL;

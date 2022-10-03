@@ -12,6 +12,16 @@
 # define ERROR -1
 # define MULTIPLE_N 0
 # define NOT_MULTIPLE 1
+# define TRUE 1
+# define FALSE 0
+
+typedef struct s_env_var
+{
+	int		index;
+	char	*name;
+	char	*value;
+	int		len;
+}	t_env_var;
 
 ////////FUNCTIONS
 //PROMPT
@@ -27,8 +37,12 @@ char	**get_path(char *envp_path);
 char	**get_cmd(char *cmd, char **paths);
 
 //PARSER
-char	**parser(char *input);
+char	**parser(char *input, char **envp);
 char	**copy_envp(char **envp);
+void	interpret_env_variables(char **argv, char **envp);
+char	*extract_env_variable_name(char *arg, int start);
+int		variable_found_inside_env(char *env_variable_name, char **envp);
+void	delete_var_inside_arg(char **argv, int start, int index);
 
 /***
 FREE
