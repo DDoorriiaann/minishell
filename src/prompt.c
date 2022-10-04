@@ -51,7 +51,7 @@ int	prompt_shell(char **envp_l)
 		else if ((ft_strncmp(buffer, "cd", 2)) == 0)
 			builtin_cd(buffer, envp_l);
 		else if ((ft_strncmp(buffer, "export", 6)) == 0)
-			builtin_export(envp_l, argv, argc);
+			envp_l = builtin_export(envp_l, argv, argc);
 		else if ((ft_strncmp(buffer, "env", 3)) == 0)
 		{
 			i = 0;
@@ -71,7 +71,7 @@ int	prompt_shell(char **envp_l)
 			exec_cmd(buffer, envp_l);
 		free_2d_arr(argv);
 		free(buffer);
-		buffer = NULL;
+		buffer = NULL;	
 		buffer = readline("Mickeytotal$>");
 	}
 	ft_free_arr(envp_l);

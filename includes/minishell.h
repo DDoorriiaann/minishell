@@ -58,7 +58,7 @@ BUILTIN
 void	builtin_echo(char *buffer);
 void	builtin_pwd(void);
 int		builtin_cd(char *buffer, char **envp_l);
-void	builtin_export(char **envp_l, char **argv, int argc);
+char	**builtin_export(char **envp_l, char **argv, int argc);
 
 /******
 UTILS
@@ -76,8 +76,7 @@ int		go_to_quote_end(char *input, int index, int *argc);
 /*****
 EXPORT
 *****/
-
-void	add_arg_export(char **envp_l, char **argv, int argc);
-void	print_export(char **copy_envp_l);
+char	**add_arg_export(char **envp_l, char **argv, int argc);
+void	print_export(char **export_envp_l);
 
 #endif

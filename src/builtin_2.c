@@ -6,7 +6,7 @@
 /*   By: ybaudoui <ybaudoui@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 16:35:09 by ybaudoui          #+#    #+#             */
-/*   Updated: 2022/09/30 17:35:25 by ybaudoui         ###   ########.fr       */
+/*   Updated: 2022/10/04 12:43:25 by ybaudoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,31 +80,33 @@ void	sort_after_first_char(char **envp_l)
 	}
 }
 
-void	builtin_export(char **envp_l, char **argv, int argc)
+char	**builtin_export(char **envp_l, char **argv, int argc)
 {
-	char	**copy_envp_l;
+	char	**export_envp_l;
 
-	copy_envp_l = copy_envp(envp_l);
-	sort_first_char(copy_envp_l);
-	sort_after_first_char(copy_envp_l);
+	export_envp_l = copy_envp(envp_l);
+	sort_first_char(export_envp_l);
+	sort_after_first_char(export_envp_l);
 	if (argc == 1)
-		print_export(copy_envp_l);
+		print_export(export_envp_l);
 	else
-		add_arg_export(copy_envp_l, argv, argc);
-//	ft_free_arr(copy_envp_l);
+		envp_l = add_arg_export(envp_l, argv, argc);
+	free_2d_arr(export_envp_l);
+	printf("%d\n", size_env(envp_l));
+	return (envp_l);
 }
 
-void	print_export(char **copy_envp_l)
+void	print_export(char **export_envp_l)
 {
 	int		i;
 	char	*tmp;
 
 	i = 0;
-	while (copy_envp_l[i])
+	while (export_envp_l[i])
 	{
-		if (copy_envp_l[i][0] != '_')
+		if (export_envp_l[i][0] != '_')
 		{
-			tmp = ft_strjoin("declare -x ", copy_envp_l[i]);
+			tmp = ft_strjoin("declare -x ", export_envp_l[i]);
 			printf("%s\n", tmp);
 			free(tmp);
 		}
@@ -112,25 +114,30 @@ void	print_export(char **copy_envp_l)
 	}
 }
 
-void	add_arg_export(char **copy_envp_l, char **argv, int argc)
+char	**add_arg_export(char **envp_l, char **argv, int argc)
 {
 	char	**tmp_envp_l;
 	int		i;
 	int		j;
 
 	i = 0;
-	tmp_envp_l = malloc(sizeof(char *) * size_env(copy_envp_l) + argc);
-	while (copy_envp_l[i])
+	tmp_envp_l = malloc(sizeof(char *) * (size_env(envp_l) + (argc)));
+	while (envp_l[i])
 	{
-		tmp_envp_l[i] = strdup(copy_envp_l[i]);
+		tmp_envp_l[i] = ft_strdup(envp_l[i]);
 		i++;
 	}
 	j = 1;
 	while (argv[j])
 	{
-		tmp_envp_l[i] = argv[j];
+		tmp_envp_l[i] = ft_strdup(argv[j]);
+		printf("%s\n", tmp_envp_l[i]);
 		j++;
 		i++;
 	}
 	tmp_envp_l[i] = NULL;
+	printf("i = %d\n", i);
+	printf("%s\n",tmp_envp_l[i - 1]);
+	free_2d_arr(envp_l);
+	return (tmp_envp_l);
 }
