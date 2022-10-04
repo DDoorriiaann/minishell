@@ -63,7 +63,7 @@ int		ft_error_return(void);
 EXEC
 ***/
 
-void	exec_cmd(char *argv, char **envp);
+//void	exec_cmd(char *argv, char **envp);
 
 /******
 BUILTIN
