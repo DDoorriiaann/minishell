@@ -59,7 +59,7 @@ int	prompt_shell(char **envp_l)
 			else if ((ft_strncmp(buffer, "cd", 2)) == 0)
 				builtin_cd(buffer, envp_l);
 			else if ((ft_strncmp(buffer, "export", 6)) == 0)
-				builtin_export(envp_l);
+				envp_l = builtin_export(envp_l, argv, argc);
 			else if ((ft_strncmp(buffer, "exit", 5)) == 0)
 			{
 				free(buffer);
