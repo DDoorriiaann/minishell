@@ -6,7 +6,7 @@
 /*   By: ybaudoui <ybaudoui@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 14:27:23 by ybaudoui          #+#    #+#             */
-/*   Updated: 2022/09/27 15:32:17 by ybaudoui         ###   ########.fr       */
+/*   Updated: 2022/09/30 16:23:15 by ybaudoui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ char	**copy_envp(char **envp)
 	int		i;
 
 	i = 0;
-	while(envp[i])
+	while (envp[i])
 		i++;
-	envp_l = malloc(sizeof(char*) * (i + 1));
+	envp_l = malloc(sizeof(char *) * (i + 1));
 	envp_l[i] = NULL;
 	i = 0;
-	while(envp[i])
+	while (envp[i])
 	{
 		envp_l[i] = ft_strdup(envp[i]);
 		i++;

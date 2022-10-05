@@ -71,7 +71,7 @@ int	prompt_shell(char **envp_l)
 		}
 		free_2d_arr(argv);
 		free(buffer);
-		buffer = NULL;
+		buffer = NULL;	
 		buffer = readline("Mickeytotal$>");
 	}
 	ft_free_arr(envp_l);

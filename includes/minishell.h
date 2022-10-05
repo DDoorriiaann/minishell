@@ -72,7 +72,9 @@ BUILTIN
 void	builtin_echo(char **argv);
 void	builtin_pwd(void);
 int		builtin_cd(char *buffer, char **envp_l);
-void	builtin_export(char **envp_l);
+char	**builtin_export(char **envp_l, char **argv, int argc);
+void	builtin_env( char **envp_l);
+
 
 /******
 UTILS
@@ -86,5 +88,11 @@ void	free_2d_arr(char **arr);
 int		find_closing_quote(char *input, int end, char quote_type);
 int		go_to_word_end(char *input, int index, int *argc);
 int		go_to_quote_end(char *input, int index, int *argc);
+
+/*****
+EXPORT
+*****/
+char	**add_arg_export(char **envp_l, char **argv, int argc);
+void	print_export(char **export_envp_l);
 
 #endif
