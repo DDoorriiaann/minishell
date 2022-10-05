@@ -111,6 +111,7 @@ void	put_args_into_argv(char **argv, char *input)
 		start++;
 	}
 }
+
 char	**split_input(char *input, int argc)
 {
 	char	**argv;

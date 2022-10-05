@@ -1,28 +1,36 @@
 #include "minishell.h"
 #include <stdio.h>
 
-void	exec_cmd(char **argv, char **envp_l)
+int	exec_cmd(char **argv, char **envp_l)
 {
 	int		pid = 0;
 	int		status = 0;
 	char	**paths;
 	char	**cmd;
+	int		status_code;
 
+	status_code = 0;
 	if (!argv[0])
-		return ;
+		return (1);
 	paths = get_path(check_line_path(envp_l));
 	cmd = get_cmd(argv[0], paths);
 	if (!cmd)
 	{
 		ft_free_arr(paths);
 		perror(argv[0]);
-		return ;
+		return (2);
 	}
 	pid = fork();
 	if (pid == -1)
 		perror("fork error");
 	else if (pid > 0)
+	{
 		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+		{
+			status_code = WEXITSTATUS(status);
+		}
+	}
 	else
 	{
 		if (execve(cmd[0], cmd, envp_l) == -1)
@@ -33,6 +41,7 @@ void	exec_cmd(char **argv, char **envp_l)
 		exit(1);
 	}
 	ft_free_all_arr(paths, cmd);
+	return (status_code);
 }
 
 int	prompt_shell(char **envp_l)
@@ -40,8 +49,10 @@ int	prompt_shell(char **envp_l)
 	char	*buffer;
 	int		argc;
 	char	**argv;
+	int		status_code;
 
 	argv = NULL;
+	status_code = 0; 
 	buffer = readline("Mickeytotal$>");
 	while (buffer != NULL)
 	{
@@ -69,8 +80,9 @@ int	prompt_shell(char **envp_l)
 			else if ((ft_strncmp(buffer, "env", 3)) == 0)
 				builtin_env(envp_l);
 			else if (*argv[0])
-				exec_cmd(argv, envp_l);
+				status_code = exec_cmd(argv, envp_l);
 		}
+		printf("exit code: %d\n", status_code);
 		free_2d_arr(argv);
 		free(buffer);
 		buffer = NULL;	

@@ -63,7 +63,7 @@ int		ft_error_return(void);
 EXEC
 ***/
 
-//void	exec_cmd(char *argv, char **envp);
+int		exec_cmd(char **argv, char **envp);
 
 /******
 BUILTIN
@@ -74,7 +74,6 @@ void	builtin_pwd(void);
 int		builtin_cd(char *buffer, char **envp_l);
 char	**builtin_export(char **envp_l, char **argv, int argc);
 void	builtin_env( char **envp_l);
-
 
 /******
 UTILS
