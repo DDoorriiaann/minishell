@@ -25,7 +25,7 @@ void	exec_cmd(char **argv, char **envp_l)
 		waitpid(pid, &status, 0);
 	else
 	{
-		if (execve(cmd[0], cmd, NULL) == -1)
+		if (execve(cmd[0], cmd, envp_l) == -1)
 		{
 			ft_free_all_arr(paths, cmd);
 			perror("exec error");
