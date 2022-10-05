@@ -14,33 +14,30 @@ int	check_echo(char *echo)
 	return (MULTIPLE_N);
 }
 
-void	builtin_echo(char *buffer)
+void	builtin_echo(char **argv)
 {
-	char	**echo;
 	int		i;
 	int		ret;
 
 	i = 1;
 	ret = 0;
-	echo = ft_split(buffer, ' ');
-	while (echo[i] && strncmp(echo[i], "-n", 2) == 0)
+	while (argv[i] && strncmp(argv[i], "-n", 2) == 0)
 	{
-		if (check_echo(echo[i]) == MULTIPLE_N)
+		if (check_echo(argv[i]) == MULTIPLE_N)
 			ret = 1;
 		else
 			break ;
 		i++;
 	}
-	while (echo[i])
+	while (argv[i])
 	{
-		printf("%s", echo[i]);
+		printf("%s", argv[i]);
 		i++;
-		if (echo[i])
+		if (argv[i])
 			printf(" ");
 	}
 	if (ret == 0)
 		printf("\n");
-	ft_free_arr(echo);
 }
 
 void	builtin_pwd(void)
