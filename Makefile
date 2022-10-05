@@ -12,6 +12,7 @@ SRC			=	main.c\
 				error.c\
 				builtin.c\
 				builtin_2.c\
+				builtin_env.c\
 				utils1.c\
 				utils2.c\
 
