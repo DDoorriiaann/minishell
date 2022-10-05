@@ -66,6 +66,8 @@ int	prompt_shell(char **envp_l)
 				free_2d_arr(argv);
 				break ;
 			}
+			else if ((ft_strncmp(buffer, "env", 3)) == 0)
+				builtin_env(envp_l);
 			else if (*argv[0])
 				exec_cmd(argv, envp_l);
 		}
