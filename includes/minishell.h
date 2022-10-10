@@ -95,6 +95,8 @@ int		len_arg(char *argv);
 void	dup_arr(char **src, char **dst);
 int		check_syntax(char *argv);
 int		size_env(char **envp_l);
+int		size_arg_before_equal(char *argv);
+int		size_arg(char *argv);
 int		check_if_new_variables(char **argv, char **envp_l);
 void	update_variable(char **envp_l, char *var, int index);
 void	update_envp_l(char **argv, char **envp_l);

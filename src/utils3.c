@@ -73,7 +73,7 @@ int	len_arg(char *argv)
 	int	i;
 
 	i = 0;
-	while (argv[i] && argv[i] != '=')
+	while (argv[i] && argv[i] != '=' && argv[i] != '+')
 		i++;
 	return (i);
 }
