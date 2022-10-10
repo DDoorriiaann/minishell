@@ -11,14 +11,14 @@ int	exec_cmd(char **argv, char **envp_l)
 
 	status_code = 0;
 	if (!argv[0])
-		return (1);
+		return (EXIT_FAILURE);
 	paths = get_path(check_line_path(envp_l));
 	cmd = get_cmd(argv[0], paths);
 	if (!cmd)
 	{
 		ft_free_arr(paths);
-		perror(argv[0]);
-		return (2);
+		ft_error_cmd(argv[0]);
+		return (127);
 	}
 	pid = fork();
 	if (pid == -1)
@@ -38,7 +38,7 @@ int	exec_cmd(char **argv, char **envp_l)
 			ft_free_all_arr(paths, cmd);
 			perror("exec error");
 		}
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	ft_free_all_arr(paths, cmd);
 	return (status_code);
@@ -52,13 +52,13 @@ int	prompt_shell(char **envp_l)
 	int		status_code;
 
 	argv = NULL;
-	status_code = 0; 
+	status_code = 0;
 	buffer = readline("Mickeytotal$>");
 	while (buffer != NULL)
 	{
 		argc = 0;
 		add_history(buffer);
-		argv = parser(buffer, envp_l);
+		argv = parser(buffer, envp_l, status_code);
 		while (argv[argc])
 			argc++;
 		if (argc != 0)
@@ -85,7 +85,7 @@ int	prompt_shell(char **envp_l)
 		printf("exit code: %d\n", status_code);
 		free_2d_arr(argv);
 		free(buffer);
-		buffer = NULL;	
+		buffer = NULL;
 		buffer = readline("Mickeytotal$>");
 	}
 	ft_free_arr(envp_l);

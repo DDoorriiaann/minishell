@@ -59,7 +59,37 @@ int	interpret_env_variable(char **argv, int start, int arg_index, char **envp)
 	return (start + value_len);
 }
 
-void	update_argv_with_env_variables(int index, char **argv, char **envp)
+int	replace_var_by_error_code(char **argv, int start, int index, int s_code)
+{
+	char	*updated_arg;
+	char	*s_code_as_chars;
+	int		i;
+	int		j;
+	char	*arg;
+	
+	arg = argv[index];
+	s_code_as_chars = ft_itoa(s_code);
+	updated_arg = malloc(ft_strlen(arg) - 2 + ft_strlen(s_code_as_chars) + 1);
+	i = 0;
+	while (i < start)
+	{
+		updated_arg[i] = arg[i];
+		i++;
+	}
+	j = 0;
+	while (s_code_as_chars[j])
+		updated_arg[i++] = s_code_as_chars[j++];
+	while (arg[start + 2])
+		updated_arg[i++] = arg[(start++) + 2];
+	updated_arg[i] = '\0';
+	free(argv[index]);
+	free(s_code_as_chars);
+	argv[index] = updated_arg;
+	return (start + j);
+}
+
+void	update_argv_with_env_variables(int index, char **argv,
+										char **envp, int s_code)
 {
 	int		start;
 	char	*arg;
@@ -75,6 +105,8 @@ void	update_argv_with_env_variables(int index, char **argv, char **envp)
 				start++;
 				continue ;
 			}
+			else if (arg[start + 1] == '?')
+				start = replace_var_by_error_code(argv, start, index, s_code);
 			else if (env_variable_name_exists(arg, start + 1, envp) != ERROR)
 				start = interpret_env_variable(argv, start, index, envp) - 1;
 			else
@@ -101,14 +133,14 @@ void	remove_arg(char **argv, int i)
 	argv[i] = NULL;
 }
 
-void	interpret_env_variables(char **argv, char **envp)
+void	interpret_env_variables(char **argv, char **envp, int s_code)
 {
 	int	i;
 
 	i = 0;
 	while (argv[i])
 	{	
-		update_argv_with_env_variables(i, argv, envp);
+		update_argv_with_env_variables(i, argv, envp, s_code);
 		if (!argv[i][0])
 		{	
 			remove_arg(argv, i);
