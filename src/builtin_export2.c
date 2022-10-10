@@ -40,6 +40,20 @@ int	check_arg(char **envp_l, char *argv)
 	return (-1);
 }
 
+int	check_char_equal(char *argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+	{
+		if (argv[i] == '=')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 void	update_envp_l(char **argv, char **envp_l)
 {
 	int		len;
@@ -54,7 +68,10 @@ void	update_envp_l(char **argv, char **envp_l)
 	{
 		var_index = check_arg(envp_l, argv[i]);
 		if (var_index != -1)
-			update_variable(envp_l, argv[i], var_index);
+		{
+			if (check_char_equal(argv[i]) == 1)
+				update_variable(envp_l, argv[i], var_index);
+		}
 		else if (check_syntax(argv[i]) == TRUE)
 		{	
 			envp_l[len] = ft_strdup(argv[i]);
