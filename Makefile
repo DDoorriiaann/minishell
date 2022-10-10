@@ -11,10 +11,13 @@ SRC			=	main.c\
 				parser.c\
 				error.c\
 				builtin.c\
-				builtin_2.c\
+				builtin_export1.c\
+				builtin_export2.c\
 				builtin_env.c\
 				utils1.c\
 				utils2.c\
+				utils3.c\
+				utils4.c\
 				env_var_interpreter.c\
 				env_var_interpreter2.c\
 

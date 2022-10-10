@@ -27,7 +27,7 @@ int	variable_found_inside_env(char *env_variable_name, char **envp)
 	int	i;
 	int	len;
 
-	len = ft_strlen(env_variable_name);
+	len = len_arg(env_variable_name);
 	i = 0;
 	while (envp[i])
 	{
