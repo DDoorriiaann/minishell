@@ -39,19 +39,17 @@ char	*extract_arg_after_equal(char *argv)
 void	join_variable(char **envp_l, char *var, int index)
 {
 	int		i;
-	int		len;
 	char	*tmp;
 
 	i = 0;
-	len = size_arg_before_equal(var);
 	var = extract_arg_after_equal(var);
 	tmp = ft_strdup(envp_l[index]);
 	while (tmp[i])
 		i++;
 	free(envp_l[index]);
-	envp_l[index] = malloc(sizeof(char) * ((len + i) + 1));
-	envp_l[index] = NULL;
 	envp_l[index] = ft_strjoin(tmp, var);
+	free(tmp);
+	free(var);
 }
 
 int	check_arg(char **envp_l, char *argv)
@@ -60,7 +58,7 @@ int	check_arg(char **envp_l, char *argv)
 	int	len;
 
 	i = 0;
-	len = size_arg(argv);
+	len = len_arg(argv);
 	while (envp_l[i])
 	{
 		if (ft_strncmp(envp_l[i], argv, len) == 0)
@@ -107,7 +105,7 @@ void	update_envp_l(char **argv, char **envp_l)
 				join_variable(envp_l, argv[i], var_index);
 		}
 		else if (check_syntax(argv[i]) == TRUE)
-		{	
+		{
 			envp_l[len] = ft_strdup(argv[i]);
 			len++;
 		}
