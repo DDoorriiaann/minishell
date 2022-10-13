@@ -17,6 +17,7 @@ SRC			=	main.c\
 				arg_parser/arg_parser.c\
 				arg_parser/env_var_interpreter/env_var_interpreter.c\
 				arg_parser/env_var_interpreter/env_var_interpreter2.c\
+				arg_parser/env_var_interpreter/extract_env_var_name.c\
 				builtin_export1.c\
 				builtin_export2.c\
 				builtin_env.c\
