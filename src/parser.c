@@ -111,6 +111,7 @@ void	put_args_into_argv(char **argv, char *input)
 		start++;
 	}
 }
+
 char	**split_input(char *input, int argc)
 {
 	char	**argv;
@@ -120,13 +121,13 @@ char	**split_input(char *input, int argc)
 	return (argv);
 }
 
-char	**parser(char *input, char **envp)
+char	**parser(char *input, char **envp, int e_code)
 {
 	int		argc;
 	char	**argv;
 
 	argc = count_arguments(input, 0);
 	argv = split_input(input, argc);
-	interpret_env_variables(argv, envp);
+	interpret_env_variables(argv, envp, e_code);
 	return (argv);
 }
