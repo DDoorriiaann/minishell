@@ -5,22 +5,22 @@ _GREEN="\e[38;5;10m"
 NAME		= minishell 
 
 SRC			=	main.c\
-				prompt.c\
-				free.c\
+				decoration.c\
 				paths.c\
-				parser.c\
 				error.c\
-				builtin.c\
-				builtin_export1.c\
-				builtin_export2.c\
-				builtin_env.c\
+				free.c\
 				utils1.c\
 				utils2.c\
 				utils3.c\
 				utils4.c\
-				env_var_interpreter.c\
-				env_var_interpreter2.c\
-				decoration.c\
+				prompt.c\
+				arg_parser/arg_parser.c\
+				arg_parser/env_var_interpreter/env_var_interpreter.c\
+				arg_parser/env_var_interpreter/env_var_interpreter2.c\
+				builtin_export1.c\
+				builtin_export2.c\
+				builtin_env.c\
+				builtin.c\
 
 SRCDIR 		= ./src/
 

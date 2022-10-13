@@ -58,7 +58,7 @@ int	prompt_shell(char **envp_l)
 	{
 		argc = 0;
 		add_history(buffer);
-		argv = parser(buffer, envp_l, status_code);
+		argv = arg_parser(buffer, envp_l, status_code);
 		while (argv[argc])
 			argc++;
 		if (argc != 0)

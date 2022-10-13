@@ -56,7 +56,7 @@ int	interpret_env_variable(char **argv, int start, int arg_index, char **envp)
 	value_len = ft_strlen(var.value);
 	free(var.value);
 	free(var.name);
-	return (start + value_len);
+	return (start + value_len - 1);
 }
 
 void	replace_var_by_error_code(char **argv, int start, int index, int s_code)
@@ -87,7 +87,7 @@ void	replace_var_by_error_code(char **argv, int start, int index, int s_code)
 	argv[index] = updated_arg;
 }
 
-void	update_argv_with_env_variables(int index, char **argv,
+static void	update_argv_with_env_variables(int index, char **argv,
 										char **envp, int s_code)
 {
 	int		start;
@@ -97,35 +97,23 @@ void	update_argv_with_env_variables(int index, char **argv,
 	start = 0;
 	while (arg[start])
 	{
-		if (arg[start] == '$')
-		{	
-			if (!arg[start + 1] || ft_isspace(arg[start + 1]))
-			{
-				start++;
-				continue ;
-			}
-			else if (arg[start + 1] == '?')
-			{
-				replace_var_by_error_code(argv, start, index, s_code);
-				start += 2;
-				arg = argv[index];
-				continue ;
-			}
-			else if (env_variable_name_exists(arg, start + 1, envp) != ERROR)
-				start = interpret_env_variable(argv, start, index, envp) - 1;
-			else
-			{
-				delete_var_inside_arg(argv, start, index);
-				arg = argv[index];
-				continue ;
-			}		
+		if (arg[start] != '$' || !arg[start + 1] || ft_isspace(arg[start + 1]))
+		{
+			start++;
+			continue ;
 		}
+		if (arg[start + 1] == '?')
+			replace_var_by_error_code(argv, start, index, s_code);
+		else if (env_variable_name_exists(arg, start + 1, envp) != ERROR)
+			start = interpret_env_variable(argv, start, index, envp);
+		else
+			start = delete_var_inside_arg(argv, start, index);
 		arg = argv[index];
 		start++;
 	}
 }
 
-void	remove_arg(char **argv, int i)
+static void	remove_arg(char **argv, int i)
 {
 	while (argv[i + 1])
 	{
@@ -153,4 +141,3 @@ void	interpret_env_variables(char **argv, char **envp, int s_code)
 		i++;
 	}
 }
-
