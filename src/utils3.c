@@ -75,5 +75,7 @@ int	len_arg(char *argv)
 	i = 0;
 	while (argv[i] && argv[i] != '=' && argv[i] != '+')
 		i++;
+	if (argv[i] == '=')
+		i++;
 	return (i);
 }

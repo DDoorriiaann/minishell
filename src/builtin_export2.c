@@ -105,10 +105,7 @@ void	update_envp_l(char **argv, char **envp_l)
 				join_variable(envp_l, argv[i], var_index);
 		}
 		else if (check_syntax(argv[i]) == TRUE)
-		{
-			envp_l[len] = ft_strdup(argv[i]);
-			len++;
-		}
+			envp_l[len++] = ft_strdup(argv[i]);
 		i++;
 	}
 	envp_l[len] = NULL;

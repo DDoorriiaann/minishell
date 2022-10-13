@@ -17,7 +17,7 @@ int	check_syntax(char *argv)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
 	while (argv[i] && argv[i] != '=')
 	{
 		if (argv[i] == '+' && argv[i + 1] == '=')
