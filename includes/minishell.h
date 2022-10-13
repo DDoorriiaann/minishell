@@ -75,7 +75,6 @@ int		builtin_cd(char *buffer, char **envp_l);
 char	**builtin_export(char **envp_l, char **argv, int argc);
 void	builtin_env( char **envp_l);
 
-
 /******
 UTILS
 ******/
@@ -88,11 +87,27 @@ void	free_2d_arr(char **arr);
 int		find_closing_quote(char *input, int end, char quote_type);
 int		go_to_word_end(char *input, int index, int *argc);
 int		go_to_quote_end(char *input, int index, int *argc);
+int		check_syntax(char *argv);
+int		len_arg(char *argv);
+void	sort_first_char(char **envp_l);
+void	sort_after_first_char(char **envp_l);
+int		len_arg(char *argv);
+void	dup_arr(char **src, char **dst);
+int		check_syntax(char *argv);
+int		size_env(char **envp_l);
+int		size_arg_before_equal(char *argv);
+int		size_arg(char *argv);
+int		check_arg(char **envp_l, char *argv);
+int		check_if_new_variables(char **argv, char **envp_l);
+void	update_variable(char **envp_l, char *var, int index);
+void	update_envp_l(char **argv, char **envp_l);
+void	join_variable(char **envp_l, char *var, int index);
 
 /*****
 EXPORT
 *****/
-char	**add_arg_export(char **envp_l, char **argv, int argc);
+
+char	**add_arg_export(char **envp_l, char **argv);
 void	print_export(char **export_envp_l);
 
 #endif

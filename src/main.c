@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv, char **envp)
 {
-	char **envp_l;
+	char	**envp_l;
 
 	(void)argc;
 	(void)argv;
