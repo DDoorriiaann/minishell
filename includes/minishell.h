@@ -44,6 +44,9 @@ char	*extract_env_variable_name(char *arg, int start);
 int		variable_found_inside_env(char *env_variable_name, char **envp);
 void	delete_var_inside_arg(char **argv, int start, int index);
 
+//DECORATION
+void	print_decoration(void);
+
 /***
 FREE
 ***/

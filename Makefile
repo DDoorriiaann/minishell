@@ -20,6 +20,7 @@ SRC			=	main.c\
 				utils4.c\
 				env_var_interpreter.c\
 				env_var_interpreter2.c\
+				decoration.c\
 
 SRCDIR 		= ./src/
 
