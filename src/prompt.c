@@ -82,7 +82,6 @@ int	prompt_shell(char **envp_l)
 			else if (*argv[0])
 				status_code = exec_cmd(argv, envp_l);
 		}
-		printf("exit code: %d\n", status_code);
 		free_2d_arr(argv);
 		free(buffer);
 		buffer = NULL;
