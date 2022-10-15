@@ -83,6 +83,7 @@ int	prompt_shell(char **envp_l)
 				status_code = exec_cmd(argv, envp_l);
 		}
 		free_2d_arr(argv);
+		argv = NULL;
 		free(buffer);
 		buffer = NULL;
 		buffer = readline("Mickeytotal$>");

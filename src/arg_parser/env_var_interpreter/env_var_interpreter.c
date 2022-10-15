@@ -14,48 +14,53 @@ int	env_variable_name_exists(char *arg, int start, char **envp)
 		return (ERROR);
 }
 
-void	replace_var_by_content(char **argv, int index, int start, t_env_var var)
+void	replace_var_by_content(char **argv, int index, int start, t_env_var *var)
 {
 	char	*updated_arg;
 	int		i;
+	int		j;
 
-	updated_arg = malloc(var.len - (ft_strlen(var.name)) + 1);
-	updated_arg[var.len - ft_strlen(var.name)] = '\0';
+	updated_arg = malloc(ft_strlen(argv[index])
+			+ var->len - (ft_strlen(var->name)) + 1);
 	i = -1;
 	while (++i < start)
 		updated_arg[i] = argv[index][i];
-	while (*var.value)
+	j = 0;
+	while (var->value[j])
 	{
-		updated_arg[i] = *var.value;
-		var.value++;
+		updated_arg[i] = var->value[j];
 		i++;
+		j++;
 	}
-	start = start + ft_strlen(var.name);
+	start = start + ft_strlen(var->name);
 	while (argv[index][start])
 	{
 		updated_arg[i] = argv[index][start];
 		start++;
 		i++;
 	}
+	updated_arg[i] = '\0';
 	free(argv[index]);
 	argv[index] = updated_arg;
 }
 
 int	interpret_env_variable(char **argv, int start, int arg_index, char **envp)
 {
-	t_env_var	var;
+	t_env_var	*var;
 	int			value_start;
 	int			value_len;
 
-	var.index = env_variable_name_exists(argv[arg_index], start + 1, envp);
-	var.len = ft_strlen(envp[var.index]);
-	var.name = extract_env_variable_name(argv[arg_index], start + 1);
-	value_start = ft_strlen(var.name);
-	var.value = ft_substr(envp[var.index], value_start, var.len - value_start);
+	var = malloc(sizeof(t_env_var));
+	var->index = env_variable_name_exists(argv[arg_index], start + 1, envp);
+	var->len = ft_strlen(envp[var->index]);
+	var->name = extract_env_variable_name(argv[arg_index], start + 1);
+	value_start = ft_strlen(var->name);
+	var->value = ft_substr(envp[var->index], value_start, var->len - value_start);
 	replace_var_by_content(argv, arg_index, start, var);
-	value_len = ft_strlen(var.value);
-	free(var.value);
-	free(var.name);
+	value_len = ft_strlen(var->value);
+	free(var->value);
+	free(var->name);
+	free(var);
 	return (start + value_len - 1);
 }
 
