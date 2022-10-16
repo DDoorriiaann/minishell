@@ -19,6 +19,7 @@ typedef struct s_env_var
 {
 	int		index;
 	char	*name;
+	int		name_len;
 	char	*value;
 	int		len;
 }	t_env_var;
@@ -40,9 +41,17 @@ char	**get_cmd(char *cmd, char **paths);
 char	**arg_parser(char *input, char **envp, int s_code);
 char	**copy_envp(char **envp);
 void	interpret_env_variables(char **argv, char **envp, int s_code);
+int		interpret_current_env_variable(char **argv, int start,
+			int arg_index, char **envp);
 char	*extract_env_variable_name(char *arg, int start);
 int		variable_found_inside_env(char *env_variable_name, char **envp);
 int		delete_var_inside_arg(char **argv, int start, int index);
+int		backup_arg_before_var(char *backup, char *original, int end);
+void	backup_arg_after_var(char *backup, char *original,
+			int end, int current_char);
+void	replace_var_by_status_code(char **argv, int start,
+			int index, int s_code);
+int		env_variable_name_exists(char *arg, int start, char **envp);
 
 //DECORATION
 void	print_decoration(void);

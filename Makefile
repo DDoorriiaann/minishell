@@ -15,9 +15,12 @@ SRC			=	main.c\
 				utils4.c\
 				prompt.c\
 				arg_parser/arg_parser.c\
-				arg_parser/env_var_interpreter/env_var_interpreter.c\
-				arg_parser/env_var_interpreter/env_var_interpreter2.c\
+				arg_parser/env_var_interpreter/interpret_env_variables.c\
+				arg_parser/env_var_interpreter/utils_env_var_interpreter.c\
 				arg_parser/env_var_interpreter/extract_env_var_name.c\
+				arg_parser/env_var_interpreter/delete_var_inside_arg.c\
+				arg_parser/env_var_interpreter/replace_var_by_status_code.c\
+				arg_parser/env_var_interpreter/interpret_current_env_variable.c\
 				builtin_export1.c\
 				builtin_export2.c\
 				builtin_env.c\
