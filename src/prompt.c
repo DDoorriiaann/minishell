@@ -58,7 +58,7 @@ int	prompt_shell(char **envp_l)
 	{
 		argc = 0;
 		add_history(buffer);
-		argv = parser(buffer, envp_l, status_code);
+		argv = arg_parser(buffer, envp_l, status_code);
 		while (argv[argc])
 			argc++;
 		if (argc != 0)
@@ -83,6 +83,7 @@ int	prompt_shell(char **envp_l)
 				status_code = exec_cmd(argv, envp_l);
 		}
 		free_2d_arr(argv);
+		argv = NULL;
 		free(buffer);
 		buffer = NULL;
 		buffer = readline("Mickeytotal$>");

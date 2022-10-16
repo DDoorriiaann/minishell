@@ -121,7 +121,7 @@ char	**split_input(char *input, int argc)
 	return (argv);
 }
 
-char	**parser(char *input, char **envp, int e_code)
+char	**arg_parser(char *input, char **envp, int e_code)
 {
 	int		argc;
 	char	**argv;
