@@ -129,5 +129,6 @@ char	**arg_parser(char *input, char **envp, int e_code)
 	argc = count_arguments(input, 0);
 	argv = split_input(input, argc);
 	interpret_env_variables(argv, envp, e_code);
+	remove_quotes(argv);
 	return (argv);
 }

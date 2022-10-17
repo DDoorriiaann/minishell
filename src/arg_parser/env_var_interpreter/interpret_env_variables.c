@@ -12,6 +12,9 @@ static void	update_argv_with_env_variables(int index, char **argv,
 	{
 		if (arg[start] != '$' || !arg[start + 1] || ft_isspace(arg[start + 1]))
 		{
+			if (arg[start] == '\''
+				&& find_closing_quote(arg, start + 1, arg[start]) != ERROR)
+				start = find_closing_quote(arg, start + 1, arg[start]);
 			start++;
 			continue ;
 		}

@@ -24,6 +24,12 @@ typedef struct s_env_var
 	int		len;
 }	t_env_var;
 
+typedef struct s_arg_update
+{
+	char	*original_arg;
+	char	*updated_arg;
+}	t_arg_update;
+
 ////////FUNCTIONS
 //PROMPT
 void	ft_free_all_arr(char **paths, char **cmd);
@@ -52,6 +58,7 @@ void	backup_arg_after_var(char *backup, char *original,
 void	replace_var_by_status_code(char **argv, int start,
 			int index, int s_code);
 int		env_variable_name_exists(char *arg, int start, char **envp);
+void	remove_quotes(char **argv);
 
 //DECORATION
 void	print_decoration(void);
