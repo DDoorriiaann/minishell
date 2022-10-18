@@ -22,6 +22,7 @@ SRC			=	main.c\
 				arg_parser/env_var_interpreter/replace_var_by_status_code.c\
 				arg_parser/env_var_interpreter/interpret_current_env_variable.c\
 				arg_parser/quotes_remover/remove_quotes.c\
+				arg_parser/redirections/handle_infile_redirection.c\
 				builtin_export1.c\
 				builtin_export2.c\
 				builtin_env.c\

@@ -1,5 +1,29 @@
 #include "minishell.h"
 
+void	delete_argument(char **argv, int arg_index, int args_to_delete)
+{
+	int		argc;
+	char	**updated_argv;
+	int		i;
+
+	argc = count_splitted_arguments(argv);
+	updated_argv = malloc(sizeof(char *) * argc - args_to_delete + 1);
+	i = 0;
+	while (i < arg_index)
+	{
+		updated_argv[i] = argv[i];
+		i++;
+	}
+	while (argv[i + 1])
+	{
+		updated_argv[i] = argv[i + 1];
+		i++;
+	}
+	updated_argv[i] = NULL;
+	free_2d_arr(argv);
+	argv = updated_argv;
+}
+
 void	dup_arr(char **src, char **dst)
 {
 	int	i;

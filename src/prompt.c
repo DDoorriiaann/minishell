@@ -44,7 +44,7 @@ int	exec_cmd(char **argv, char **envp_l)
 	return (status_code);
 }
 
-int	prompt_shell(char **envp_l)
+int	prompt_shell(char **envp_l, t_redirections *redirections)
 {
 	char	*buffer;
 	int		argc;
@@ -58,7 +58,7 @@ int	prompt_shell(char **envp_l)
 	{
 		argc = 0;
 		add_history(buffer);
-		argv = arg_parser(buffer, envp_l, status_code);
+		argv = arg_parser(buffer, envp_l, status_code, redirections);
 		while (argv[argc])
 			argc++;
 		if (argc != 0)

@@ -30,10 +30,17 @@ typedef struct s_arg_update
 	char	*updated_arg;
 }	t_arg_update;
 
+typedef struct s_redirections
+{
+	int		in_redirection;
+	int		out_redirection;
+	char	*infile;
+}	t_redirections;
+
 ////////FUNCTIONS
 //PROMPT
 void	ft_free_all_arr(char **paths, char **cmd);
-int		prompt_shell(char **envp_l);
+int		prompt_shell(char **envp_l, t_redirections *redirections);
 
 /****
 PATHS
@@ -44,7 +51,8 @@ char	**get_path(char *envp_path);
 char	**get_cmd(char *cmd, char **paths);
 
 //PARSER
-char	**arg_parser(char *input, char **envp, int s_code);
+char	**arg_parser(char *input, char **envp,
+			int s_code, t_redirections *redirections);
 char	**copy_envp(char **envp);
 void	interpret_env_variables(char **argv, char **envp, int s_code);
 int		interpret_current_env_variable(char **argv, int start,
@@ -59,6 +67,7 @@ void	replace_var_by_status_code(char **argv, int start,
 			int index, int s_code);
 int		env_variable_name_exists(char *arg, int start, char **envp);
 void	remove_quotes(char **argv);
+void	handle_infile_redirection(char **argv, t_redirections *redirections);
 
 //DECORATION
 void	print_decoration(void);
@@ -121,6 +130,8 @@ int		check_if_new_variables(char **argv, char **envp_l);
 void	update_variable(char **envp_l, char *var, int index);
 void	update_envp_l(char **argv, char **envp_l);
 void	join_variable(char **envp_l, char *var, int index);
+int		count_splitted_arguments(char **argv);
+void	delete_argument(char **argv, int arg_index, int args_to_delete);
 
 /*****
 EXPORT

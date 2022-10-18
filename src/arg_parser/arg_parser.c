@@ -121,7 +121,8 @@ char	**split_input(char *input, int argc)
 	return (argv);
 }
 
-char	**arg_parser(char *input, char **envp, int e_code)
+char	**arg_parser(char *input, char **envp,
+			int e_code, t_redirections *redirections)
 {
 	int		argc;
 	char	**argv;
@@ -129,6 +130,7 @@ char	**arg_parser(char *input, char **envp, int e_code)
 	argc = count_arguments(input, 0);
 	argv = split_input(input, argc);
 	interpret_env_variables(argv, envp, e_code);
+	handle_infile_redirection(argv, redirections);
 	remove_quotes(argv);
 	return (argv);
 }

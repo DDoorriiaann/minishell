@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+int	count_splitted_arguments(char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+		i++;
+	return (i);
+}
+
 void	free_2d_arr(char **arr)
 {
 	int	i;
