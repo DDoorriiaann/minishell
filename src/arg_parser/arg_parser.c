@@ -130,7 +130,7 @@ char	**arg_parser(char *input, char **envp,
 	argc = count_arguments(input, 0);
 	argv = split_input(input, argc);
 	interpret_env_variables(argv, envp, e_code);
-	handle_infile_redirection(argv, redirections);
+	argv = handle_infile_redirection(argv, redirections);
 	remove_quotes(argv);
 	return (argv);
 }

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	delete_argument(char **argv, int arg_index, int args_to_delete)
+char	**delete_argument(char **argv, int arg_index, int args_to_delete)
 {
 	int		argc;
 	char	**updated_argv;
@@ -11,17 +11,17 @@ void	delete_argument(char **argv, int arg_index, int args_to_delete)
 	i = 0;
 	while (i < arg_index)
 	{
-		updated_argv[i] = argv[i];
+		updated_argv[i] = ft_strdup(argv[i]);
 		i++;
 	}
-	while (argv[i + 1])
+	while (argv[i + args_to_delete])
 	{
-		updated_argv[i] = argv[i + 1];
+		updated_argv[i] = ft_strdup(argv[i + args_to_delete]);
 		i++;
 	}
 	updated_argv[i] = NULL;
 	free_2d_arr(argv);
-	argv = updated_argv;
+	return (updated_argv);
 }
 
 void	dup_arr(char **src, char **dst)

@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+static int	is_chevron_alone(char **argv, int arg_index)
+{
+	int	arg_len;
+
+	arg_len = ft_strlen(argv[arg_index]);
+	if (arg_len == 1 && argv[arg_index][0] == '<' && argv[arg_index + 1])
+		return (TRUE);
+	return (FALSE);
+}
+
 static void	extract_infile_name(char *arg, t_redirections *redirections)
 {
 	int		i;
@@ -18,25 +28,20 @@ static void	extract_infile_name(char *arg, t_redirections *redirections)
 	redirections->infile[i] = '\0';
 }
 
-static int	fetch_infile(char **argv, int arg_index,
+static char	**fetch_infile(char **argv, int arg_index,
 		t_redirections *redirections)
 {
-	int	arg_len;
-
-	arg_len = ft_strlen(argv[arg_index]);
-	if (arg_len == 1 && argv[arg_index][0] == '<' && argv[arg_index + 1])
+	if (is_chevron_alone(argv, arg_index))
 	{	
-		redirections->infile = argv[arg_index + 1];
-		delete_argument(argv, arg_index, 2);
-		arg_index -= 2;
+		redirections->infile = ft_strdup(argv[arg_index + 1]);
+		argv = delete_argument(argv, arg_index, 2);
 	}
 	else
 	{
 		extract_infile_name(argv[arg_index], redirections);
-		delete_argument(argv, arg_index, 1);
-		arg_index--;
+		argv = delete_argument(argv, arg_index, 1);
 	}
-	return (arg_index);
+	return (argv);
 }
 
 static void	check_infile_redirection(char *arg, t_redirections *redirections)
@@ -47,26 +52,39 @@ static void	check_infile_redirection(char *arg, t_redirections *redirections)
 	while (arg[i])
 	{
 		if (arg[i] == '<')
+		{	
 			redirections->in_redirection = TRUE;
+			return ;
+		}
 		i++;
 	}
 	redirections->in_redirection = FALSE;
 }
 
-void	handle_infile_redirection(char **argv, t_redirections *redirections)
+char	**handle_infile_redirection(char **argv, t_redirections *redirections)
 {
 	int	i;
+	int	chevron_alone;
 
 	i = 0;
 	while (argv[i])
 	{
 		check_infile_redirection(argv[i], redirections);
 		if (redirections->in_redirection)
-			i = fetch_infile(argv, i, redirections);
+		{
+			chevron_alone = is_chevron_alone(argv, i);
+			argv = fetch_infile(argv, i, redirections);
+			if (chevron_alone)
+				i--;
+			i--;
+			if (i < 0)
+				i = 0;
+		}
 		redirections->in_redirection = FALSE;
-		i++;
+		if (argv[i])
+			i++;
 	}
 	if (redirections->infile)
 		redirections->in_redirection = TRUE;
-	printf("infile : %s\n", redirections->infile);
+	return (argv);
 }

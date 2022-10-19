@@ -67,7 +67,7 @@ void	replace_var_by_status_code(char **argv, int start,
 			int index, int s_code);
 int		env_variable_name_exists(char *arg, int start, char **envp);
 void	remove_quotes(char **argv);
-void	handle_infile_redirection(char **argv, t_redirections *redirections);
+char	**handle_infile_redirection(char **argv, t_redirections *redirections);
 
 //DECORATION
 void	print_decoration(void);
@@ -131,7 +131,7 @@ void	update_variable(char **envp_l, char *var, int index);
 void	update_envp_l(char **argv, char **envp_l);
 void	join_variable(char **envp_l, char *var, int index);
 int		count_splitted_arguments(char **argv);
-void	delete_argument(char **argv, int arg_index, int args_to_delete);
+char	**delete_argument(char **argv, int arg_index, int args_to_delete);
 
 /*****
 EXPORT
