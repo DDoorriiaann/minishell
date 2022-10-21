@@ -2,10 +2,8 @@
 
 void	ft_error_cmd(char *str)
 {
-	write(2, "command '", 9);
 	write(2, str, ft_strlen(str));
-	write(2, "' not found\n", 12);
-	exit(1);
+	write(2, ": command not found\n", 20);
 }
 
 void	ft_error(void)

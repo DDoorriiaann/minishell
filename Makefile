@@ -5,10 +5,8 @@ _GREEN="\e[38;5;10m"
 NAME		= minishell 
 
 SRC			=	main.c\
-				prompt.c\
-				free.c\
+				decoration.c\
 				paths.c\
-				parser.c\
 				error.c\
 				builtin/builtin.c\
 				builtin/export/extract_arg/extract_arg_after_equal.c\
@@ -28,11 +26,20 @@ SRC			=	main.c\
 				builtin/export/sort_export/sort_first_char.c\
 				builtin/export/export.c\
 				builtin/env/builtin_env.c\
+        builtin.c\
+				free.c\
 				utils1.c\
 				utils2.c\
 				utils4.c\
-				env_var_interpreter.c\
-				env_var_interpreter2.c\
+				prompt.c\
+				arg_parser/arg_parser.c\
+				arg_parser/env_var_interpreter/interpret_env_variables.c\
+				arg_parser/env_var_interpreter/utils_env_var_interpreter.c\
+				arg_parser/env_var_interpreter/extract_env_var_name.c\
+				arg_parser/env_var_interpreter/delete_var_inside_arg.c\
+				arg_parser/env_var_interpreter/replace_var_by_status_code.c\
+				arg_parser/env_var_interpreter/interpret_current_env_variable.c\
+				arg_parser/quotes_remover/remove_quotes.c\
 
 SRCDIR 		= ./src/
 
