@@ -91,23 +91,25 @@ int		check_syntax(char *argv);
 int		len_arg(char *argv);
 void	sort_first_char(char **envp_l);
 void	sort_after_first_char(char **envp_l);
+int		sort_ascii(char **envp_l, int ret, int i);
 int		len_arg(char *argv);
 void	dup_arr(char **src, char **dst);
 int		check_syntax(char *argv);
 int		size_env(char **envp_l);
-int		size_arg_before_equal(char *argv);
 int		size_arg(char *argv);
 int		check_arg(char **envp_l, char *argv);
 int		check_if_new_variables(char **argv, char **envp_l);
-void	update_variable(char **envp_l, char *var, int index);
 void	update_envp_l(char **argv, char **envp_l);
-void	join_variable(char **envp_l, char *var, int index);
+int		size_arg_before_equal(char *argv);
+char	*extract_arg_with_equal(char *argv);
+char	*extract_arg_after_equal(char *argv);
+int		check_char_equal(char *argv);
+int		check_plus(char *argv);
 
 /*****
 EXPORT
 *****/
 
-char	**add_arg_export(char **envp_l, char **argv);
 void	print_export(char **export_envp_l);
 
 #endif
