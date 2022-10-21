@@ -8,10 +8,28 @@ SRC			=	main.c\
 				decoration.c\
 				paths.c\
 				error.c\
+				builtin/builtin.c\
+				builtin/export/extract_arg/extract_arg_after_equal.c\
+				builtin/export/extract_arg/extract_arg_with_equal.c\
+				builtin/export/update_envp_l/update_envp_l.c\
+				builtin/export/print_export/print_export.c\
+				builtin/export/check_arg/check_char_equal.c\
+				builtin/export/check_arg/check_plus.c\
+				builtin/export/check_arg/check_if_new_variables.c\
+				builtin/export/check_arg/compare_arg_envp_l.c\
+				builtin/export/size_env_or_arg/len_arg.c\
+				builtin/export/size_env_or_arg/size_arg.c\
+				builtin/export/size_env_or_arg/size_arg_before_equal.c\
+				builtin/export/size_env_or_arg/size_env.c\
+				builtin/export/sort_export/sort_after_first_char.c\
+				builtin/export/sort_export/sort_ascii.c\
+				builtin/export/sort_export/sort_first_char.c\
+				builtin/export/export.c\
+				builtin/env/builtin_env.c\
+        builtin.c\
 				free.c\
 				utils1.c\
 				utils2.c\
-				utils3.c\
 				utils4.c\
 				prompt.c\
 				arg_parser/arg_parser.c\
@@ -22,10 +40,6 @@ SRC			=	main.c\
 				arg_parser/env_var_interpreter/replace_var_by_status_code.c\
 				arg_parser/env_var_interpreter/interpret_current_env_variable.c\
 				arg_parser/quotes_remover/remove_quotes.c\
-				builtin_export1.c\
-				builtin_export2.c\
-				builtin_env.c\
-				builtin.c\
 
 SRCDIR 		= ./src/
 
