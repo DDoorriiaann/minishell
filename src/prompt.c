@@ -1,7 +1,7 @@
 #include "minishell.h"
-#include <stdio.h>
+#include <fcntl.h>
 
-int	exec_cmd(char **argv, char **envp_l)
+int	exec_cmd(char **argv, char **envp_l, t_redirections *redirections)
 {
 	int		pid = 0;
 	int		status = 0;
@@ -19,6 +19,11 @@ int	exec_cmd(char **argv, char **envp_l)
 		ft_free_arr(paths);
 		ft_error_cmd(argv[0]);
 		return (127);
+	}
+	if (redirections->infile)
+	{
+		close(0);
+		open(redirections->infile, O_RDONLY);
 	}
 	pid = fork();
 	if (pid == -1)
@@ -80,7 +85,7 @@ int	prompt_shell(char **envp_l, t_redirections *redirections)
 			else if ((ft_strncmp(buffer, "env", 3)) == 0)
 				builtin_env(envp_l);
 			else if (*argv[0])
-				status_code = exec_cmd(argv, envp_l);
+				status_code = exec_cmd(argv, envp_l, redirections);
 		}
 		free_2d_arr(argv);
 		argv = NULL;

@@ -6,6 +6,9 @@
 # include <errno.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -91,7 +94,7 @@ int		ft_error_return(void);
 EXEC
 ***/
 
-int		exec_cmd(char **argv, char **envp);
+int		exec_cmd(char **argv, char **envp, t_redirections *redirections);
 
 /******
 BUILTIN
