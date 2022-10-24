@@ -15,6 +15,7 @@ SRC			=	main.c\
 				builtin/export/print_export/print_export.c\
 				builtin/export/check_arg/check_char_equal.c\
 				builtin/export/check_arg/check_plus.c\
+				builtin/export/check_arg/check_dollars.c\
 				builtin/export/check_arg/check_if_new_variables.c\
 				builtin/export/check_arg/compare_arg_envp_l.c\
 				builtin/export/size_env_or_arg/len_arg.c\
