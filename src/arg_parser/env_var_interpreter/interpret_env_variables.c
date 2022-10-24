@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+static int	skip_lonely_dollars(char *arg, int start)
+{
+	while (arg[start] == '$' && arg[start] == arg[start + 1])
+		start++;
+	return (start);
+}
+
+static int	skip_single_quoted_content(char *arg, int start)
+{
+	if (arg[start] == '\''
+		&& find_closing_quote(arg, start + 1, arg[start]) != ERROR)
+		start = find_closing_quote(arg, start + 1, arg[start]);
+	start++;
+	return (start);
+}
+
 static void	update_argv_with_env_variables(int index, char **argv,
 										char **envp, int s_code)
 {
@@ -10,12 +26,11 @@ static void	update_argv_with_env_variables(int index, char **argv,
 	start = 0;
 	while (arg[start])
 	{
+		if (arg[start] == '$' && arg[start + 1] == '$')
+			start = skip_lonely_dollars(arg, start);
 		if (arg[start] != '$' || !arg[start + 1] || ft_isspace(arg[start + 1]))
 		{
-			if (arg[start] == '\''
-				&& find_closing_quote(arg, start + 1, arg[start]) != ERROR)
-				start = find_closing_quote(arg, start + 1, arg[start]);
-			start++;
+			start = skip_single_quoted_content(arg, start);
 			continue ;
 		}
 		if (arg[start + 1] == '?')
