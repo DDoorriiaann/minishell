@@ -124,6 +124,7 @@ char	*extract_arg_with_equal(char *argv);
 char	*extract_arg_after_equal(char *argv);
 int		check_char_equal(char *argv);
 int		check_plus(char *argv);
+char	**check_dollars(char **argv);
 
 /*****
 EXPORT

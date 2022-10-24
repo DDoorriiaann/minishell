@@ -22,6 +22,7 @@ static char	**add_arg_export(char **envp_l, char **argv)
 	}
 	return (tmp_envp_l);
 }
+
 char	**builtin_export(char **envp_l, char **argv, int argc)
 {
 	char	**export_envp_l;
@@ -29,6 +30,7 @@ char	**builtin_export(char **envp_l, char **argv, int argc)
 	export_envp_l = copy_envp(envp_l);
 	sort_first_char(export_envp_l);
 	sort_after_first_char(export_envp_l);
+	check_dollars(argv);
 	if (argc == 1)
 		print_export(export_envp_l);
 	else
