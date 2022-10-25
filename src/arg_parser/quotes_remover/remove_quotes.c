@@ -44,6 +44,7 @@ static void	delete_quotes_from_arg(char **argv, int arg_index,
 	update->updated_arg[new_arg_len] = '\0';
 	free(argv[arg_index]);
 	argv[arg_index] = update->updated_arg;
+	free(update);
 }
 
 static int	handle_quotes(char **argv, int arg_index, int cur_char)
