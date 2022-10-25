@@ -9,7 +9,8 @@ int	variable_found_inside_env(char *env_variable_name, char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], env_variable_name, len) == 0)
+		if (ft_strncmp(envp[i], env_variable_name, len) == 0
+			&& (envp[i][len] == '=' || envp[i][len] == '\0'))
 			return (i);
 		i++;
 	}
