@@ -65,17 +65,19 @@ void	update_envp_l(char **argv, char **envp_l)
 	i = 1;
 	while (argv[i])
 	{
-		var_index = check_arg(envp_l, argv[i]);
-		if (var_index != -1)
-			existing_export(argv, envp_l, var_index, i);
-		else if (check_syntax(argv[i]) == TRUE)
+		if (!(argv[i][0] == '_' && argv[i][1] == '='))
 		{
-			if (check_plus(argv[i]) == TRUE)
-				argv[i] = remove_plus(argv[i]);
-			envp_l[len++] = ft_strdup(argv[i]);
-			envp_l[len] = NULL;
+			var_index = check_arg(envp_l, argv[i]);
+			if (var_index != -1)
+				existing_export(argv, envp_l, var_index, i);
+			else if (check_syntax(argv[i]) == TRUE)
+			{
+				if (check_plus(argv[i]) == TRUE)
+					argv[i] = remove_plus(argv[i]);
+				envp_l[len++] = ft_strdup(argv[i]);
+				envp_l[len] = NULL;
+			}
 		}
 		i++;
 	}
-	envp_l[len] = NULL;
 }

@@ -26,6 +26,7 @@ SRC			=	main.c\
 				builtin/export/sort_export/sort_ascii.c\
 				builtin/export/sort_export/sort_first_char.c\
 				builtin/export/export.c\
+				builtin/unset/builtin_unset.c\
 				builtin/env/builtin_env.c\
 				free.c\
 				utils1.c\
