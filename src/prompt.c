@@ -79,6 +79,8 @@ int	prompt_shell(char **envp_l)
 			}
 			else if ((ft_strncmp(buffer, "env", 3)) == 0)
 				builtin_env(envp_l);
+			else if ((ft_strncmp(buffer, "unset", 5)) == 0)
+				envp_l = builtin_unset(envp_l, argv);
 			else if (*argv[0])
 				status_code = exec_cmd(argv, envp_l);
 		}

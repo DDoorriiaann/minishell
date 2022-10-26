@@ -125,11 +125,15 @@ char	*extract_arg_after_equal(char *argv);
 int		check_char_equal(char *argv);
 int		check_plus(char *argv);
 char	**check_dollars(char **argv);
+int		len_arg_unset(char *argv);
+int		check_arg_unset(char **envp_l, char *argv);
 
 /*****
 EXPORT
 *****/
 
 void	print_export(char **export_envp_l);
+
+char	**builtin_unset(char **envp_l, char **argv);
 
 #endif
