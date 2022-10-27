@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   paths.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ybaudoui <ybaudoui@student.42angoulem      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/27 14:27:23 by ybaudoui          #+#    #+#             */
-/*   Updated: 2022/09/30 16:23:15 by ybaudoui         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 char	**copy_envp(char **envp)
@@ -88,6 +76,6 @@ char	**get_cmd(char *cmd, char **paths)
 		free(cmd_path);
 		i++;
 	}
-	ft_free_arr(cmd_split);
+	free_2d_arr(cmd_split);
 	return (0);
 }

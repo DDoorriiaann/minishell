@@ -68,7 +68,7 @@ FREE
 ***/
 
 void	ft_free_all_arr(char **paths, char **cmd);
-void	ft_free_arr(char **arr);
+void	free_2d_arr(char **arr);
 
 /****
 ERROR
@@ -102,7 +102,6 @@ int		ft_isspace(char c);
 int		ft_is_quote(char c);
 int		skip_spaces(char *input, int index);
 int		find_word_end(char *input, int index);
-void	free_2d_arr(char **arr);
 int		find_closing_quote(char *input, int end, char quote_type);
 int		go_to_word_end(char *input, int index, int *argc);
 int		go_to_quote_end(char *input, int index, int *argc);
@@ -125,8 +124,9 @@ char	*extract_arg_after_equal(char *argv);
 int		check_char_equal(char *argv);
 int		check_plus(char *argv);
 char	**check_dollars(char **argv);
-int		len_arg_unset(char *argv);
-int		check_arg_unset(char **envp_l, char *argv);
+void	print_error(char *argv);
+void	print_error_unset(char *argv);
+int		check_syntax_unset(char *argv);
 
 /*****
 EXPORT

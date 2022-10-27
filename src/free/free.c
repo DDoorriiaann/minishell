@@ -1,6 +1,6 @@
 # include "minishell.h"
 
-void	ft_free_arr(char **arr)
+void	free_2d_arr(char **arr)
 {
 	int	i;
 
@@ -15,6 +15,6 @@ void	ft_free_arr(char **arr)
 
 void	ft_free_all_arr(char **paths, char **cmd)
 {
-	ft_free_arr(paths);
-	ft_free_arr(cmd);
+	free_2d_arr(paths);
+	free_2d_arr(cmd);
 }
