@@ -9,7 +9,7 @@ char	*extract_env_variable_name(char *arg, int start)
 	end = start;
 	while (arg[end] && (ft_isalnum(arg[end]) || arg[end] == '_'))
 		end++;
-	env_variable_name = malloc((end - start) + 2);
+	env_variable_name = malloc((end - start) + 1);
 	i = 0;
 	while (start < end)
 	{
@@ -17,7 +17,6 @@ char	*extract_env_variable_name(char *arg, int start)
 		start++;
 		i++;
 	}
-	env_variable_name[i] = '=';
-	env_variable_name[i + 1] = '\0';
+	env_variable_name[i] = '\0';
 	return (env_variable_name);
 }
