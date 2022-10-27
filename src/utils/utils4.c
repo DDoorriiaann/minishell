@@ -33,18 +33,9 @@ int	check_syntax(char *argv)
 	return (FALSE);
 }
 
-int	check_arg_unset(char **envp_l, char *argv)
+void	print_error(char *argv)
 {
-	int	i;
-	int	len;
-
-	i = 0;
-	while (envp_l[i])
-	{
-		len = len_arg_unset(envp_l[i]);
-		if (ft_strncmp(envp_l[i], argv, len) == 0)
-			return (i);
-		i++;
-	}
-	return (-1);
+	ft_putstr_fd("Mickeytotal: export: `", 2);
+	ft_putstr_fd(argv, 2);
+	ft_putstr_fd("':not a valid identifier\n", 2);
 }

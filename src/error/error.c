@@ -13,7 +13,7 @@ void	ft_error(void)
 	exit(1);
 }
 
-int		ft_error_return(void)
+int	ft_error_return(void)
 {
 	ft_putstr_fd(strerror(errno), 2);
 	ft_putstr_fd("\n", 2);

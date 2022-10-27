@@ -5,10 +5,12 @@ _GREEN="\e[38;5;10m"
 NAME		= minishell 
 
 SRC			=	main.c\
-				decoration.c\
-				paths.c\
-				error.c\
-				builtin/builtin.c\
+				decoration/decoration.c\
+				path/path.c\
+				error/error.c\
+				builtin/pwd/builtin_pwd.c\
+				builtin/echo/builtin_echo.c\
+				builtin/cd/builtin_cd.c\
 				builtin/export/extract_arg/extract_arg_after_equal.c\
 				builtin/export/extract_arg/extract_arg_with_equal.c\
 				builtin/export/update_envp_l/update_envp_l.c\
@@ -25,13 +27,14 @@ SRC			=	main.c\
 				builtin/export/sort_export/sort_after_first_char.c\
 				builtin/export/sort_export/sort_ascii.c\
 				builtin/export/sort_export/sort_first_char.c\
-				builtin/export/export.c\
+				builtin/export/builtin_export.c\
 				builtin/unset/builtin_unset.c\
+				builtin/unset/utils_unset.c\
 				builtin/env/builtin_env.c\
-				free.c\
-				utils1.c\
-				utils2.c\
-				utils4.c\
+				free/free.c\
+				utils/utils1.c\
+				utils/utils2.c\
+				utils/utils4.c\
 				prompt.c\
 				arg_parser/arg_parser.c\
 				arg_parser/env_var_interpreter/interpret_env_variables.c\

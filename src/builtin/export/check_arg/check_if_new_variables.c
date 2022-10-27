@@ -15,7 +15,7 @@ int	check_if_new_variables(char **argv, char **envp_l)
 			continue ;
 		}
 		if (check_syntax(argv[i]) == FALSE)
-			ft_putstr_fd("bash :export: not a valid identifier\n", 2);
+			print_error(argv[i]);
 		else if (check_arg(envp_l, argv[i]) == -1)
 			new_vars++;
 		i++;

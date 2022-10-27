@@ -16,7 +16,7 @@ int	exec_cmd(char **argv, char **envp_l)
 	cmd = get_cmd(argv[0], paths);
 	if (!cmd)
 	{
-		ft_free_arr(paths);
+		free_2d_arr(paths);
 		ft_error_cmd(argv[0]);
 		return (127);
 	}
@@ -90,7 +90,7 @@ int	prompt_shell(char **envp_l)
 		buffer = NULL;
 		buffer = readline("Mickeytotal$>");
 	}
-	ft_free_arr(envp_l);
+	free_2d_arr(envp_l);
 	printf("\nHave a nice day with MickeyTotal \n");
 	return (0);
 }
