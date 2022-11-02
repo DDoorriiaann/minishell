@@ -27,9 +27,7 @@ int	exec_cmd(char **argv, char **envp_l)
 	{
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
-		{
 			status_code = WEXITSTATUS(status);
-		}
 	}
 	else
 	{
@@ -42,6 +40,31 @@ int	exec_cmd(char **argv, char **envp_l)
 	}
 	ft_free_all_arr(paths, cmd);
 	return (status_code);
+}
+
+char	**builtins(char **argv, char **envp_l, int argc, int *status_code)
+{
+	if ((ft_strcmp(argv[0], "echo")) == 0)
+		builtin_echo(argv);
+	else if ((ft_strcmp(argv[0], "pwd")) == 0)
+		builtin_pwd();
+	else if ((ft_strcmp(argv[0], "cd")) == 0)
+		builtin_cd(argv[0], envp_l);
+	else if ((ft_strcmp(argv[0], "export")) == 0)
+		envp_l = builtin_export(envp_l, argv, argc);
+//	else if ((ft_strcmp(argv[0], "exit")) == 0)
+//	{
+//		free(buffer);
+//		free_2d_arr(argv);
+//		break ;
+//	}
+	else if ((ft_strcmp(argv[0], "env")) == 0)
+		builtin_env(envp_l);
+	else if ((ft_strcmp(argv[0], "unset")) == 0)
+		envp_l = builtin_unset(envp_l, argv);
+	else if (*argv[0])
+		*status_code = exec_cmd(argv, envp_l);
+	return (envp_l);
 }
 
 int	prompt_shell(char **envp_l)
@@ -62,30 +85,8 @@ int	prompt_shell(char **envp_l)
 		while (argv[argc])
 			argc++;
 		if (argc != 0)
-		{
-			if ((ft_strncmp(argv[0], "echo", 4)) == 0)
-				builtin_echo(argv);
-			else if ((ft_strncmp(buffer, "pwd", 3)) == 0)
-				builtin_pwd();
-			else if ((ft_strncmp(buffer, "cd", 2)) == 0)
-				builtin_cd(buffer, envp_l);
-			else if ((ft_strncmp(buffer, "export", 6)) == 0)
-				envp_l = builtin_export(envp_l, argv, argc);
-			else if ((ft_strncmp(buffer, "exit", 5)) == 0)
-			{
-				free(buffer);
-				free_2d_arr(argv);
-				break ;
-			}
-			else if ((ft_strncmp(buffer, "env", 3)) == 0)
-				builtin_env(envp_l);
-			else if ((ft_strncmp(buffer, "unset", 5)) == 0)
-				envp_l = builtin_unset(envp_l, argv);
-			else if (*argv[0])
-				status_code = exec_cmd(argv, envp_l);
-		}
+			envp_l = builtins(argv, envp_l, argc, &status_code);
 		free_2d_arr(argv);
-		argv = NULL;
 		free(buffer);
 		buffer = NULL;
 		buffer = readline("Mickeytotal$>");
