@@ -42,7 +42,7 @@ int	exec_cmd(char **argv, char **envp_l)
 	return (status_code);
 }
 
-char	**builtins(char **argv, char **envp_l, int argc, int *status_code)
+static char	**builtins(char **argv, char **envp_l, int argc, int *status_code)
 {
 	if ((ft_strcmp(argv[0], "echo")) == 0)
 		builtin_echo(argv);
@@ -52,12 +52,8 @@ char	**builtins(char **argv, char **envp_l, int argc, int *status_code)
 		builtin_cd(argv[0], envp_l);
 	else if ((ft_strcmp(argv[0], "export")) == 0)
 		envp_l = builtin_export(envp_l, argv, argc);
-//	else if ((ft_strcmp(argv[0], "exit")) == 0)
-//	{
-//		free(buffer);
-//		free_2d_arr(argv);
-//		break ;
-//	}
+	else if ((ft_strcmp(argv[0], "exit")) == 0)
+		builtin_exit(envp_l, argv);
 	else if ((ft_strcmp(argv[0], "env")) == 0)
 		builtin_env(envp_l);
 	else if ((ft_strcmp(argv[0], "unset")) == 0)
