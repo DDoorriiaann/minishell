@@ -9,3 +9,13 @@ Environment variables are handled, like ``$HOME``, including the return code ``$
 Finally, you can use ``Ctrl-C`` to interrupt and ``Ctrl-\`` to quit a program, as well as ``Ctrl-D`` to throw an EOF, same as in bash.
 
 A few of the functions are "built-in", meaning we don't call the executable, we re-coded them directly. It's the case for ``echo``, ``pwd``, ``cd``, ``env``, ``export``, ``unset`` and ``exit``.
+
+### How to use it
+
+Using ``make`` will create the ``minishell`` executable.
+
+Simply run it with :
+
+```
+./minishell
+```
