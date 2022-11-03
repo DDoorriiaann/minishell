@@ -53,7 +53,7 @@ static char	**builtins(char **argv, char **envp_l, int argc, int *status_code)
 	else if ((ft_strcmp(argv[0], "export")) == 0)
 		envp_l = builtin_export(envp_l, argv, argc);
 	else if ((ft_strcmp(argv[0], "exit")) == 0)
-		builtin_exit(envp_l, argv);
+		builtin_exit(argv);
 	else if ((ft_strcmp(argv[0], "env")) == 0)
 		builtin_env(envp_l);
 	else if ((ft_strcmp(argv[0], "unset")) == 0)

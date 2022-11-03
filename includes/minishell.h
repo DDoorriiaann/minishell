@@ -93,6 +93,7 @@ void	builtin_pwd(void);
 int		builtin_cd(char *argv, char **envp_l);
 char	**builtin_export(char **envp_l, char **argv, int argc);
 void	builtin_env( char **envp_l);
+void	builtin_exit(char **argv);
 
 /******
 UTILS
