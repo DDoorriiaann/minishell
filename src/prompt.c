@@ -53,7 +53,7 @@ static char	**builtins(char **argv, char **envp_l, int argc, int *status_code)
 	else if ((ft_strcmp(argv[0], "export")) == 0)
 		envp_l = builtin_export(envp_l, argv, argc);
 	else if ((ft_strcmp(argv[0], "exit")) == 0)
-		builtin_exit(argv);
+		builtin_exit(argv, *status_code, envp_l);
 	else if ((ft_strcmp(argv[0], "env")) == 0)
 		builtin_env(envp_l);
 	else if ((ft_strcmp(argv[0], "unset")) == 0)
@@ -78,13 +78,13 @@ int	prompt_shell(char **envp_l)
 		argc = 0;
 		add_history(buffer);
 		argv = arg_parser(buffer, envp_l, status_code);
+		free(buffer);
+		buffer = NULL;
 		while (argv[argc])
 			argc++;
 		if (argc != 0)
 			envp_l = builtins(argv, envp_l, argc, &status_code);
 		free_2d_arr(argv);
-		free(buffer);
-		buffer = NULL;
 		buffer = readline("Mickeytotal$>");
 	}
 	free_2d_arr(envp_l);

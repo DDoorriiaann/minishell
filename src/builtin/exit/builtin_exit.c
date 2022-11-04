@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	numeric_argument_required(char *argv)
+static void	numeric_argument_required(char *argv)
 {
 	ft_putstr_fd("exit\n", 2);
 	ft_putstr_fd("Mickeytotal: exit: ", 2);
@@ -8,7 +8,7 @@ void	numeric_argument_required(char *argv)
 	ft_putstr_fd(": numeric argument required\n", 2);
 }
 
-void	too_many_arguments(void)
+static void	too_many_arguments(void)
 {	
 	ft_putstr_fd("exit\n", 2);
 	ft_putstr_fd("Mickeytotal: exit: ", 2);
@@ -25,30 +25,31 @@ static int	check_number_of_arg(char **argv)
 	return (i - 1);
 }
 
-void	builtin_exit(char **argv)
+static void	ft_exit(char **argv, char **envp_l, int status_code)
+{
+	free_2d_arr(argv);
+	free_2d_arr(envp_l);
+	exit(status_code);
+}
+
+void	builtin_exit(char **argv, int status_code, char **envp_l)
 {
 	int	i;
-	int	j;
 	int	number_arg;
 
 	i = 1;
-	j = 0;
 	number_arg = check_number_of_arg(argv);
-	if (ft_isdigit(argv[i][j]) == 1 && number_arg > 1)
-		too_many_arguments();
-	else if (ft_isdigit(argv[i][j]) == 0 && number_arg > 1)
+	if (number_arg == 0)
+		ft_exit(argv, envp_l, status_code);
+	if (ft_isdigit(argv[i][0]) == 0 && number_arg >= 1)
 	{
 		numeric_argument_required(argv[i]);
-		exit (argv[i][j]);
+		ft_exit(argv, envp_l, 2);
 	}
-	else if (ft_isdigit(argv[i][j]) == 0 && number_arg <= 1)
-	{
-		numeric_argument_required(argv[i]);
-		exit (argv[i][j]);
-	}
-	else if (ft_isdigit(argv[i][j]) == 1 && number_arg <= 1)
+	if (ft_isdigit(argv[i][0]) == 1 && number_arg == 1)
 	{
 		ft_putstr_fd("exit\n", 2);
-		exit (argv[i][j]);
+		ft_exit(argv, envp_l, ft_atoi(argv[i]));
 	}
+	too_many_arguments();
 }
