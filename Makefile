@@ -45,6 +45,7 @@ SRC			=	main.c\
 				arg_parser/env_var_interpreter/replace_var_by_status_code.c\
 				arg_parser/env_var_interpreter/interpret_current_env_variable.c\
 				arg_parser/quotes_remover/remove_quotes.c\
+				arg_parser/redirections/handle_infile_redirection.c\
 
 SRCDIR 		= ./src/
 

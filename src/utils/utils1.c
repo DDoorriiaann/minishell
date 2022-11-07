@@ -20,3 +20,13 @@ int	skip_spaces(char *input, int index)
 		index++;
 	return (index);
 }
+
+int	count_splitted_arguments(char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+		i++;
+	return (i);
+}

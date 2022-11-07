@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include <stdio.h>
 
-int	exec_cmd(char **argv, char **envp_l)
+int	exec_cmd(char **argv, char **envp_l, t_redirections *redirections)
 {
 	int		pid = 0;
 	int		status = 0;
@@ -19,6 +19,11 @@ int	exec_cmd(char **argv, char **envp_l)
 		free_2d_arr(paths);
 		ft_error_cmd(argv[0]);
 		return (127);
+	}
+	if (redirections->infile)
+	{
+		close(0);
+		open(redirections->infile, O_RDONLY);
 	}
 	pid = fork();
 	if (pid == -1)
@@ -42,7 +47,7 @@ int	exec_cmd(char **argv, char **envp_l)
 	return (status_code);
 }
 
-static char	**builtins(char **argv, char **envp_l, int argc, int *status_code)
+static char	**builtins(char **argv, char **envp_l, int argc, int *status_code, t_redirections *redirections)
 {
 	if ((ft_strcmp(argv[0], "echo")) == 0)
 		builtin_echo(argv);
@@ -59,11 +64,11 @@ static char	**builtins(char **argv, char **envp_l, int argc, int *status_code)
 	else if ((ft_strcmp(argv[0], "unset")) == 0)
 		envp_l = builtin_unset(envp_l, argv);
 	else if (*argv[0])
-		*status_code = exec_cmd(argv, envp_l);
+		*status_code = exec_cmd(argv, envp_l, redirections);
 	return (envp_l);
 }
 
-int	prompt_shell(char **envp_l)
+int	prompt_shell(char **envp_l, t_redirections *redirections)
 {
 	char	*buffer;
 	int		argc;
@@ -77,13 +82,13 @@ int	prompt_shell(char **envp_l)
 	{
 		argc = 0;
 		add_history(buffer);
-		argv = arg_parser(buffer, envp_l, status_code);
+		argv = arg_parser(buffer, envp_l, status_code, redirections);
 		free(buffer);
 		buffer = NULL;
 		while (argv[argc])
 			argc++;
 		if (argc != 0)
-			envp_l = builtins(argv, envp_l, argc, &status_code);
+			envp_l = builtins(argv, envp_l, argc, &status_code, redirections);
 		free_2d_arr(argv);
 		buffer = readline("Mickeytotal$>");
 	}

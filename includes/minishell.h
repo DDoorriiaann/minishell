@@ -6,6 +6,9 @@
 # include <errno.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -30,10 +33,17 @@ typedef struct s_arg_update
 	char	*updated_arg;
 }	t_arg_update;
 
+typedef struct s_redirections
+{
+	int		in_redirection;
+	int		out_redirection;
+	char	*infile;
+}	t_redirections;
+
 ////////FUNCTIONS
 //PROMPT
 void	ft_free_all_arr(char **paths, char **cmd);
-int		prompt_shell(char **envp_l);
+int		prompt_shell(char **envp_l, t_redirections *redirections);
 
 /****
 PATHS
@@ -44,7 +54,7 @@ char	**get_path(char *envp_path);
 char	**get_cmd(char *cmd, char **paths);
 
 //PARSER
-char	**arg_parser(char *input, char **envp, int s_code);
+char	**arg_parser(char *input, char **envp, int s_code, t_redirections *redirections);
 char	**copy_envp(char **envp);
 void	interpret_env_variables(char **argv, char **envp, int s_code);
 int		interpret_current_env_variable(char **argv, int start,
@@ -59,6 +69,7 @@ void	replace_var_by_status_code(char **argv, int start,
 			int index, int s_code);
 int		env_variable_name_exists(char *arg, int start, char **envp);
 void	remove_quotes(char **argv);
+char	**handle_infile_redirection(char **argv, t_redirections *redirections);
 
 //DECORATION
 void	print_decoration(void);
@@ -82,7 +93,7 @@ int		ft_error_return(void);
 EXEC
 ***/
 
-int		exec_cmd(char **argv, char **envp);
+int		exec_cmd(char **argv, char **envp, t_redirections *redirections);
 
 /******
 BUILTIN
@@ -128,7 +139,8 @@ char	**check_dollars(char **argv);
 void	print_error(char *argv);
 void	print_error_unset(char *argv);
 int		check_syntax_unset(char *argv);
-
+int	count_splitted_arguments(char **argv);
+char	**delete_argument(char **argv, int arg_index, int args_to_delete);
 /*****
 EXPORT
 *****/
