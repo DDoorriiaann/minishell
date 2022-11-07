@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-int	builtin_cd(char *buffer, char **envp_l)
+int	builtin_cd(char *argv, char **envp_l)
 {
 	char	**path;
 	char	buff[2048];
 	char	*old_pwd;
 	int		i;
 
-	path = ft_split(buffer, ' ');
+	path = ft_split(argv, ' ');
 	i = 1;
 	if (chdir(path[i]) == -1)
 		perror("chdir()");
