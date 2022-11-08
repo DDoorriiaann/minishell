@@ -1,5 +1,6 @@
 #include "minishell.h"
 #include <stdio.h>
+#include <unistd.h>
 
 int	exec_cmd(char **argv, char **envp_l, t_redirections *redirections)
 {
@@ -20,29 +21,26 @@ int	exec_cmd(char **argv, char **envp_l, t_redirections *redirections)
 		ft_error_cmd(argv[0]);
 		return (127);
 	}
-	if (redirections->infile)
-	{
-		close(0);
-		open(redirections->infile, O_RDONLY);
-	}
 	pid = fork();
 	if (pid == -1)
 		perror("fork error");
-	else if (pid > 0)
+	if (pid == 0)
 	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			status_code = WEXITSTATUS(status);
-	}
-	else
-	{
-		if (execve(cmd[0], cmd, envp_l) == -1)
+		if (redirections->infile)
+		{
+			redirections->fd_in = open(redirections->infile, O_RDONLY);
+			dup2(redirections->fd_in, STDIN_FILENO);
+		}
+		if (execve(cmd[0], argv, envp_l) == -1)
 		{
 			ft_free_all_arr(paths, cmd);
 			perror("exec error");
 		}
 		exit(EXIT_FAILURE);
 	}
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		status_code = WEXITSTATUS(status);
 	ft_free_all_arr(paths, cmd);
 	return (status_code);
 }

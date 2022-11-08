@@ -38,6 +38,8 @@ typedef struct s_redirections
 	int		in_redirection;
 	int		out_redirection;
 	char	*infile;
+	int		fd_in;
+	int		fd_out;
 }	t_redirections;
 
 ////////FUNCTIONS
@@ -69,7 +71,11 @@ void	replace_var_by_status_code(char **argv, int start,
 			int index, int s_code);
 int		env_variable_name_exists(char *arg, int start, char **envp);
 void	remove_quotes(char **argv);
+
+//REDIRECTIONS
 char	**handle_infile_redirection(char **argv, t_redirections *redirections);
+int		is_chevron_alone(char **argv, int arg_index);
+void	extract_file_name(char *arg, t_redirections *redirections);
 
 //DECORATION
 void	print_decoration(void);
