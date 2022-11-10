@@ -1,17 +1,34 @@
 #include "minishell.h"
 
+void	extract_infile_name(char *arg, t_redirections *redirections)
+{
+	int		i;
+
+	if (redirections->infile)
+		free(redirections->infile);
+	redirections->infile = malloc(ft_strlen(arg));
+	if (!redirections->infile)
+		return ;
+	i = 0;
+	while (arg[i + 1])
+	{
+		redirections->infile[i] = arg[i + 1];
+		i++;
+	}
+	redirections->infile[i] = '\0';
+}
 
 static char	**fetch_infile(char **argv, int arg_index,
 		t_redirections *redirections)
 {
-	if (is_chevron_alone(argv, arg_index))
+	if (is_chevron_alone(argv, arg_index, '<'))
 	{	
 		redirections->infile = ft_strdup(argv[arg_index + 1]);
 		argv = delete_argument(argv, arg_index, 2);
 	}
 	else
 	{
-		extract_file_name(argv[arg_index], redirections);
+		extract_infile_name(argv[arg_index], redirections);
 		argv = delete_argument(argv, arg_index, 1);
 	}
 	return (argv);
@@ -45,7 +62,7 @@ char	**handle_infile_redirection(char **argv, t_redirections *redirections)
 		check_infile_redirection(argv[i], redirections);
 		if (redirections->in_redirection)
 		{
-			chevron_alone = is_chevron_alone(argv, i);
+			chevron_alone = is_chevron_alone(argv, i, '<');
 			argv = fetch_infile(argv, i, redirections);
 			if (chevron_alone)
 				i--;

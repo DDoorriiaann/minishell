@@ -31,6 +31,10 @@ int	exec_cmd(char **argv, char **envp_l, t_redirections *redirections)
 			redirections->fd_in = open(redirections->infile, O_RDONLY);
 			dup2(redirections->fd_in, STDIN_FILENO);
 		}
+		if (redirections->outfile)
+		{
+			dup2(redirections->fd_out, STDOUT_FILENO);
+		}
 		if (execve(cmd[0], argv, envp_l) == -1)
 		{
 			ft_free_all_arr(paths, cmd);
@@ -41,6 +45,9 @@ int	exec_cmd(char **argv, char **envp_l, t_redirections *redirections)
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		status_code = WEXITSTATUS(status);
+	if (redirections->fd_out)
+		close(redirections->fd_out);
+	reset_redirections(redirections);
 	ft_free_all_arr(paths, cmd);
 	return (status_code);
 }
