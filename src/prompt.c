@@ -47,7 +47,6 @@ int	exec_cmd(char **argv, char **envp_l, t_redirections *redirections)
 		status_code = WEXITSTATUS(status);
 	if (redirections->fd_out)
 		close(redirections->fd_out);
-	reset_redirections(redirections);
 	ft_free_all_arr(paths, cmd);
 	return (status_code);
 }
@@ -95,6 +94,7 @@ int	prompt_shell(char **envp_l, t_redirections *redirections)
 		if (argc != 0)
 			envp_l = builtins(argv, envp_l, argc, &status_code, redirections);
 		free_2d_arr(argv);
+		reset_redirections(redirections);
 		buffer = readline("Mickeytotal$>");
 	}
 	free_2d_arr(envp_l);
