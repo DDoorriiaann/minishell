@@ -1,29 +1,37 @@
 #include "minishell.h"
 
-int	is_chevron_alone(char **argv, int arg_index)
+int	is_chevron(char c)
+{
+	if (c == '<' || c == '>')
+		return (TRUE);
+	else
+		return (FALSE);
+}
+
+int	is_chevron_alone(char **argv, int arg_index, char chevron_type)
 {
 	int	arg_len;
 
 	arg_len = ft_strlen(argv[arg_index]);
-	if (arg_len == 1 && argv[arg_index][0] == '<' && argv[arg_index + 1])
+	if (arg_len == 1 && argv[arg_index][0] == chevron_type && argv[arg_index + 1])
+		return (TRUE);
+	if (arg_len == 2 && (argv[arg_index][0] == chevron_type && argv[arg_index][1] == chevron_type) && argv[arg_index + 1])
 		return (TRUE);
 	return (FALSE);
 }
 
-void	extract_file_name(char *arg, t_redirections *redirections)
+void	reset_redirections(t_redirections *redirections)
 {
-	int		i;
-
 	if (redirections->infile)
-		free(redirections->infile);
-	redirections->infile = malloc(ft_strlen(arg));
-	if (!redirections->infile)
-		return ;
-	i = 0;
-	while (arg[i + 1])
 	{
-		redirections->infile[i] = arg[i + 1];
-		i++;
+		free(redirections->infile);
+		redirections->infile = NULL;
+		redirections->in_redirection = FALSE;
 	}
-	redirections->infile[i] = '\0';
+	if (redirections->outfile)
+	{
+		free(redirections->outfile);
+		redirections->outfile = NULL;
+		redirections->out_redirection = FALSE;
+	}
 }

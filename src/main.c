@@ -11,6 +11,7 @@ int	main(int argc, char **argv, char **envp)
 	redirections.in_redirection = FALSE;
 	redirections.out_redirection = FALSE;
 	redirections.infile = NULL;
+	redirections.outfile = NULL;
 	print_decoration();
 	envp_l = copy_envp(envp);
 	prompt_shell(envp_l, &redirections);

@@ -31,6 +31,10 @@ int	exec_cmd(char **argv, char **envp_l, t_redirections *redirections)
 			redirections->fd_in = open(redirections->infile, O_RDONLY);
 			dup2(redirections->fd_in, STDIN_FILENO);
 		}
+		if (redirections->outfile)
+		{
+			dup2(redirections->fd_out, STDOUT_FILENO);
+		}
 		if (execve(cmd[0], argv, envp_l) == -1)
 		{
 			ft_free_all_arr(paths, cmd);
@@ -41,6 +45,8 @@ int	exec_cmd(char **argv, char **envp_l, t_redirections *redirections)
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		status_code = WEXITSTATUS(status);
+	if (redirections->fd_out)
+		close(redirections->fd_out);
 	ft_free_all_arr(paths, cmd);
 	return (status_code);
 }
@@ -88,6 +94,7 @@ int	prompt_shell(char **envp_l, t_redirections *redirections)
 		if (argc != 0)
 			envp_l = builtins(argv, envp_l, argc, &status_code, redirections);
 		free_2d_arr(argv);
+		reset_redirections(redirections);
 		buffer = readline("Mickeytotal$>");
 	}
 	free_2d_arr(envp_l);
