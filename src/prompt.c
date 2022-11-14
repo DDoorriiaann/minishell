@@ -72,7 +72,8 @@ static char	**builtins(char **argv, char **envp_l, int argc, int *status_code, t
 	return (envp_l);
 }
 
-int	prompt_shell(char **envp_l, t_redirections *redirections)
+int	prompt_shell(char **envp_l, t_redirections *redirections,
+		t_pipes_data *pipes)
 {
 	char	*buffer;
 	int		argc;

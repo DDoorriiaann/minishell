@@ -48,6 +48,11 @@ SRC			=	main.c\
 				arg_parser/redirections/handle_infile_redirection.c\
 				arg_parser/redirections/handle_outfile_redirection.c\
 				arg_parser/redirections/redirections_utils.c\
+				pipes/commands.c\
+				pipes/commands_utils.c\
+				pipes/memory.c\
+				pipes/paths.c\
+				pipes/paths_utils.c\
 
 SRCDIR 		= ./src/
 

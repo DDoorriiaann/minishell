@@ -44,10 +44,37 @@ typedef struct s_redirections
 	int		fd_out;
 }	t_redirections;
 
+typedef enum error{
+	NO_ERROR,
+	MALLOC_ERROR,
+	COMMAND_ERROR,
+	MISSING_ARGS,
+	FORK_ERROR,
+	FILE_ERROR,
+	PIPE_ERROR,
+}	t_error;
+
+typedef struct s_pipes_data
+{
+	int		pipes_detected;
+	char	**paths;
+	char	**pathnames;
+	char	**cmds;
+	char	***cmds_split;
+	char	**files;
+	pid_t	pid[2];
+	int		pipe_fd[2];
+	int		fd_in;
+	int		fd_out;
+	int		cmds_count;
+	int		tmp_infile;
+}	t_pipes_data;
+
 ////////FUNCTIONS
 //PROMPT
 void	ft_free_all_arr(char **paths, char **cmd);
-int		prompt_shell(char **envp_l, t_redirections *redirections);
+int		prompt_shell(char **envp_l, t_redirections *redirections,
+			t_pipes_data *pipes);
 
 /****
 PATHS
@@ -158,5 +185,29 @@ EXPORT
 void	print_export(char **export_envp_l);
 
 char	**builtin_unset(char **envp_l, char **argv);
+
+/*****
+PIPES
+*****/
+
+////PATHS
+char	**split_path(char *env_path);
+char	**get_paths(char **envp);
+void	get_files(char **argv, int argc, t_data *data);
+void	find_cmd_path(t_data *data);
+int		is_cmd_litteral_path(t_data *data, char **cmd_split, int i);
+void	search_valid_path(t_data *data, char **cmd_split, int i);
+
+////COMMANDS
+t_error	get_cmds(char **argv, int argc, t_data *data);
+t_error	ft_split_commands(t_data *data);
+t_error	exec_cmds(t_data *data, char **envp);
+void	alert_command_error(t_data *data);
+
+////MEMORY MANAGEMENT
+void	init_data(t_data *data, int argc);
+void	ft_free_all(t_data *data);
+void	ft_free_arr(char **tmp_cmd_split);
+void	ft_free_arr3d(char ***arr);
 
 #endif
