@@ -40,7 +40,10 @@ void	builtin_exit(char **argv, int status_code, char **envp_l)
 	i = 1;
 	number_arg = check_number_of_arg(argv);
 	if (number_arg == 0)
+	{	
+		ft_putstr_fd("exit\n", 2);
 		ft_exit(argv, envp_l, status_code);
+	}
 	if (ft_isdigit(argv[i][0]) == 0 && number_arg >= 1)
 	{
 		numeric_argument_required(argv[i]);
