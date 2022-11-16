@@ -6,13 +6,13 @@
 /*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 17:40:26 by dguet             #+#    #+#             */
-/*   Updated: 2022/09/13 17:48:09 by dguet            ###   ########.fr       */
+/*   Updated: 2022/11/15 15:35:50 by dguet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
-int	is_cmd_litteral_path(t_data *data, char **cmd_split, int i)
+int	is_cmd_litteral_path(t_pipes_data *data, char **cmd_split, int i)
 {
 	if (access(cmd_split[0], R_OK | X_OK) == 0)
 	{
@@ -23,7 +23,7 @@ int	is_cmd_litteral_path(t_data *data, char **cmd_split, int i)
 	return (0);
 }
 
-void	search_valid_path(t_data *data, char **cmd_split, int i)
+void	search_valid_path(t_pipes_data *data, char **cmd_split, int i)
 {
 	int		j;
 

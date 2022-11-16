@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+int	find_next_corresponding_quote(char *input, int end, char quote_type)
+{
+	while (input[end])
+	{
+		if (input[end] == quote_type)
+			return (end);
+		end++;
+	}
+	return (ERROR);
+}
+
 char	**delete_argument(char **argv, int arg_index, int args_to_delete)
 {
 	int		argc;

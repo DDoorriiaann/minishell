@@ -6,13 +6,13 @@
 /*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 18:11:29 by dguet             #+#    #+#             */
-/*   Updated: 2022/09/14 13:41:53 by dguet            ###   ########.fr       */
+/*   Updated: 2022/11/15 15:33:47 by dguet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
-void	alert_command_error(t_data *data)
+void	alert_command_error(t_pipes_data *data)
 {
 	ft_putstr_fd("command not found: ", 2);
 	if (!data->pathnames[0])
@@ -23,7 +23,7 @@ void	alert_command_error(t_data *data)
 	ft_putstr_fd("\n", 2);
 }
 
-t_error	get_cmds(char **argv, int argc, t_data *data)
+t_error	get_cmds(char **argv, int argc, t_pipes_data *data)
 {
 	int		i;
 	int		j;
@@ -43,7 +43,7 @@ t_error	get_cmds(char **argv, int argc, t_data *data)
 	return (NO_ERROR);
 }
 
-t_error	ft_split_commands(t_data *data)
+t_error	ft_split_commands(t_pipes_data *data)
 {
 	int		i;
 	int		j;

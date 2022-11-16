@@ -100,6 +100,7 @@ void	replace_var_by_status_code(char **argv, int start,
 			int index, int s_code);
 int		env_variable_name_exists(char *arg, int start, char **envp);
 void	remove_quotes(char **argv);
+char	*isolate_pipe_symbols(char *input);
 
 //REDIRECTIONS
 char	**handle_infile_redirection(char **argv, t_redirections *redirections);
@@ -176,8 +177,10 @@ char	**check_dollars(char **argv);
 void	print_error(char *argv);
 void	print_error_unset(char *argv);
 int		check_syntax_unset(char *argv);
-int	count_splitted_arguments(char **argv);
+int		count_splitted_arguments(char **argv);
 char	**delete_argument(char **argv, int arg_index, int args_to_delete);
+int		find_next_corresponding_quote(char *input, int end, char quote_type);
+
 /*****
 EXPORT
 *****/
@@ -193,20 +196,20 @@ PIPES
 ////PATHS
 char	**split_path(char *env_path);
 char	**get_paths(char **envp);
-void	get_files(char **argv, int argc, t_data *data);
-void	find_cmd_path(t_data *data);
-int		is_cmd_litteral_path(t_data *data, char **cmd_split, int i);
-void	search_valid_path(t_data *data, char **cmd_split, int i);
+void	get_files(char **argv, int argc, t_pipes_data *data);
+void	find_cmd_path(t_pipes_data *data);
+int		is_cmd_litteral_path(t_pipes_data *data, char **cmd_split, int i);
+void	search_valid_path(t_pipes_data *data, char **cmd_split, int i);
 
 ////COMMANDS
-t_error	get_cmds(char **argv, int argc, t_data *data);
-t_error	ft_split_commands(t_data *data);
-t_error	exec_cmds(t_data *data, char **envp);
-void	alert_command_error(t_data *data);
+t_error	get_cmds(char **argv, int argc, t_pipes_data *data);
+t_error	ft_split_commands(t_pipes_data *data);
+t_error	exec_cmds(t_pipes_data *data, char **envp);
+void	alert_command_error(t_pipes_data *data);
 
 ////MEMORY MANAGEMENT
-void	init_data(t_data *data, int argc);
-void	ft_free_all(t_data *data);
+void	init_data(t_pipes_data *data, int argc);
+void	ft_free_all(t_pipes_data *data);
 void	ft_free_arr(char **tmp_cmd_split);
 void	ft_free_arr3d(char ***arr);
 

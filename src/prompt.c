@@ -80,6 +80,7 @@ int	prompt_shell(char **envp_l, t_redirections *redirections,
 	char	**argv;
 	int		status_code;
 
+	(void)pipes;
 	argv = NULL;
 	status_code = 0;
 	buffer = readline("Mickeytotal$>");

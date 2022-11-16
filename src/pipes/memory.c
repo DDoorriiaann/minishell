@@ -6,13 +6,13 @@
 /*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:08:16 by dguet             #+#    #+#             */
-/*   Updated: 2022/09/13 18:32:01 by dguet            ###   ########.fr       */
+/*   Updated: 2022/11/15 15:34:26 by dguet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
-void	init_data(t_data *data, int argc)
+void	init_data(t_pipes_data *data, int argc)
 {	
 	data->paths = NULL;
 	data->pathnames = NULL;
@@ -40,7 +40,7 @@ void	free_pathnames(char **pathnames, int count)
 	pathnames = NULL;
 }
 
-void	ft_free_all(t_data *data)
+void	ft_free_all(t_pipes_data *data)
 {
 	ft_free_arr(data->paths);
 	free_pathnames(data->pathnames, 2);

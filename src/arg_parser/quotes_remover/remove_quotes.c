@@ -1,16 +1,5 @@
 #include "minishell.h"
 
-static int	find_next_corresponding_quote(char *input, int end, char quote_type)
-{
-	while (input[end])
-	{
-		if (input[end] == quote_type)
-			return (end);
-		end++;
-	}
-	return (ERROR);
-}
-
 static int	backup_arg_part(t_arg_update *update, int backup_start,
 		int end, int cur_index)
 {

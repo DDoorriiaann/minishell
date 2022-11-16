@@ -6,11 +6,11 @@
 /*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:01:44 by dguet             #+#    #+#             */
-/*   Updated: 2022/09/14 13:35:50 by dguet            ###   ########.fr       */
+/*   Updated: 2022/11/15 15:34:57 by dguet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
 char	**split_path(char *env_path)
 {
@@ -69,14 +69,14 @@ char	**get_paths(char **envp)
 	return (paths);
 }
 
-void	get_files(char **argv, int argc, t_data *data)
+void	get_files(char **argv, int argc, t_pipes_data *data)
 {
 	data->files = malloc(sizeof (char *) * 2);
 	data->files[0] = argv[1];
 	data->files[1] = argv[argc - 1];
 }
 
-void	find_cmd_path(t_data *data)
+void	find_cmd_path(t_pipes_data *data)
 {
 	char	**cmd_split;
 	int		i;
