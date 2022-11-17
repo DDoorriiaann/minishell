@@ -56,25 +56,26 @@ typedef enum error{
 
 typedef struct s_pipes_data
 {
-	int		pipes_detected;
-	char	**paths;
-	char	**pathnames;
-	char	**cmds;
-	char	***cmds_split;
-	char	**files;
-	pid_t	pid[2];
-	int		pipe_fd[2];
-	int		fd_in;
-	int		fd_out;
-	int		cmds_count;
-	int		tmp_infile;
+	int				status_code;
+	int				pipes_detected;
+	char			**paths;
+	char			**pathnames;
+	char			**cmds;
+	char			***cmds_split;
+	char			**files;
+	pid_t			pid[2];
+	int				pipe_fd[2];
+	int				fd_in;
+	int				fd_out;
+	int				cmds_count;
+	int				tmp_infile;
+	t_redirections	*redirections;
 }	t_pipes_data;
 
 ////////FUNCTIONS
 //PROMPT
 void	ft_free_all_arr(char **paths, char **cmd);
-int		prompt_shell(char **envp_l, t_redirections *redirections,
-			t_pipes_data *pipes);
+int		prompt_shell(char **envp_l,	t_pipes_data *pipes);
 
 /****
 PATHS
@@ -85,7 +86,8 @@ char	**get_path(char *envp_path);
 char	**get_cmd(char *cmd, char **paths);
 
 //PARSER
-char	**arg_parser(char *input, char **envp, int s_code, t_redirections *redirections);
+char	**raw_input_parser(char *input);
+char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes);
 char	**copy_envp(char **envp);
 void	interpret_env_variables(char **argv, char **envp, int s_code);
 int		interpret_current_env_variable(char **argv, int start,
@@ -131,7 +133,7 @@ int		ft_error_return(void);
 EXEC
 ***/
 
-int		exec_cmd(char **argv, char **envp, t_redirections *redirections);
+int		exec_cmd(char **argv, char **envp, t_pipes_data *pipes);
 
 /******
 BUILTIN
