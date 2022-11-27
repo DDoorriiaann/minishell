@@ -9,7 +9,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)envp;
 	pipes.pipes_detected = FALSE;
-	print_decoration();
+	//print_decoration();
 	envp_l = copy_envp(envp);
 	prompt_shell(envp_l, &pipes);
 	return (0);

@@ -58,19 +58,27 @@ typedef struct s_pipes_data
 {
 	int				status_code;
 	int				pipes_detected;
+	int				pipes_count;
 	char			**paths;
 	char			**pathnames;
 	char			**cmds;
 	char			***cmds_split;
 	char			**files;
-	pid_t			pid[2];
-	int				pipe_fd[2];
-	int				fd_in;
-	int				fd_out;
+	pid_t			*pid;
+	int				**pipe_fd;
+	int				*fd_in;
+	int				*fd_out;
 	int				cmds_count;
 	int				tmp_infile;
 	t_redirections	*redirections;
 }	t_pipes_data;
+
+typedef struct s_pipes_init
+{
+	int		pipe_nb;
+	int		pipe_arg;
+	int		args_count;
+}	t_pipes_init;
 
 ////////FUNCTIONS
 //PROMPT
