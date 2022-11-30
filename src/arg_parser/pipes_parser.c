@@ -70,49 +70,45 @@ int	fill_pipes_args(char ***pipes_args, char **argv)
 	return (0);
 }
 
-int	init_pipes_data(t_pipes_data *pipes, int pipes_count)
+int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
 {
 	int		i;
 
-	pipes->pipes_count = pipes_count;
-	pipes->pipe_fd = malloc(sizeof(int *) * pipes_count);
-	if (!pipes->pipe_fd)
-		return (1);
+	pipes_data->pipes_count = pipes_count;
+	pipes_data->pipe = malloc(sizeof(t_pipe *) * pipes_count);
 	i = 0;
-	while (i < pipes_count)
+	while (i < pipes_count || i == 0)
 	{
-		pipes->pipe_fd[i] = malloc (sizeof(int) * 2);
-		if (!pipes->pipe_fd)
-			return (1);
+		pipes_data->pipe[i] = malloc(sizeof(t_pipe *));
+		pipes_data->pipe[i]->pipe_fd = malloc(sizeof(int) * 2);
+		pipes_data->pipe[i]->pid = malloc(sizeof(pid_t));
+		pipes_data->pipe[i]->redirections = malloc(sizeof(t_redirections *));
 		i++;
 	}
-	pipes->pid = malloc(sizeof(pid_t) * pipes_count);
-	if (!pipes->pid)
-		return (1);
-	pipes->fd_in = malloc(sizeof(int) * pipes_count);
-	if (!pipes->fd_in)
-		return (1);
-	pipes->fd_out = malloc(sizeof(int) * pipes_count);
-	if (!pipes->fd_out)
-		return (1);
 	return (0);
 }
 
-char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes)
+char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 {
 	char	***pipes_args;
 	int		pipes_count;
+	int		i;
 
 	pipes_count = count_pipes(argv);
 	if (pipes_count)
-		pipes->pipes_detected = TRUE;
+		pipes_data->pipes_detected = TRUE;
 	(void)envp_l;
 	pipes_args = malloc (sizeof(char **) * (pipes_count + 2));
 	fill_pipes_args(pipes_args, argv);
-	init_pipes_data(pipes, pipes_count);
-	//interpret_env_variables(argv, envp_l, pipes->status_code);
-	//argv = handle_infile_redirection(argv, redirections);
-	//argv = handle_outfile_redirection(argv, redirections);
-	//remove_quotes(argv);
+	init_pipes_data(pipes_data, pipes_count);
+	i = 0;
+	while (pipes_args[i])
+	{
+		interpret_env_variables(pipes_args[i], envp_l, pipes_data->status_code);
+		pipes_args[i] = handle_infile_redirection(pipes_args[i], pipes_data->pipe[i]->redirections);
+		pipes_args[i] = handle_outfile_redirection(pipes_args[i], pipes_data->pipe[i]->redirections);
+		remove_quotes(argv);
+		i++;
+	}
 	return (pipes_args);
 }

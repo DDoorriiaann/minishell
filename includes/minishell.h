@@ -54,23 +54,25 @@ typedef enum error{
 	PIPE_ERROR,
 }	t_error;
 
+typedef struct s_pipe
+{
+	char			**paths;
+	char			**pathnames;
+	char			**cmds;
+	char			***cmds_split;
+	pid_t			*pid;
+	int				*pipe_fd;
+	t_redirections	*redirections;
+}	t_pipe;
+
 typedef struct s_pipes_data
 {
 	int				status_code;
 	int				pipes_detected;
 	int				pipes_count;
-	char			**paths;
-	char			**pathnames;
-	char			**cmds;
-	char			***cmds_split;
-	char			**files;
-	pid_t			*pid;
-	int				**pipe_fd;
-	int				*fd_in;
-	int				*fd_out;
 	int				cmds_count;
 	int				tmp_infile;
-	t_redirections	*redirections;
+	t_pipe			**pipe;
 }	t_pipes_data;
 
 typedef struct s_pipes_init
@@ -203,6 +205,8 @@ char	**builtin_unset(char **envp_l, char **argv);
 PIPES
 *****/
 
+int		pipex(char ***pipes_cmds, t_pipes_data *pipes_data, char **envp);
+
 ////PATHS
 char	**split_path(char *env_path);
 char	**get_paths(char **envp);
@@ -218,7 +222,7 @@ t_error	exec_cmds(t_pipes_data *data, char **envp);
 void	alert_command_error(t_pipes_data *data);
 
 ////MEMORY MANAGEMENT
-void	init_data(t_pipes_data *data, int argc);
+void	init_data(t_pipes_data *data, char ***pipes_cmds);
 void	ft_free_all(t_pipes_data *data);
 void	ft_free_arr(char **tmp_cmd_split);
 void	ft_free_arr3d(char ***arr);

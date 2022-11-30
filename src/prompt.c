@@ -96,6 +96,13 @@ int	exec_pipes(t_pipes_data *pipes, char ***pipes_cmds, char **envp_l, int *stat
 		if (argc != 0)
 			envp_l = builtins(pipes_cmds[0], envp_l, argc, status_code, pipes);
 	}
+	else if (pipes->pipes_count > 0)
+	{
+		if (pipes->pipes_count == 1)
+		{
+
+		}
+	}
 	return (*status_code);
 }
 
