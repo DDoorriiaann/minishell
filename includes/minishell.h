@@ -44,7 +44,8 @@ typedef struct s_redirections
 	int		fd_out;
 }	t_redirections;
 
-typedef enum error{
+typedef enum error
+{
 	NO_ERROR,
 	MALLOC_ERROR,
 	COMMAND_ERROR,
@@ -54,16 +55,16 @@ typedef enum error{
 	PIPE_ERROR,
 }	t_error;
 
-typedef struct s_pipe
+typedef struct s_fork
 {
 	char			**paths;
 	char			**pathnames;
 	char			**cmds;
 	char			***cmds_split;
-	pid_t			*pid;
-	int				*pipe_fd;
+	pid_t			pid;
+	int				pipe_fd[2];
 	t_redirections	*redirections;
-}	t_pipe;
+}	t_fork;
 
 typedef struct s_pipes_data
 {
@@ -72,7 +73,7 @@ typedef struct s_pipes_data
 	int				pipes_count;
 	int				cmds_count;
 	int				tmp_infile;
-	t_pipe			**pipe;
+	t_fork			**fork;
 }	t_pipes_data;
 
 typedef struct s_pipes_init

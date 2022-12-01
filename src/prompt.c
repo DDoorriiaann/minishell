@@ -84,29 +84,31 @@ int	count_cur_pipe_args(char **pipe_args)
 	return (i);
 }
 
-int	exec_pipes(t_pipes_data *pipes, char ***pipes_cmds, char **envp_l, int *status_code)
+char	**exec_pipes(t_pipes_data *pipes_data, char ***pipes_cmds, char **envp_l, int *status_code)
 {
 	//int	i;
 	int	argc;
 
 	//i = 0;
-	if (pipes->pipes_count == 0)
+	if (pipes_data->pipes_count == 0)
 	{
 		argc = count_cur_pipe_args(pipes_cmds[0]);
 		if (argc != 0)
-			envp_l = builtins(pipes_cmds[0], envp_l, argc, status_code, pipes);
+			envp_l = builtins(pipes_cmds[0], envp_l, argc, status_code, pipes_data);
 	}
-	else if (pipes->pipes_count > 0)
+	else if (pipes_data->pipes_count > 0)
 	{
-		if (pipes->pipes_count == 1)
+		if (pipes_data->pipes_count == 1)
 		{
-
+			printf("one pipe detected \n");
 		}
+		else
+			printf("multiple pipes detected \n");
 	}
-	return (*status_code);
+	return (envp_l);
 }
 
-int	prompt_shell(char **envp_l, t_pipes_data *pipes)
+int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 {
 	char	*buffer;
 	//int		argc;
@@ -114,7 +116,6 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes)
 	int		status_code;
 	char	***pipes_cmds;
 
-	(void)pipes;
 	argv = NULL;
 	status_code = 0;
 	buffer = readline("Mickeytotal$>");
@@ -125,14 +126,14 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes)
 		argv = raw_input_parser(buffer);
 		free(buffer);
 		buffer = NULL;
-		pipes_cmds = pipes_parser(argv, envp_l, pipes);
+		pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
 	/*	
 		while (argv[argc])
 			argc++;
 		if (argc != 0)
 			envp_l = builtins(argv, envp_l, argc, &status_code, pipes);	
 	*/
-		exec_pipes(pipes, pipes_cmds, envp_l, &status_code);
+		envp_l = exec_pipes(pipes_data, pipes_cmds, envp_l, &status_code);
 		free_2d_arr(argv);
 		//reset_redirections(pipes->redirections);
 		buffer = readline("Mickeytotal$>");

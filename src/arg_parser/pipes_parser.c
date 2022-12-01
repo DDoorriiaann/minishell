@@ -54,15 +54,14 @@ int	fill_pipes_args(char ***pipes_args, char **argv)
 	{
 		pipes_init.args_count = 0;
 		pipes_init.pipe_arg = 0;
-		if (argv[i] && ft_strlen(argv[i]) != 1 && argv[i][0] != '|')
-		{
-			pipes_init.args_count = count_pipe_args(argv, i);
-			pipes_args[pipes_init.pipe_nb] = malloc(sizeof(char *)
-					* (pipes_init.args_count + 1));
-			if (!pipes_args[pipes_init.pipe_nb])
-				return (-1);
-			i = copy_args_adresses(argv, i, &pipes_init, pipes_args);
-		}
+		if (!argv[i] || (ft_strlen(argv[i]) == 1 && argv[i][0] == '|'))
+			return (1);
+		pipes_init.args_count = count_pipe_args(argv, i);
+		pipes_args[pipes_init.pipe_nb] = malloc(sizeof(char *)
+				* (pipes_init.args_count + 1));
+		if (!pipes_args[pipes_init.pipe_nb])
+			return (-1);
+		i = copy_args_adresses(argv, i, &pipes_init, pipes_args);
 		pipes_init.pipe_nb++;
 		if (argv[i])
 			i++;
@@ -75,14 +74,14 @@ int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
 	int		i;
 
 	pipes_data->pipes_count = pipes_count;
-	pipes_data->pipe = malloc(sizeof(t_pipe *) * pipes_count);
+	pipes_data->fork = malloc(sizeof(t_fork *) * (pipes_count + 1));
 	i = 0;
-	while (i < pipes_count || i == 0)
+	while (i <= pipes_count)
 	{
-		pipes_data->pipe[i] = malloc(sizeof(t_pipe *));
-		pipes_data->pipe[i]->pipe_fd = malloc(sizeof(int) * 2);
-		pipes_data->pipe[i]->pid = malloc(sizeof(pid_t));
-		pipes_data->pipe[i]->redirections = malloc(sizeof(t_redirections *));
+		pipes_data->fork[i] = malloc(sizeof(t_fork *));
+		pipes_data->fork[i]->redirections = malloc(sizeof(t_redirections *));
+		pipes_data->fork[i]->pipe_fd[0] = -1;
+		pipes_data->fork[i]->pipe_fd[1] = -1;
 		i++;
 	}
 	return (0);
@@ -99,14 +98,15 @@ char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 		pipes_data->pipes_detected = TRUE;
 	(void)envp_l;
 	pipes_args = malloc (sizeof(char **) * (pipes_count + 2));
+	pipes_args[pipes_count + 1] = NULL;
 	fill_pipes_args(pipes_args, argv);
 	init_pipes_data(pipes_data, pipes_count);
 	i = 0;
 	while (pipes_args[i])
 	{
 		interpret_env_variables(pipes_args[i], envp_l, pipes_data->status_code);
-		pipes_args[i] = handle_infile_redirection(pipes_args[i], pipes_data->pipe[i]->redirections);
-		pipes_args[i] = handle_outfile_redirection(pipes_args[i], pipes_data->pipe[i]->redirections);
+		pipes_args[i] = handle_infile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
+		pipes_args[i] = handle_outfile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
 		remove_quotes(argv);
 		i++;
 	}
