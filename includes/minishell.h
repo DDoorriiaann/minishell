@@ -57,10 +57,7 @@ typedef enum error
 
 typedef struct s_fork
 {
-	char			**paths;
-	char			**pathnames;
-	char			**cmds;
-	char			***cmds_split;
+	char			**cmd;
 	pid_t			pid;
 	int				pipe_fd[2];
 	t_redirections	*redirections;

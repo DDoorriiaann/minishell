@@ -87,9 +87,13 @@ int	count_cur_pipe_args(char **pipe_args)
 char	**exec_pipes(t_pipes_data *pipes_data, char ***pipes_cmds, char **envp_l, int *status_code)
 {
 	//int	i;
-	int	argc;
+	int		argc;
+	char	**paths;
+	t_fork	*cur_fork;
+	int		status = 0;
 
 	//i = 0;
+	paths = get_path(check_line_path(envp_l));
 	if (pipes_data->pipes_count == 0)
 	{
 		argc = count_cur_pipe_args(pipes_cmds[0]);
@@ -98,9 +102,93 @@ char	**exec_pipes(t_pipes_data *pipes_data, char ***pipes_cmds, char **envp_l, i
 	}
 	else if (pipes_data->pipes_count > 0)
 	{
+
 		if (pipes_data->pipes_count == 1)
 		{
-			printf("one pipe detected \n");
+			if (pipe(pipes_data->fork[0]->pipe_fd) < 0)
+			{
+				perror("pipe error\n");
+				//free everything
+				// update status code
+				return (envp_l);
+			}
+			cur_fork = pipes_data->fork[0];
+			cur_fork->pid = fork();
+			if (cur_fork->pid < 0)
+			{
+				perror("fork error\n");
+				//free everything
+				// update status code
+				return (envp_l);
+			}
+			if (cur_fork->pid == 0)
+			{
+				close(cur_fork->pipe_fd[0]);
+				dup2(cur_fork->pipe_fd[1], STDOUT_FILENO);
+				close(cur_fork->pipe_fd[1]);
+				cur_fork->cmd = get_cmd(pipes_cmds[0][0], paths);
+				if (!cur_fork->cmd)
+				{
+					free_2d_arr(paths);
+					ft_error_cmd(pipes_cmds[0][0]);
+					//free everything needed
+					return (envp_l);
+				}
+				if (execve(cur_fork->cmd[0], pipes_cmds[0], envp_l) == -1)
+				{
+					ft_free_all_arr(paths, cur_fork->cmd);
+					perror("exec error");
+				}
+				exit(EXIT_FAILURE);
+			}
+			else
+			{
+				cur_fork = pipes_data->fork[1];
+				pipes_data->fork[1]->pipe_fd[0] = pipes_data->fork[0]->pipe_fd[0];
+				pipes_data->fork[1]->pipe_fd[1] = pipes_data->fork[0]->pipe_fd[1];
+				cur_fork->pid = fork();
+				if (cur_fork->pid < 0)
+				{
+					perror("fork error\n");
+					//free everything
+					// update status code
+					return (envp_l);
+				}
+				if (cur_fork->pid == 0)
+				{
+					close(cur_fork->pipe_fd[1]);
+					dup2(pipes_data->fork[0]->pipe_fd[0], STDIN_FILENO);
+					close(cur_fork->pipe_fd[0]);
+					cur_fork->cmd = get_cmd(pipes_cmds[1][0], paths);
+					if (!cur_fork->cmd)
+					{
+						free_2d_arr(paths);
+						ft_error_cmd(pipes_cmds[1][0]);
+						//free everything needed
+						return (envp_l);
+					}
+					if (execve(cur_fork->cmd[0], pipes_cmds[1], envp_l) == -1)
+					{
+						ft_free_all_arr(paths, cur_fork->cmd);
+						perror("exec error");
+					}
+					exit(EXIT_FAILURE);
+				}
+				else
+				{
+					status = 0;
+					close(pipes_data->fork[1]->pipe_fd[0]);
+					close(pipes_data->fork[1]->pipe_fd[1]);
+					waitpid(pipes_data->fork[1]->pid, &status, 0);
+				}
+			}
+			if (WIFEXITED(status))
+				*status_code = WEXITSTATUS(status);
+			//	if (pipes->redirections->fd_out)
+			//		pipes->redirections->outfile = NULL;
+			//	close(pipes->redirections->fd_out);
+			//ft_free_all_arr(paths, cur_fork->cmd);
+			return (envp_l);
 		}
 		else
 			printf("multiple pipes detected \n");
@@ -111,7 +199,6 @@ char	**exec_pipes(t_pipes_data *pipes_data, char ***pipes_cmds, char **envp_l, i
 int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 {
 	char	*buffer;
-	//int		argc;
 	char	**argv;
 	int		status_code;
 	char	***pipes_cmds;
@@ -121,18 +208,11 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 	buffer = readline("Mickeytotal$>");
 	while (buffer != NULL)
 	{
-	//	argc = 0;
 		add_history(buffer);
 		argv = raw_input_parser(buffer);
 		free(buffer);
 		buffer = NULL;
 		pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
-	/*	
-		while (argv[argc])
-			argc++;
-		if (argc != 0)
-			envp_l = builtins(argv, envp_l, argc, &status_code, pipes);	
-	*/
 		envp_l = exec_pipes(pipes_data, pipes_cmds, envp_l, &status_code);
 		free_2d_arr(argv);
 		//reset_redirections(pipes->redirections);
