@@ -75,15 +75,24 @@ int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
 
 	pipes_data->pipes_count = pipes_count;
 	pipes_data->fork = malloc(sizeof(t_fork *) * (pipes_count + 1));
+	if (!pipes_data->fork)//free
+		return (1);
 	i = 0;
 	while (i <= pipes_count)
 	{
-		pipes_data->fork[i] = malloc(sizeof(t_fork *));
-		pipes_data->fork[i]->redirections = malloc(sizeof(t_redirections *));
+		pipes_data->fork[i] = malloc(sizeof(t_fork));
+		if (!pipes_data->fork[i])//free
+			return (1);
+		pipes_data->fork[i]->redirections = malloc(sizeof(t_redirections));
+		if (!pipes_data->fork[i]->redirections)//free
+			return (1);
+		pipes_data->fork[i]->redirections->infile = NULL;
+		pipes_data->fork[i]->redirections->outfile = NULL;
 		pipes_data->fork[i]->pipe_fd[0] = -1;
 		pipes_data->fork[i]->pipe_fd[1] = -1;
 		i++;
 	}
+	
 	return (0);
 }
 
@@ -98,6 +107,8 @@ char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 		pipes_data->pipes_detected = TRUE;
 	(void)envp_l;
 	pipes_args = malloc (sizeof(char **) * (pipes_count + 2));
+	if (!pipes_args)//free
+		return (NULL);
 	pipes_args[pipes_count + 1] = NULL;
 	fill_pipes_args(pipes_args, argv);
 	init_pipes_data(pipes_data, pipes_count);

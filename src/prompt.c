@@ -214,7 +214,8 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 		buffer = NULL;
 		pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
 		envp_l = exec_pipes(pipes_data, pipes_cmds, envp_l, &status_code);
-		free_2d_arr(argv);
+//		free_2d_arr(argv);
+		free_3d_arr(pipes_cmds);
 		//reset_redirections(pipes->redirections);
 		buffer = readline("Mickeytotal$>");
 	}

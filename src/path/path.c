@@ -37,7 +37,7 @@ char	*check_line_path(char **envp_l)
 
 char	**get_path(char *envp_path)
 {
-	char	*tmp;
+//	char	*tmp;
 	char	**paths;
 	int		i;
 
@@ -45,10 +45,10 @@ char	**get_path(char *envp_path)
 	paths = ft_split(envp_path, ':');
 	while (paths[i])
 	{
-		tmp = paths[i];
+//		tmp = paths[i];
 		paths[i] = ft_strjoin(paths[i], "/");
-		free(tmp);
-		tmp = NULL;
+//		free(tmp);
+//		tmp = NULL;
 		i++;
 	}
 	return (paths);

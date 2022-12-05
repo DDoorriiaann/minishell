@@ -4,8 +4,8 @@ void	extract_infile_name(char *arg, t_redirections *redirections)
 {
 	int		i;
 
-	if (redirections->infile)
-		free(redirections->infile);
+//	if (redirections->infile)
+//		free(redirections->infile);
 	redirections->infile = malloc(ft_strlen(arg));
 	if (!redirections->infile)
 		return ;

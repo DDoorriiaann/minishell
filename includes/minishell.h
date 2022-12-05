@@ -128,6 +128,7 @@ FREE
 
 void	ft_free_all_arr(char **paths, char **cmd);
 void	free_2d_arr(char **arr);
+void	free_3d_arr(char ***arr);
 
 /****
 ERROR
