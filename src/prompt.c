@@ -53,7 +53,7 @@ int	exec_cmd(char **argv, char **envp_l, t_pipes_data *pipes)
 	return (status_code);
 }
 
-static char	**builtins(char **argv, char **envp_l, int argc, int *status_code, t_pipes_data *pipes)
+static char	**builtins(char **argv, char **envp_l, int argc, t_pipes_data *pipes_data)
 {
 	if ((ft_strcmp(argv[0], "echo")) == 0)
 		builtin_echo(argv);
@@ -64,13 +64,13 @@ static char	**builtins(char **argv, char **envp_l, int argc, int *status_code, t
 	else if ((ft_strcmp(argv[0], "export")) == 0)
 		envp_l = builtin_export(envp_l, argv, argc);
 	else if ((ft_strcmp(argv[0], "exit")) == 0)
-		builtin_exit(argv, *status_code, envp_l);
+		builtin_exit(argv, envp_l, pipes_data);
 	else if ((ft_strcmp(argv[0], "env")) == 0)
 		builtin_env(envp_l);
 	else if ((ft_strcmp(argv[0], "unset")) == 0)
 		envp_l = builtin_unset(envp_l, argv);
 	else if (*argv[0])
-		*status_code = exec_cmd(argv, envp_l, pipes);
+		pipes_data->status_code = exec_cmd(argv, envp_l, pipes_data);
 	return (envp_l);
 }
 
@@ -84,7 +84,7 @@ int	count_cur_pipe_args(char **pipe_args)
 	return (i);
 }
 
-char	**exec_pipes(t_pipes_data *pipes_data, char ***pipes_cmds, char **envp_l, int *status_code)
+char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 {
 	//int	i;
 	int		argc;
@@ -93,16 +93,16 @@ char	**exec_pipes(t_pipes_data *pipes_data, char ***pipes_cmds, char **envp_l, i
 	int		status = 0;
 
 	//i = 0;
-	paths = get_path(check_line_path(envp_l));
 	if (pipes_data->pipes_count == 0)
 	{
-		argc = count_cur_pipe_args(pipes_cmds[0]);
+		argc = count_cur_pipe_args(pipes_data->pipes_cmds[0]);
 		if (argc != 0)
-			envp_l = builtins(pipes_cmds[0], envp_l, argc, status_code, pipes_data);
+			envp_l = builtins(pipes_data->pipes_cmds[0], envp_l, argc, pipes_data);
 	}
 	else if (pipes_data->pipes_count > 0)
 	{
 
+		paths = get_path(check_line_path(envp_l));
 		if (pipes_data->pipes_count == 1)
 		{
 			if (pipe(pipes_data->fork[0]->pipe_fd) < 0)
@@ -126,15 +126,15 @@ char	**exec_pipes(t_pipes_data *pipes_data, char ***pipes_cmds, char **envp_l, i
 				close(cur_fork->pipe_fd[0]);
 				dup2(cur_fork->pipe_fd[1], STDOUT_FILENO);
 				close(cur_fork->pipe_fd[1]);
-				cur_fork->cmd = get_cmd(pipes_cmds[0][0], paths);
+				cur_fork->cmd = get_cmd(pipes_data->pipes_cmds[0][0], paths);
 				if (!cur_fork->cmd)
 				{
 					free_2d_arr(paths);
-					ft_error_cmd(pipes_cmds[0][0]);
+					ft_error_cmd(pipes_data->pipes_cmds[0][0]);
 					//free everything needed
 					return (envp_l);
 				}
-				if (execve(cur_fork->cmd[0], pipes_cmds[0], envp_l) == -1)
+				if (execve(cur_fork->cmd[0], pipes_data->pipes_cmds[0], envp_l) == -1)
 				{
 					ft_free_all_arr(paths, cur_fork->cmd);
 					perror("exec error");
@@ -159,15 +159,15 @@ char	**exec_pipes(t_pipes_data *pipes_data, char ***pipes_cmds, char **envp_l, i
 					close(cur_fork->pipe_fd[1]);
 					dup2(pipes_data->fork[0]->pipe_fd[0], STDIN_FILENO);
 					close(cur_fork->pipe_fd[0]);
-					cur_fork->cmd = get_cmd(pipes_cmds[1][0], paths);
+					cur_fork->cmd = get_cmd(pipes_data->pipes_cmds[1][0], paths);
 					if (!cur_fork->cmd)
 					{
 						free_2d_arr(paths);
-						ft_error_cmd(pipes_cmds[1][0]);
+						ft_error_cmd(pipes_data->pipes_cmds[1][0]);
 						//free everything needed
 						return (envp_l);
 					}
-					if (execve(cur_fork->cmd[0], pipes_cmds[1], envp_l) == -1)
+					if (execve(cur_fork->cmd[0], pipes_data->pipes_cmds[1], envp_l) == -1)
 					{
 						ft_free_all_arr(paths, cur_fork->cmd);
 						perror("exec error");
@@ -183,11 +183,11 @@ char	**exec_pipes(t_pipes_data *pipes_data, char ***pipes_cmds, char **envp_l, i
 				}
 			}
 			if (WIFEXITED(status))
-				*status_code = WEXITSTATUS(status);
+				pipes_data->status_code = WEXITSTATUS(status);
 			//	if (pipes->redirections->fd_out)
 			//		pipes->redirections->outfile = NULL;
 			//	close(pipes->redirections->fd_out);
-			//ft_free_all_arr(paths, cur_fork->cmd);
+			ft_free_all_arr(paths, cur_fork->cmd);
 			return (envp_l);
 		}
 		else
@@ -200,11 +200,9 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 {
 	char	*buffer;
 	char	**argv;
-	int		status_code;
-	char	***pipes_cmds;
 
 	argv = NULL;
-	status_code = 0;
+	pipes_data->status_code = 0;
 	buffer = readline("Mickeytotal$>");
 	while (buffer != NULL)
 	{
@@ -212,10 +210,12 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 		argv = raw_input_parser(buffer);
 		free(buffer);
 		buffer = NULL;
-		pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
-		envp_l = exec_pipes(pipes_data, pipes_cmds, envp_l, &status_code);
-//		free_2d_arr(argv);
-		free_3d_arr(pipes_cmds);
+		pipes_data->pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
+		envp_l = exec_pipes(pipes_data, envp_l);
+		free_2d_arr(argv);
+		argv = NULL;
+		free_pipes_cmds_arr(pipes_data->pipes_cmds);
+		free_forks(pipes_data);
 		//reset_redirections(pipes->redirections);
 		buffer = readline("Mickeytotal$>");
 	}

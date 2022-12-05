@@ -70,6 +70,7 @@ typedef struct s_pipes_data
 	int				pipes_count;
 	int				cmds_count;
 	int				tmp_infile;
+	char			***pipes_cmds;
 	t_fork			**fork;
 }	t_pipes_data;
 
@@ -128,7 +129,8 @@ FREE
 
 void	ft_free_all_arr(char **paths, char **cmd);
 void	free_2d_arr(char **arr);
-void	free_3d_arr(char ***arr);
+void	free_pipes_cmds_arr(char ***arr);
+void	free_forks(t_pipes_data *pipes_data);
 
 /****
 ERROR
@@ -153,7 +155,8 @@ void	builtin_pwd(void);
 int		builtin_cd(char *argv, char **envp_l);
 char	**builtin_export(char **envp_l, char **argv, int argc);
 void	builtin_env( char **envp_l);
-void	builtin_exit(char **argv, int status_code, char **envp_l);
+void	builtin_exit(char **argv, char **envp_l,
+			t_pipes_data *pipes_data);
 
 /******
 UTILS

@@ -91,8 +91,7 @@ int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
 		pipes_data->fork[i]->pipe_fd[0] = -1;
 		pipes_data->fork[i]->pipe_fd[1] = -1;
 		i++;
-	}
-	
+	}	
 	return (0);
 }
 
