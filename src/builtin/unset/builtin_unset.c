@@ -89,5 +89,6 @@ char	**builtin_unset(char **envp_l, char **argv)
 		return (NULL);
 	remove_old_variables(argv, envp_l, tmp_envp_l);
 	free_2d_arr(envp_l);
+	g_return = 0;
 	return (tmp_envp_l);
 }

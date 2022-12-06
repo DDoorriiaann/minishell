@@ -31,7 +31,7 @@ static void	ft_exit(char **argv, char **envp_l, t_pipes_data *pipes_data)
 	free_2d_arr(envp_l);
 	free_forks(pipes_data);
 	free(pipes_data->pipes_cmds);
-	exit(pipes_data->status_code);
+	exit(g_return);
 }
 
 void	builtin_exit(char **argv, char **envp_l, t_pipes_data *pipes_data)
@@ -48,13 +48,13 @@ void	builtin_exit(char **argv, char **envp_l, t_pipes_data *pipes_data)
 	}
 	if (ft_isdigit(argv[i][0]) == 0 && number_arg >= 1)
 	{
-		pipes_data->status_code = 2;
+		g_return = 2;
 		numeric_argument_required(argv[i]);
 		ft_exit(argv, envp_l, pipes_data);
 	}
 	if (ft_isdigit(argv[i][0]) == 1 && number_arg == 1)
 	{
-		pipes_data->status_code = ft_atoi(argv[i]);
+		g_return = ft_atoi(argv[i]) % 256;
 		ft_putstr_fd("exit\n", 2);
 		ft_exit(argv, envp_l, pipes_data);
 	}

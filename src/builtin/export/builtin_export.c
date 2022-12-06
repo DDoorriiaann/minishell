@@ -36,5 +36,6 @@ char	**builtin_export(char **envp_l, char **argv, int argc)
 	else
 		envp_l = add_arg_export(envp_l, argv);
 	free_2d_arr(export_envp_l);
+	g_return = 0;
 	return (envp_l);
 }

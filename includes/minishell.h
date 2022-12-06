@@ -18,6 +18,8 @@
 # define TRUE 1
 # define FALSE 0
 
+extern	int	g_return;
+
 typedef struct s_env_var
 {
 	int		index;
@@ -65,7 +67,6 @@ typedef struct s_fork
 
 typedef struct s_pipes_data
 {
-	int				status_code;
 	int				pipes_detected;
 	int				pipes_count;
 	int				cmds_count;
@@ -98,7 +99,7 @@ char	**get_cmd(char *cmd, char **paths);
 char	**raw_input_parser(char *input);
 char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes);
 char	**copy_envp(char **envp);
-void	interpret_env_variables(char **argv, char **envp, int s_code);
+void	interpret_env_variables(char **argv, char **envp);
 int		interpret_current_env_variable(char **argv, int start,
 			int arg_index, char **envp);
 char	*extract_env_variable_name(char *arg, int start);
@@ -107,8 +108,7 @@ int		delete_var_inside_arg(char **argv, int start, int index);
 int		backup_arg_before_var(char *backup, char *original, int end);
 void	backup_arg_after_var(char *backup, char *original,
 			int end, int current_char);
-void	replace_var_by_status_code(char **argv, int start,
-			int index, int s_code);
+void	replace_var_by_status_code(char **argv, int start, int index);
 int		env_variable_name_exists(char *arg, int start, char **envp);
 void	remove_quotes(char **argv);
 char	*isolate_pipe_symbols(char *input);
@@ -200,8 +200,13 @@ EXPORT
 *****/
 
 void	print_export(char **export_envp_l);
-
 char	**builtin_unset(char **envp_l, char **argv);
+
+/*****
+SIGNAL
+*****/
+
+void	ft_signal(void);
 
 /*****
 PIPES

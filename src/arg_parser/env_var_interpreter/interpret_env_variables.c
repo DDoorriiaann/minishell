@@ -17,7 +17,7 @@ static int	skip_single_quoted_content(char *arg, int start)
 }
 
 static void	update_argv_with_env_variables(int index, char **argv,
-										char **envp, int s_code)
+										char **envp)
 {
 	int		start;
 	char	*arg;
@@ -34,7 +34,7 @@ static void	update_argv_with_env_variables(int index, char **argv,
 			continue ;
 		}
 		if (arg[start + 1] == '?')
-			replace_var_by_status_code(argv, start, index, s_code);
+			replace_var_by_status_code(argv, start, index);
 		else if (env_variable_name_exists(arg, start + 1, envp) != ERROR)
 			start = interpret_current_env_variable(argv, start, index, envp);
 		else
@@ -56,14 +56,14 @@ static void	remove_arg(char **argv, int i)
 	argv[i] = NULL;
 }
 
-void	interpret_env_variables(char **argv, char **envp, int s_code)
+void	interpret_env_variables(char **argv, char **envp)
 {
 	int	i;
 
 	i = 0;
 	while (argv[i])
 	{	
-		update_argv_with_env_variables(i, argv, envp, s_code);
+		update_argv_with_env_variables(i, argv, envp);
 		if (!argv[i][0])
 		{	
 			remove_arg(argv, i);

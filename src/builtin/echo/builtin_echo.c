@@ -38,4 +38,5 @@ void	builtin_echo(char **argv)
 	}
 	if (ret == 0)
 		printf("\n");
+	g_return = 0;
 }
