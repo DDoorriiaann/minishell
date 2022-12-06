@@ -1,5 +1,7 @@
 # include "minishell.h"
 
+int	g_return = 0;
+
 int	main(int argc, char **argv, char **envp)
 {
 	char			**envp_l;
@@ -12,5 +14,5 @@ int	main(int argc, char **argv, char **envp)
 	//print_decoration();
 	envp_l = copy_envp(envp);
 	prompt_shell(envp_l, &pipes);
-	return (0);
+	return (g_return);
 }

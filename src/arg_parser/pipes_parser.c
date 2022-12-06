@@ -114,7 +114,7 @@ char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 	i = 0;
 	while (pipes_args[i])
 	{
-		interpret_env_variables(pipes_args[i], envp_l, pipes_data->status_code);
+		interpret_env_variables(pipes_args[i], envp_l);
 		pipes_args[i] = handle_infile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
 		pipes_args[i] = handle_outfile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
 		remove_quotes(argv);

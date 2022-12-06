@@ -8,4 +8,5 @@ void	builtin_pwd(void)
 		printf("%s\n", buffer);
 	else
 		ft_error();
+	g_return = 0;
 }

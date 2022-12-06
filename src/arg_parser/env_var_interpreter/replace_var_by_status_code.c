@@ -15,8 +15,7 @@ static int	insert_status_code_value(char *updated_arg,
 	return (end);
 }
 
-void	replace_var_by_status_code(char **argv, int start,
-			int index, int s_code)
+void	replace_var_by_status_code(char **argv, int start, int index)
 {
 	char	*updated_arg;
 	char	*s_code_value;
@@ -24,7 +23,7 @@ void	replace_var_by_status_code(char **argv, int start,
 	char	*arg;
 
 	arg = argv[index];
-	s_code_value = ft_itoa(s_code);
+	s_code_value = ft_itoa(g_return);
 	updated_arg = malloc(ft_strlen(arg) - 2 + ft_strlen(s_code_value) + 1);
 	i = backup_arg_before_var(updated_arg, arg, start);
 	i = insert_status_code_value(updated_arg, s_code_value, i);

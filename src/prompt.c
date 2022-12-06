@@ -70,7 +70,7 @@ static char	**builtins(char **argv, char **envp_l, int argc, t_pipes_data *pipes
 	else if ((ft_strcmp(argv[0], "unset")) == 0)
 		envp_l = builtin_unset(envp_l, argv);
 	else if (*argv[0])
-		pipes_data->status_code = exec_cmd(argv, envp_l, pipes_data);
+		g_return = exec_cmd(argv, envp_l, pipes_data);
 	return (envp_l);
 }
 
@@ -185,7 +185,7 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 				}
 			}
 			if (WIFEXITED(status))
-				pipes_data->status_code = WEXITSTATUS(status);
+				g_return = WEXITSTATUS(status);
 			//	if (pipes->redirections->fd_out)
 			//		pipes->redirections->outfile = NULL;
 			//	close(pipes->redirections->fd_out);
@@ -206,7 +206,7 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 	char	**argv;
 
 	argv = NULL;
-	pipes_data->status_code = 0;
+	ft_signal();
 	buffer = readline("Mickeytotal$>");
 	while (buffer != NULL)
 	{
@@ -228,6 +228,6 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 		buffer = readline("Mickeytotal$>");
 	}
 	free_2d_arr(envp_l);
-	printf("\nHave a nice day with MickeyTotal \n");
+	printf("exit\nHave a nice day with MickeyTotal \n");
 	return (0);
 }
