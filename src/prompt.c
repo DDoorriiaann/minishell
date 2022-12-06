@@ -210,13 +210,17 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 		argv = raw_input_parser(buffer);
 		free(buffer);
 		buffer = NULL;
-		pipes_data->pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
-		free(argv);
-		envp_l = exec_pipes(pipes_data, envp_l);
-		argv = NULL;
-		free_pipes_cmds_arr(pipes_data->pipes_cmds);
-		free_forks(pipes_data);
-		//reset_redirections(pipes->redirections);
+		if (argv[0])
+		{	
+			pipes_data->pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
+			free(argv);
+			envp_l = exec_pipes(pipes_data, envp_l);
+			free_pipes_cmds_arr(pipes_data->pipes_cmds);
+			free_forks(pipes_data);
+			//reset_redirections(pipes->redirections);
+		}
+		else
+			free(argv);
 		buffer = readline("Mickeytotal$>");
 	}
 	free_2d_arr(envp_l);
