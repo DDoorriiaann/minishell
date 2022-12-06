@@ -30,12 +30,12 @@ int	count_pipe_args(char **argv, int i)
 	return (args_count);
 }
 
-int	copy_args_adresses(char **argv, int i, t_pipes_init *pipes_init,
+int	duplicate_args(char **argv, int i, t_pipes_init *pipes_init,
 		char ***pipes_args)
 {
 	while (argv[i] && ft_strlen(argv[i]) != 1 && argv[i][0] != '|')
 	{
-		pipes_args[pipes_init->pipe_nb][pipes_init->pipe_arg] = argv[i];
+		pipes_args[pipes_init->pipe_nb][pipes_init->pipe_arg] = ft_strdup(argv[i]);
 		pipes_init->pipe_arg++;
 		i++;
 	}
@@ -61,7 +61,7 @@ int	fill_pipes_args(char ***pipes_args, char **argv)
 				* (pipes_init.args_count + 1));
 		if (!pipes_args[pipes_init.pipe_nb])
 			return (-1);
-		i = copy_args_adresses(argv, i, &pipes_init, pipes_args);
+		i = duplicate_args(argv, i, &pipes_init, pipes_args);
 		pipes_init.pipe_nb++;
 		if (argv[i])
 			i++;

@@ -139,6 +139,7 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 					ft_free_all_arr(paths, cur_fork->cmd);
 					perror("exec error");
 				}
+				free_2d_arr(cur_fork->cmd);
 				exit(EXIT_FAILURE);
 			}
 			else
@@ -172,6 +173,7 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 						ft_free_all_arr(paths, cur_fork->cmd);
 						perror("exec error");
 					}
+					free_2d_arr(cur_fork->cmd);
 					exit(EXIT_FAILURE);
 				}
 				else
@@ -187,7 +189,9 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 			//	if (pipes->redirections->fd_out)
 			//		pipes->redirections->outfile = NULL;
 			//	close(pipes->redirections->fd_out);
-			ft_free_all_arr(paths, cur_fork->cmd);
+			free_2d_arr(paths);
+			free_2d_arr(pipes_data->pipes_cmds[0]);
+			free_2d_arr(pipes_data->pipes_cmds[1]);
 			return (envp_l);
 		}
 		else
@@ -213,9 +217,9 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 		if (argv[0])
 		{	
 			pipes_data->pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
-			free(argv);
+			free_2d_arr(argv);
 			envp_l = exec_pipes(pipes_data, envp_l);
-			free_pipes_cmds_arr(pipes_data->pipes_cmds);
+			free(pipes_data->pipes_cmds);
 			free_forks(pipes_data);
 			//reset_redirections(pipes->redirections);
 		}
