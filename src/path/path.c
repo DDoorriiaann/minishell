@@ -45,8 +45,9 @@ char	**get_path(char *envp_path)
 	paths = ft_split(envp_path, ':');
 	while (paths[i])
 	{
-		tmp = paths[i];
-		paths[i] = ft_strjoin(paths[i], "/");
+		tmp = ft_strdup(paths[i]);
+		free(paths[i]);
+		paths[i] = ft_strjoin(tmp, "/");
 		free(tmp);
 		tmp = NULL;
 		i++;

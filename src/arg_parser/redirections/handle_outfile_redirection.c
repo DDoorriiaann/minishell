@@ -31,8 +31,8 @@ static int	save_filename(t_redirections *redirections, char *arg, int i, int end
 {
 	int	j;
 
-	if (redirections->outfile)
-		free(redirections->outfile);
+//	if (redirections->outfile)
+//		free(redirections->outfile);
 	redirections->outfile = malloc(redirections->out_filename_len + 1);
 	if (!redirections->outfile)
 		return (-1);

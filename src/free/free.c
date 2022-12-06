@@ -1,5 +1,35 @@
 # include "minishell.h"
 
+void	free_forks(t_pipes_data *pipes_data)
+{
+	int	i;
+
+	i = 0;
+	while (i < pipes_data->pipes_count + 1)
+	{
+		free(pipes_data->fork[i]->redirections);
+		free(pipes_data->fork[i]);
+		i++;
+	}
+	free(pipes_data->fork);
+}
+
+void	free_pipes_cmds_arr(char ***arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		arr[i] = NULL;
+		i++;
+	}
+	if (arr)
+		free(arr);
+	arr = NULL;
+}
+
 void	free_2d_arr(char **arr)
 {
 	int	i;
@@ -8,9 +38,11 @@ void	free_2d_arr(char **arr)
 	while (arr[i])
 	{
 		free(arr[i]);
+		arr[i] = NULL;
 		i++;
 	}
-	free(arr);
+	if (arr)
+		free(arr);
 }
 
 void	ft_free_all_arr(char **paths, char **cmd)

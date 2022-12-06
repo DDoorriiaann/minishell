@@ -1,4 +1,5 @@
 #include "minishell.h"
+
 /*
 void	echap_last_quote(char *input, char quote_type, int count)
 {
@@ -121,16 +122,15 @@ char	**split_input(char *input, int argc)
 	return (argv);
 }
 
-char	**arg_parser(char *input, char **envp, int e_code, t_redirections *redirections)
+char	**raw_input_parser(char *input)
 {
 	int		argc;
 	char	**argv;
+	char	*updated_input;
 
-	argc = count_arguments(input, 0);
-	argv = split_input(input, argc);
-	interpret_env_variables(argv, envp, e_code);
-	argv = handle_infile_redirection(argv, redirections);
-	argv = handle_outfile_redirection(argv, redirections);
-	remove_quotes(argv);
+	updated_input = isolate_pipe_symbols(input);
+	argc = count_arguments(updated_input, 0);
+	argv = split_input(updated_input, argc);
+	free(updated_input);
 	return (argv);
 }
