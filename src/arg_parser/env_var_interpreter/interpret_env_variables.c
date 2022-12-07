@@ -37,6 +37,11 @@ static void	update_argv_with_env_variables(int index, char **argv,
 			replace_var_by_status_code(argv, start, index);
 		else if (env_variable_name_exists(arg, start + 1, envp) != ERROR)
 			start = interpret_current_env_variable(argv, start, index, envp);
+		else if (arg[start] == '$' && (!arg[start + 1] || arg[start + 1] == ' ' || ft_is_quote(arg[start + 1])))
+		{
+			start ++;
+			continue ;
+		}
 		else
 			start = delete_var_inside_arg(argv, start, index);
 		arg = argv[index];

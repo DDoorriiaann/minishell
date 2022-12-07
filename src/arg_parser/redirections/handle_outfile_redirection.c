@@ -91,6 +91,8 @@ static void	check_outfile_redirection(char *arg, t_redirections *redirections)
 	i = 0;
 	while (arg[i])
 	{
+		if (ft_is_quote(arg[i]))
+			i = find_next_corresponding_quote(arg, i + 1, arg[i]);
 		if (arg[i] == '>')
 		{	
 			redirections->out_redirection = TRUE;

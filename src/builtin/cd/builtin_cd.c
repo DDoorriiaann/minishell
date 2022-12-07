@@ -1,16 +1,21 @@
 #include "minishell.h"
 
-int	builtin_cd(char *argv, char **envp_l)
+int	builtin_cd(char **args, char **envp_l, int argc)
 {
-	char	**path;
 	char	buff[2048];
 	char	*old_pwd;
 	int		i;
 
-	path = ft_split(argv, ' ');
-	i = 1;
-	if (chdir(path[i]) == -1)
+	if (argc > 2)
+	{
+		ft_putstr_fd(" too many arguments\n", 2);
+		return (1);
+	}
+	else if (chdir(args[1]) == -1)
+	{
 		perror("chdir()");
+		return (1);
+	}
 	i = 0;
 	while (envp_l[i])
 	{
@@ -33,6 +38,5 @@ int	builtin_cd(char *argv, char **envp_l)
 		}
 		i++;
 	}
-	free_2d_arr(path);
 	return (0);
 }

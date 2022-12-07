@@ -152,7 +152,7 @@ BUILTIN
 
 void	builtin_echo(char **argv);
 void	builtin_pwd(void);
-int		builtin_cd(char *argv, char **envp_l);
+int		builtin_cd(char **args, char **envp_l, int argc);
 char	**builtin_export(char **envp_l, char **argv, int argc);
 void	builtin_env( char **envp_l);
 void	builtin_exit(char **argv, char **envp_l,

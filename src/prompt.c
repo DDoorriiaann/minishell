@@ -60,7 +60,7 @@ static char	**builtins(char **argv, char **envp_l, int argc, t_pipes_data *pipes
 	else if ((ft_strcmp(argv[0], "pwd")) == 0)
 		builtin_pwd();
 	else if ((ft_strcmp(argv[0], "cd")) == 0)
-		builtin_cd(argv[0], envp_l);
+		g_return = builtin_cd(argv, envp_l, argc);
 	else if ((ft_strcmp(argv[0], "export")) == 0)
 		envp_l = builtin_export(envp_l, argv, argc);
 	else if ((ft_strcmp(argv[0], "exit")) == 0)
@@ -123,9 +123,19 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 			}
 			if (cur_fork->pid == 0)
 			{
+				if (cur_fork->redirections->infile)
+				{
+					cur_fork->redirections->fd_in = open(cur_fork->redirections->infile, O_RDONLY);
+					dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
+				}
 				close(cur_fork->pipe_fd[0]);
 				dup2(cur_fork->pipe_fd[1], STDOUT_FILENO);
 				close(cur_fork->pipe_fd[1]);
+				if (cur_fork->redirections->outfile)
+				{
+					cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+					dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
+				}
 				cur_fork->cmd = get_cmd(pipes_data->pipes_cmds[0][0], paths);
 				if (!cur_fork->cmd)
 				{
@@ -157,9 +167,19 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 				}
 				if (cur_fork->pid == 0)
 				{
+					if (cur_fork->redirections->infile)
+					{
+						cur_fork->redirections->fd_in = open(cur_fork->redirections->infile, O_RDONLY);
+						dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
+					}
 					close(cur_fork->pipe_fd[1]);
 					dup2(pipes_data->fork[0]->pipe_fd[0], STDIN_FILENO);
 					close(cur_fork->pipe_fd[0]);
+					if (cur_fork->redirections->outfile)
+					{
+						cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+						dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
+					}
 					cur_fork->cmd = get_cmd(pipes_data->pipes_cmds[1][0], paths);
 					if (!cur_fork->cmd)
 					{
