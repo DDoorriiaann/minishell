@@ -14,9 +14,9 @@ int	is_chevron_alone(char **argv, int arg_index, char chevron_type)
 
 	arg_len = ft_strlen(argv[arg_index]);
 	if (arg_len == 1 && argv[arg_index][0] == chevron_type && argv[arg_index + 1])
-		return (TRUE);
+		return (1);
 	if (arg_len == 2 && (argv[arg_index][0] == chevron_type && argv[arg_index][1] == chevron_type) && argv[arg_index + 1])
-		return (TRUE);
+		return (2);
 	return (FALSE);
 }
 

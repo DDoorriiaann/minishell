@@ -39,6 +39,7 @@ typedef struct s_redirections
 {
 	int		in_redirection;
 	int		out_redirection;
+	int		out_redir_type;
 	char	*infile;
 	char	*outfile;
 	int		out_filename_len;

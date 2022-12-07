@@ -72,6 +72,7 @@ static char	**fetch_outfile(char **argv, int arg_index,
 {
 	if (is_chevron_alone(argv, arg_index, '>'))
 	{	
+		redirections->out_redir_type = is_chevron_alone(argv, arg_index, '>');
 		redirections->outfile = ft_strdup(argv[arg_index + 1]);
 		argv = delete_argument(argv, arg_index, 2);
 	}
@@ -116,9 +117,6 @@ char	**handle_outfile_redirection(char **argv, t_redirections *redirections)
 		{
 			chevron_alone = is_chevron_alone(argv, i, '>');
 			argv = fetch_outfile(argv, i, redirections);
-			if (redirections->fd_out)
-				close(redirections->fd_out);
-			redirections->fd_out = open(redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (chevron_alone)
 				i--;
 			i--;

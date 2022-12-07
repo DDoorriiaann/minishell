@@ -36,6 +36,14 @@ int	exec_cmd(char **argv, char **envp_l, t_pipes_data *pipes)
 	//	{
 	//		dup2(pipes->redirections->fd_out, STDOUT_FILENO);
 	//	}
+		if (pipes->fork[0]->redirections->outfile)
+		{
+		if (pipes->fork[0]->redirections->out_redir_type == 1)
+			pipes->fork[0]->redirections->fd_out = open(pipes->fork[0]->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else if (pipes->fork[0]->redirections->out_redir_type == 2)
+			pipes->fork[0]->redirections->fd_out = open(pipes->fork[0]->redirections->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		dup2(pipes->fork[0]->redirections->fd_out, STDOUT_FILENO);
+		}
 		if (execve(cmd[0], argv, envp_l) == -1)
 		{
 			ft_free_all_arr(paths, cmd);
@@ -133,7 +141,10 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 				close(cur_fork->pipe_fd[1]);
 				if (cur_fork->redirections->outfile)
 				{
-					cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+					if (cur_fork->redirections->out_redir_type == 1)
+						cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+					else if (cur_fork->redirections->out_redir_type == 2)
+						cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 					dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
 				}
 				cur_fork->cmd = get_cmd(pipes_data->pipes_cmds[0][0], paths);
