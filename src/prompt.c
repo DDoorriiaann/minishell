@@ -228,6 +228,6 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 		buffer = readline("Mickeytotal$>");
 	}
 	free_2d_arr(envp_l);
-	printf("exit\nHave a nice day with MickeyTotal \n");
+	printf("exit\n");
 	return (0);
 }

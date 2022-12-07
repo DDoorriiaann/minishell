@@ -97,6 +97,8 @@ void	put_args_into_argv(char **argv, char *input)
 			argv[i - 1] = ft_substr(input, start, (end - start));
 			start = end;
 		}
+		else if (end == start)
+			argv[i - 1] = ft_substr(input, start, start + 1);
 		if (ft_isspace(input[start]))
 		{
 			end = skip_spaces(input, start);

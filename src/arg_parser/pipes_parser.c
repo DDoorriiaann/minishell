@@ -22,8 +22,13 @@ int	count_pipe_args(char **argv, int i)
 	int	args_count;
 
 	args_count = 0;
-	while (argv[i] && ft_strlen(argv[i]) != 1 && argv[i][0] != '|')
+	while (argv[i])
 	{
+		if (ft_strlen(argv[i]) == 1 && argv[i][0] == '|')
+		{
+			i++;
+			continue ;
+		}
 		args_count++;
 		i++;
 	}
@@ -33,8 +38,13 @@ int	count_pipe_args(char **argv, int i)
 int	duplicate_args(char **argv, int i, t_pipes_init *pipes_init,
 		char ***pipes_args)
 {
-	while (argv[i] && ft_strlen(argv[i]) != 1 && argv[i][0] != '|')
+	while (argv[i])
 	{
+		if  (ft_strlen(argv[i]) == 1 && argv[i][0] == '|')
+		{
+			i++;
+			continue ;
+		}
 		pipes_args[pipes_init->pipe_nb][pipes_init->pipe_arg] = ft_strdup(argv[i]);
 		pipes_init->pipe_arg++;
 		i++;
@@ -54,8 +64,8 @@ int	fill_pipes_args(char ***pipes_args, char **argv)
 	{
 		pipes_init.args_count = 0;
 		pipes_init.pipe_arg = 0;
-		if (!argv[i] || (ft_strlen(argv[i]) == 1 && argv[i][0] == '|'))
-			return (1);
+		//if (!argv[i] || (ft_strlen(argv[i]) == 1 && argv[i][0] == '|'))
+		//	return (1);
 		pipes_init.args_count = count_pipe_args(argv, i);
 		pipes_args[pipes_init.pipe_nb] = malloc(sizeof(char *)
 				* (pipes_init.args_count + 1));

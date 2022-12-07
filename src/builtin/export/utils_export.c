@@ -1,17 +1,17 @@
 #include "minishell.h"
 
-int	check_syntax(char *argv)
+int	check_syntax(char *arg)
 {
 	int	i;
 
 	i = 0;
-	while (argv[i] && argv[i] != '=')
+	while (arg[i] && arg[i] != '=')
 	{
-		if (i != 0 && argv[i] == '+' && argv[i + 1] == '=')
+		if (i != 0 && arg[i] == '+' && arg[i + 1] == '=')
 			return (TRUE);
-		if (i == 0 && argv[i] != '_' && ft_isalpha(argv[i]) == 0)
+		if (i == 0 && arg[i] != '_' && ft_isalpha(arg[i]) == 0)
 			return (FALSE);
-		if (argv[i] != '_' && ft_isalnum(argv[i]) == 0)
+		if (arg[i] != '_' && ft_isalnum(arg[i]) == 0)
 			return (FALSE);
 		i++;
 	}
@@ -25,4 +25,5 @@ void	print_error(char *argv)
 	ft_putstr_fd("Mickeytotal: export: `", 2);
 	ft_putstr_fd(argv, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
+	g_return = 1;
 }

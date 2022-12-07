@@ -26,8 +26,10 @@ void	free_pipes_cmds_arr(char ***arr)
 		i++;
 	}
 	if (arr)
+	{
 		free(arr);
-	arr = NULL;
+		arr = NULL;
+	}
 }
 
 void	free_2d_arr(char **arr)
@@ -42,7 +44,10 @@ void	free_2d_arr(char **arr)
 		i++;
 	}
 	if (arr)
+	{
 		free(arr);
+		arr = NULL;
+	}
 }
 
 void	ft_free_all_arr(char **paths, char **cmd)

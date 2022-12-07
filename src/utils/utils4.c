@@ -47,7 +47,7 @@ void	dup_arr(char **src, char **dst)
 	}
 	dst[i] = NULL;
 }
-
+/*
 int	check_syntax(char *argv)
 {
 	int	i;
@@ -72,5 +72,7 @@ void	print_error(char *argv)
 {
 	ft_putstr_fd("Mickeytotal: export: `", 2);
 	ft_putstr_fd(argv, 2);
-	ft_putstr_fd("':not a valid identifier\n", 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+
 }
+*/

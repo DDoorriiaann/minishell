@@ -18,7 +18,7 @@
 # define TRUE 1
 # define FALSE 0
 
-extern	int	g_return;
+extern int	g_return;
 
 typedef struct s_env_var
 {
@@ -169,14 +169,12 @@ int		find_word_end(char *input, int index);
 int		find_closing_quote(char *input, int end, char quote_type);
 int		go_to_word_end(char *input, int index, int *argc);
 int		go_to_quote_end(char *input, int index, int *argc);
-int		check_syntax(char *argv);
+int		check_syntax(char *arg);
 int		len_arg(char *argv);
 void	sort_first_char(char **envp_l);
 void	sort_after_first_char(char **envp_l);
 int		sort_ascii(char **envp_l, int ret, int i);
-int		len_arg(char *argv);
 void	dup_arr(char **src, char **dst);
-int		check_syntax(char *argv);
 int		size_env(char **envp_l);
 int		size_arg(char *argv);
 int		check_arg(char **envp_l, char *argv);
