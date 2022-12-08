@@ -43,8 +43,21 @@ static int	save_filename(t_redirections *redirections, char *arg, int i, int end
 		i++;
 		j++;
 	}
-	redirections->outfile[i] = '\0';
+	redirections->outfile[j] = '\0';
 	return (j);
+}
+
+int	count_chevrons(char *arg, int start)
+{
+	int	i;
+
+	i = 0;
+	while (is_chevron(arg[start]))
+	{
+		i++;
+		start++;
+	}
+	return (i);
 }
 
 static int	extract_outfile_name(char **argv, int arg_index, t_redirections *redirections)
@@ -53,12 +66,18 @@ static int	extract_outfile_name(char **argv, int arg_index, t_redirections *redi
 	int		end;	
 	char	*arg;
 	char	*backup;
+	int		nb_chevrons;
 
 	arg = argv[arg_index];
 	redirections->out_filename_len = get_filename_len(arg);
 	backup = malloc(ft_strlen(arg) - redirections->out_filename_len + 1);
 	end = find_chevron(arg);
 	i = backup_arg_before_var(backup, arg, end);
+	nb_chevrons = count_chevrons(arg, end);
+	//if (nb_chevron > 2)
+	//	ERROR!!!
+	(void)nb_chevrons;
+	redirections->out_redir_type = nb_chevrons;
 	end = end + redirections->out_filename_len + 1;
 	backup_arg_after_var(backup, arg, i, end);
 	save_filename(redirections, arg, i, end);
@@ -73,12 +92,14 @@ static char	**fetch_outfile(char **argv, int arg_index,
 	if (is_chevron_alone(argv, arg_index, '>'))
 	{	
 		redirections->out_redir_type = is_chevron_alone(argv, arg_index, '>');
-		redirections->outfile = ft_strdup(argv[arg_index + 1]);
+		if (!redirections->out_error)
+			redirections->outfile = ft_strdup(argv[arg_index + 1]);
 		argv = delete_argument(argv, arg_index, 2);
 	}
 	else
 	{
-		extract_outfile_name(argv, arg_index, redirections);
+		if (!redirections->out_error)
+			extract_outfile_name(argv, arg_index, redirections);
 		if (!argv[arg_index] || !argv[arg_index][0])
 			argv = delete_argument(argv, arg_index, 1);
 	}
@@ -110,6 +131,7 @@ char	**handle_outfile_redirection(char **argv, t_redirections *redirections)
 	int	chevron_alone;
 
 	i = 0;
+	redirections->out_error = 0;
 	while (argv[i])
 	{
 		check_outfile_redirection(argv[i], redirections);
@@ -117,6 +139,13 @@ char	**handle_outfile_redirection(char **argv, t_redirections *redirections)
 		{
 			chevron_alone = is_chevron_alone(argv, i, '>');
 			argv = fetch_outfile(argv, i, redirections);
+			if (redirections->outfile && !redirections->out_error)
+			{
+				redirections->outfile = remove_quotes_in_filename(redirections->outfile); 
+				redirections->fd_out = open(redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (redirections->fd_out < 0)
+					redirections->out_error = 1;
+			}
 			if (chevron_alone)
 				i--;
 			i--;

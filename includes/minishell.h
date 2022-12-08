@@ -40,6 +40,8 @@ typedef struct s_redirections
 	int		in_redirection;
 	int		out_redirection;
 	int		out_redir_type;
+	int		out_error;
+	int		tmp_infile;
 	char	*infile;
 	char	*outfile;
 	int		out_filename_len;
@@ -118,6 +120,7 @@ char	*isolate_pipe_symbols(char *input);
 char	**handle_infile_redirection(char **argv, t_redirections *redirections);
 char	**handle_outfile_redirection(char **argv, t_redirections *redirections);
 int		is_chevron_alone(char **argv, int arg_index, char chevron_type);
+char	*remove_quotes_in_filename(char *filename);
 void	reset_redirections(t_redirections *redirections);
 int		is_chevron(char c);
 

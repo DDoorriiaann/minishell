@@ -26,12 +26,15 @@ void	reset_redirections(t_redirections *redirections)
 	{
 		free(redirections->infile);
 		redirections->infile = NULL;
-		redirections->in_redirection = FALSE;
 	}
+	redirections->in_redirection = FALSE;
+	redirections->fd_in = 0;
 	if (redirections->outfile)
-	{
+	{	
 		free(redirections->outfile);
 		redirections->outfile = NULL;
-		redirections->out_redirection = FALSE;
 	}
+	redirections->out_redirection = FALSE;
+	redirections->fd_out = 0;
+	redirections->out_error = FALSE;
 }

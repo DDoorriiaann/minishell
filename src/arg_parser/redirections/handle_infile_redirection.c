@@ -66,6 +66,11 @@ char	**handle_infile_redirection(char **argv, t_redirections *redirections)
 		{
 			chevron_alone = is_chevron_alone(argv, i, '<');
 			argv = fetch_infile(argv, i, redirections);
+			if (redirections->infile)
+			{	
+				redirections->infile = remove_quotes_in_filename(redirections->infile); 
+				redirections->fd_in = open(redirections->infile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			}
 			if (chevron_alone)
 				i--;
 			i--;
