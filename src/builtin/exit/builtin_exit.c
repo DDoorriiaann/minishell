@@ -102,4 +102,5 @@ void	builtin_exit(char **argv, char **envp_l, t_pipes_data *pipes_data)
 		ft_exit(argv, envp_l, pipes_data);
 	}
 	too_many_arguments();
+	ft_exit(argv, envp_l, pipes_data);
 }
