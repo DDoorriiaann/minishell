@@ -22,19 +22,18 @@ int	is_chevron_alone(char **argv, int arg_index, char chevron_type)
 
 void	reset_redirections(t_redirections *redirections)
 {
+	redirections->out_error = FALSE;
 	if (redirections->infile)
 	{
 		free(redirections->infile);
 		redirections->infile = NULL;
+		redirections->in_redirection = FALSE;
 	}
-	redirections->in_redirection = FALSE;
-	redirections->fd_in = 0;
 	if (redirections->outfile)
-	{	
+	{
 		free(redirections->outfile);
 		redirections->outfile = NULL;
+		redirections->out_redirection = FALSE;
 	}
-	redirections->out_redirection = FALSE;
-	redirections->fd_out = 0;
-	redirections->out_error = FALSE;
+
 }

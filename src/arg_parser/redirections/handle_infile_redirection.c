@@ -37,12 +37,17 @@ static char	**fetch_infile(char **argv, int arg_index,
 static void	check_infile_redirection(char *arg, t_redirections *redirections)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	while (arg[i])
 	{
 		if (ft_is_quote(arg[i]))
-			i = find_next_corresponding_quote(arg, i + 1, arg[i]);
+		{	
+			j = find_next_corresponding_quote(arg, i + 1, arg[i]);
+			if (j != -1)
+				i = j;
+		}
 		if (arg[i] == '<')
 		{	
 			redirections->in_redirection = TRUE;

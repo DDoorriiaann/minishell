@@ -63,10 +63,10 @@ char	*remove_quotes_in_filename(char *filename)
 	wrapper = malloc(sizeof(char *));
 	wrapper[0] = filename;
 	i = 0;
-	while (filename[i])
+	while (wrapper[0][i])
 	{
-		if (ft_is_quote(filename[i]))
-			i = handle_quotes(wrapper, 0, i);
+		if (ft_is_quote(wrapper[0][i]))
+			i = handle_quotes(wrapper, 0, i) - 1;
 		i++;
 	}
 	updated_filename = wrapper[0];

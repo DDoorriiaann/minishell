@@ -44,7 +44,7 @@ int	exec_cmd(char **argv, char **envp_l, t_pipes_data *pipes)
 		if (pipes->fork[0]->redirections->fd_in < 0 || pipes->fork[0]->redirections->fd_out < 0)
 		{
 			ft_free_all_arr(paths, cmd);
-			perror("my tralala");
+			perror("");
 			reset_redirections(pipes->fork[0]->redirections);
 			exit (EXIT_FAILURE);
 		}

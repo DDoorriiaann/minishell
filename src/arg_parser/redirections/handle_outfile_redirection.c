@@ -80,7 +80,8 @@ static int	extract_outfile_name(char **argv, int arg_index, t_redirections *redi
 	redirections->out_redir_type = nb_chevrons;
 	end = end + redirections->out_filename_len + 1;
 	backup_arg_after_var(backup, arg, i, end);
-	save_filename(redirections, arg, i, end);
+	if (!redirections->out_error)
+		save_filename(redirections, arg, i, end);
 	free(argv[arg_index]);
 	argv[arg_index] = backup;
 	return (redirections->out_filename_len);
@@ -98,8 +99,7 @@ static char	**fetch_outfile(char **argv, int arg_index,
 	}
 	else
 	{
-		if (!redirections->out_error)
-			extract_outfile_name(argv, arg_index, redirections);
+		extract_outfile_name(argv, arg_index, redirections);
 		if (!argv[arg_index] || !argv[arg_index][0])
 			argv = delete_argument(argv, arg_index, 1);
 	}
@@ -109,12 +109,17 @@ static char	**fetch_outfile(char **argv, int arg_index,
 static void	check_outfile_redirection(char *arg, t_redirections *redirections)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	while (arg[i])
 	{
 		if (ft_is_quote(arg[i]))
-			i = find_next_corresponding_quote(arg, i + 1, arg[i]);
+		{
+			j = find_next_corresponding_quote(arg, i + 1, arg[i]);
+			if (j != -1)
+				i = j;
+		}
 		if (arg[i] == '>')
 		{	
 			redirections->out_redirection = TRUE;
