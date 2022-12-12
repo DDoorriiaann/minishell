@@ -136,20 +136,23 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 
 	/*if (!argv[0])
 		return (envp_l);*/
-	if ((ft_strcmp(argv[0], "exit")) == 0)
-		builtin_exit(argv, envp_l, pipes);
 	is_builtin = cmd_is_builtin(argv[0]);
-	if (!is_builtin)
+	if (is_builtin)
 	{
-		paths = get_path(check_line_path(envp_l));
-		cmd = get_cmd(argv[0], paths);
-		if (!cmd)
-		{
-			free_2d_arr(paths);
+		envp_l = builtins(argv, envp_l, argc, pipes);
+		return (envp_l);
+	}
+	paths = get_path(check_line_path(envp_l));
+	cmd = get_cmd(argv[0], paths);
+	if (!cmd)
+	{
+		free_2d_arr(paths);
+		if (argv[0][0] == '/' ||(argv[0][0] == '.' && argv[0][1] == '/'))
+			perror(" ");
+		else
 			ft_error_cmd(argv[0]);
-			g_return = 127;
-			return (envp_l);
-		}
+		g_return = 127;
+		return (envp_l);
 	}
 	pid = fork();
 	if (pid == -1)
@@ -164,7 +167,7 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 		if (pipes->fork[0]->redirections->fd_in < 0 || pipes->fork[0]->redirections->fd_out < 0)
 		{
 			ft_free_all_arr(paths, cmd);
-			perror("");
+			perror(" ");
 			reset_redirections(pipes->fork[0]->redirections);
 			exit (EXIT_FAILURE);
 		}
@@ -177,12 +180,7 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 			dup2(pipes->fork[0]->redirections->fd_out, STDOUT_FILENO);
 		}
 	
-		if (is_builtin)
-		{
-			envp_l = builtins(argv, envp_l, argc, pipes);
-			exit(g_return);
-		}
-		else if (execve(cmd[0], argv, envp_l) == -1)
+		if (execve(cmd[0], argv, envp_l) == -1)
 		{
 			ft_free_all_arr(paths, cmd);
 			perror("exec error");
@@ -195,8 +193,7 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 		if (WIFEXITED(status))
 			g_return = WEXITSTATUS(status);
 	}
-	if (!is_builtin)
-		ft_free_all_arr(paths, cmd);
+	ft_free_all_arr(paths, cmd);
 	return (envp_l);
 }
 
@@ -265,7 +262,7 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 						cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 					if (cur_fork->redirections->fd_out < 0)
 					{
-						perror("");
+						perror(" ");
 						ft_free_all_arr(paths, cur_fork->cmd);
 						exit (EXIT_FAILURE);
 					}

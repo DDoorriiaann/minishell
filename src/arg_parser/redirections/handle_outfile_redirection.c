@@ -7,9 +7,9 @@ static int	get_filename_len(char *arg)
 
 	len = 0;
 	i = 0;
-	while (arg[i] && !is_chevron(arg[i]))
+	while (arg[i] && is_chevron(arg[i]))
 		i++;
-	while (arg[i + 1] && !is_chevron(arg[i + 1]))
+	while (arg[i] && !is_chevron(arg[i]))
 	{	
 		i++;
 		len++;
@@ -78,10 +78,10 @@ static int	extract_outfile_name(char **argv, int arg_index, t_redirections *redi
 	//	ERROR!!!
 	(void)nb_chevrons;
 	redirections->out_redir_type = nb_chevrons;
-	end = end + redirections->out_filename_len + 1;
+	end = end + redirections->out_filename_len + redirections->out_redir_type;
 	backup_arg_after_var(backup, arg, i, end);
 	if (!redirections->out_error)
-		save_filename(redirections, arg, i, end);
+		save_filename(redirections, arg, i + redirections->out_redir_type, end);
 	free(argv[arg_index]);
 	argv[arg_index] = backup;
 	return (redirections->out_filename_len);
