@@ -37,9 +37,11 @@ static int	save_filename(t_redirections *redirections, char *arg, int i, int end
 	if (!redirections->outfile)
 		return (-1);
 	j = 0;
-	while (i < end - 1)
+	while (arg[i] && is_chevron(arg[i]))
+		i++;
+	while (i < end)
 	{
-		redirections->outfile[j] = arg[i + 1];
+		redirections->outfile[j] = arg[i];
 		i++;
 		j++;
 	}
@@ -81,7 +83,7 @@ static int	extract_outfile_name(char **argv, int arg_index, t_redirections *redi
 	end = end + redirections->out_filename_len + redirections->out_redir_type;
 	backup_arg_after_var(backup, arg, i, end);
 	if (!redirections->out_error)
-		save_filename(redirections, arg, i + redirections->out_redir_type, end);
+		save_filename(redirections, arg, i, end);
 	free(argv[arg_index]);
 	argv[arg_index] = backup;
 	return (redirections->out_filename_len);

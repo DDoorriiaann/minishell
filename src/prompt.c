@@ -39,6 +39,12 @@ int	exec_cmd(char **argv, char **envp_l, t_pipes_data *pipes)
 		if (pipes->fork[0]->redirections->infile)
 		{
 			pipes->fork[0]->redirections->fd_in = open(pipes->fork[0]->redirections->infile, O_RDONLY);
+			if (pipes->fork[0]->redirections->fd_in == -1)
+			{
+				perror("");
+				pipes->fork[0]->tmp_infile = 1;
+				pipes->fork[0]->redirections->fd_in = open("tmp_infile", O_RDONLY | O_CREAT | O_TRUNC, 0644);
+			}
 			dup2(pipes->fork[0]->redirections->fd_in, STDIN_FILENO);
 		}
 		if (pipes->fork[0]->redirections->fd_in < 0 || pipes->fork[0]->redirections->fd_out < 0)
@@ -133,13 +139,57 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 	char	**paths;
 	char	**cmd;
 	int		is_builtin;
+	int		old_stdout;
+	int		old_stdin;
 
 	/*if (!argv[0])
 		return (envp_l);*/
 	is_builtin = cmd_is_builtin(argv[0]);
 	if (is_builtin)
 	{
+		if (pipes->fork[0]->redirections->infile)
+		{
+			pipes->fork[0]->redirections->fd_in = open(pipes->fork[0]->redirections->infile, O_RDONLY);
+			if (pipes->fork[0]->redirections->fd_in == -1)
+			{
+				perror(" ");
+				pipes->fork[0]->tmp_infile = 1;
+				pipes->fork[0]->redirections->fd_in = open("tmp_infile", O_RDONLY | O_CREAT | O_TRUNC, 0644);
+			}
+			old_stdin = dup(0);
+			dup2(pipes->fork[0]->redirections->fd_in, STDIN_FILENO);
+		}
+		if (pipes->fork[0]->redirections->outfile)
+		{
+			if (pipes->fork[0]->redirections->out_redir_type == 1)
+				pipes->fork[0]->redirections->fd_out = open(pipes->fork[0]->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			else if (pipes->fork[0]->redirections->out_redir_type == 2)
+				pipes->fork[0]->redirections->fd_out = open(pipes->fork[0]->redirections->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (pipes->fork[0]->redirections->fd_out < 0)
+			{
+				perror(" ");
+				if (pipes->fork[0]->redirections->fd_in >= 0)
+				{	
+					dup2(old_stdin, 0);
+					close(old_stdin);
+				}
+				g_return = 1;
+				return (envp_l);
+			}
+			old_stdout = dup(1);
+			dup2(pipes->fork[0]->redirections->fd_out, STDOUT_FILENO);
+		}
 		envp_l = builtins(argv, envp_l, argc, pipes);
+		if (pipes->fork[0]->redirections->fd_out >= 0)
+		{	
+			dup2(old_stdout, 1);
+			close(old_stdout);
+		}
+		if (pipes->fork[0]->redirections->fd_in >= 0)
+		{	
+			dup2(old_stdin, 0);
+			close(old_stdin);
+		}
 		return (envp_l);
 	}
 	paths = get_path(check_line_path(envp_l));
@@ -162,14 +212,13 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 		if (pipes->fork[0]->redirections->infile)
 		{
 			pipes->fork[0]->redirections->fd_in = open(pipes->fork[0]->redirections->infile, O_RDONLY);
+			if (pipes->fork[0]->redirections->fd_in == -1)
+			{
+				perror(" ");
+				pipes->fork[0]->tmp_infile = 1;
+				pipes->fork[0]->redirections->fd_in = open("tmp_infile", O_RDONLY | O_CREAT | O_TRUNC, 0644);
+			}
 			dup2(pipes->fork[0]->redirections->fd_in, STDIN_FILENO);
-		}
-		if (pipes->fork[0]->redirections->fd_in < 0 || pipes->fork[0]->redirections->fd_out < 0)
-		{
-			ft_free_all_arr(paths, cmd);
-			perror(" ");
-			reset_redirections(pipes->fork[0]->redirections);
-			exit (EXIT_FAILURE);
 		}
 		if (pipes->fork[0]->redirections->outfile)
 		{
@@ -177,6 +226,12 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 				pipes->fork[0]->redirections->fd_out = open(pipes->fork[0]->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			else if (pipes->fork[0]->redirections->out_redir_type == 2)
 				pipes->fork[0]->redirections->fd_out = open(pipes->fork[0]->redirections->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (pipes->fork[0]->redirections->fd_out < 0)
+			{
+				perror(" ");
+				free_2d_arr(cmd);
+				exit (EXIT_FAILURE);
+			}
 			dup2(pipes->fork[0]->redirections->fd_out, STDOUT_FILENO);
 		}
 	
@@ -185,6 +240,9 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 			ft_free_all_arr(paths, cmd);
 			perror("exec error");
 		}
+		if (pipes->fork[0]->tmp_infile == TRUE)
+			unlink("tmp_infile");
+		free_2d_arr(paths);
 		exit(EXIT_FAILURE);
 	}
 	else
@@ -239,15 +297,14 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 			}
 			if (cur_fork->pid == 0)
 			{
-				
 				if (cur_fork->redirections->infile)
 				{
 					cur_fork->redirections->fd_in = open(cur_fork->redirections->infile, O_RDONLY);
 					if (cur_fork->redirections->fd_in < 0)
 					{
 						perror("");
-						ft_free_all_arr(paths, cur_fork->cmd);
-						exit (EXIT_FAILURE);
+						cur_fork->tmp_infile = 1;
+						cur_fork->redirections->fd_in = open("tmp_infile", O_RDONLY | O_CREAT | O_TRUNC, 0644);
 					}
 					dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
 				}
@@ -263,46 +320,35 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 					if (cur_fork->redirections->fd_out < 0)
 					{
 						perror(" ");
-						ft_free_all_arr(paths, cur_fork->cmd);
+						if (!cur_fork->is_builtin)
+							free_2d_arr(cur_fork->cmd);
 						exit (EXIT_FAILURE);
 					}
 					
 					dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
 				}
-				/*if (pipes->fork[0]->redirections->infile)
+				cur_fork->is_builtin = cmd_is_builtin(pipes_data->pipes_cmds[0][0]);
+				if (cur_fork->is_builtin)
 				{
-					pipes->fork[0]->redirections->fd_in = open(pipes->fork[0]->redirections->infile, O_RDONLY);
-					dup2(pipes->fork[0]->redirections->fd_in, STDIN_FILENO);
+					cur_fork->argc = count_cur_fork_args(pipes_data->pipes_cmds[0]);
+					builtins(cur_fork->cmd, envp_l, cur_fork->argc, pipes_data);
+					exit(g_return);
 				}
-				if (pipes->fork[0]->redirections->fd_in < 0 || pipes->fork[0]->redirections->fd_out < 0)
-				{
-					ft_free_all_arr(paths, cmd);
-					perror("");
-					reset_redirections(pipes->fork[0]->redirections);
-					exit (EXIT_FAILURE);
-				}
-				if (pipes->fork[0]->redirections->outfile)
-				{
-					if (pipes->fork[0]->redirections->out_redir_type == 1)
-						pipes->fork[0]->redirections->fd_out = open(pipes->fork[0]->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-					else if (pipes->fork[0]->redirections->out_redir_type == 2)
-						pipes->fork[0]->redirections->fd_out = open(pipes->fork[0]->redirections->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-					dup2(pipes->fork[0]->redirections->fd_out, STDOUT_FILENO);
-				}*/
 				cur_fork->cmd = get_cmd(pipes_data->pipes_cmds[0][0], paths);
 				if (!cur_fork->cmd)
 				{
-					free_2d_arr(paths);
 					ft_error_cmd(pipes_data->pipes_cmds[0][0]);
 					//free everything needed
-					return (envp_l);
+					exit(EXIT_FAILURE);
 				}
 				if (execve(cur_fork->cmd[0], pipes_data->pipes_cmds[0], envp_l) == -1)
 				{
-					ft_free_all_arr(paths, cur_fork->cmd);
+					free_2d_arr(cur_fork->cmd);
 					perror("exec error");
 				}
 				free_2d_arr(cur_fork->cmd);
+				if (cur_fork->tmp_infile == TRUE)
+					unlink("tmp_infile");
 				exit(EXIT_FAILURE);
 			}
 			else
@@ -316,37 +362,69 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 					perror("fork error\n");
 					//free everything
 					// update status code
-					return (envp_l);
+					exit(EXIT_FAILURE);
 				}
 				if (cur_fork->pid == 0)
 				{
 					if (cur_fork->redirections->infile)
 					{
 						cur_fork->redirections->fd_in = open(cur_fork->redirections->infile, O_RDONLY);
+						if (cur_fork->redirections->fd_in < 0)
+						{
+							perror("");
+							cur_fork->tmp_infile = 1;
+							cur_fork->redirections->fd_in = open("tmp_infile", O_RDONLY | O_CREAT | O_TRUNC, 0644);
+						}
 						dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
 					}
 					close(cur_fork->pipe_fd[1]);
 					dup2(pipes_data->fork[0]->pipe_fd[0], STDIN_FILENO);
 					close(cur_fork->pipe_fd[0]);
-					if (cur_fork->redirections->outfile)
+					/*if (cur_fork->redirections->outfile)
 					{
 						cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+						if (cur_fork->redirections->fd_out < 0) 
+							cur_fork->redirections->fd_out = open("/dev/null", O_WRONLY);
 						dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
+					}*/
+					if (cur_fork->redirections->outfile)
+					{
+						if (cur_fork->redirections->out_redir_type == 1)
+							cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+						else if (cur_fork->redirections->out_redir_type == 2)
+							cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+						if (cur_fork->redirections->fd_out < 0)
+						{
+							perror(" ");
+							if (!cur_fork->is_builtin)
+								free_2d_arr(cur_fork->cmd);
+							exit (EXIT_FAILURE);
+						}
+						
+						dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
+					}
+					cur_fork->is_builtin = cmd_is_builtin(pipes_data->pipes_cmds[1][0]);
+					if (cur_fork->is_builtin)
+					{
+						cur_fork->argc = count_cur_fork_args(pipes_data->pipes_cmds[1]);
+						builtins(cur_fork->cmd, envp_l, cur_fork->argc, pipes_data);
+						exit(g_return);
 					}
 					cur_fork->cmd = get_cmd(pipes_data->pipes_cmds[1][0], paths);
 					if (!cur_fork->cmd)
 					{
-						free_2d_arr(paths);
 						ft_error_cmd(pipes_data->pipes_cmds[1][0]);
 						//free everything needed
-						return (envp_l);
+						exit(EXIT_FAILURE);
 					}
 					if (execve(cur_fork->cmd[0], pipes_data->pipes_cmds[1], envp_l) == -1)
 					{
-						ft_free_all_arr(paths, cur_fork->cmd);
+						free_2d_arr(cur_fork->cmd);
 						perror("exec error");
 					}
 					free_2d_arr(cur_fork->cmd);
+					if (cur_fork->tmp_infile == TRUE)
+						unlink("tmp_infile");
 					exit(EXIT_FAILURE);
 				}
 				else

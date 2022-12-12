@@ -74,7 +74,7 @@ char	**handle_infile_redirection(char **argv, t_redirections *redirections)
 			if (redirections->infile)
 			{	
 				redirections->infile = remove_quotes_in_filename(redirections->infile); 
-				redirections->fd_in = open(redirections->infile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				redirections->fd_in = open(redirections->infile, O_RDONLY, 0644);
 			}
 			if (chevron_alone)
 				i--;

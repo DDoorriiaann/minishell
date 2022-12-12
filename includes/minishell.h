@@ -66,6 +66,9 @@ typedef struct s_fork
 	pid_t			pid;
 	int				pipe_fd[2];
 	t_redirections	*redirections;
+	int				tmp_infile;
+	int				is_builtin;
+	int				argc;
 }	t_fork;
 
 typedef struct s_pipes_data
@@ -73,7 +76,6 @@ typedef struct s_pipes_data
 	int				pipes_detected;
 	int				pipes_count;
 	int				cmds_count;
-	int				tmp_infile;
 	char			***pipes_cmds;
 	t_fork			**fork;
 }	t_pipes_data;
