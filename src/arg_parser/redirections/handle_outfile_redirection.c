@@ -1,53 +1,6 @@
 #include "minishell.h"
 
-static int	get_filename_len(char *arg)
-{
-	int	len;
-	int	i;
 
-	len = 0;
-	i = 0;
-	while (arg[i] && is_chevron(arg[i]))
-		i++;
-	while (arg[i] && !is_chevron(arg[i]))
-	{	
-		i++;
-		len++;
-	}
-	return (len);
-}
-
-static int	find_chevron(char *arg)
-{
-	int	start;
-
-	start = 0;
-	while (arg[start] && !is_chevron(arg[start]))
-		start++;
-	return (start);
-}
-
-static int	save_filename(t_redirections *redirections, char *arg, int i, int end)
-{
-	int	j;
-
-//	if (redirections->outfile)
-//		free(redirections->outfile);
-	redirections->outfile = malloc(redirections->out_filename_len + 1);
-	if (!redirections->outfile)
-		return (-1);
-	j = 0;
-	while (arg[i] && is_chevron(arg[i]))
-		i++;
-	while (i < end)
-	{
-		redirections->outfile[j] = arg[i];
-		i++;
-		j++;
-	}
-	redirections->outfile[j] = '\0';
-	return (j);
-}
 
 int	count_chevrons(char *arg, int start)
 {
@@ -83,7 +36,7 @@ static int	extract_outfile_name(char **argv, int arg_index, t_redirections *redi
 	end = end + redirections->out_filename_len + redirections->out_redir_type;
 	backup_arg_after_var(backup, arg, i, end);
 	if (!redirections->out_error)
-		save_filename(redirections, arg, i, end);
+		save_out_filename(redirections, arg, i, end);
 	free(argv[arg_index]);
 	argv[arg_index] = backup;
 	return (redirections->out_filename_len);

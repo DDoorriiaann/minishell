@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include <unistd.h>
 
 char	**copy_envp(char **envp)
 {
@@ -63,12 +64,12 @@ char	**get_cmd(char *cmd, char **paths)
 
 	i = 0;
 	cmd_split = ft_split(cmd, ' ');
-	if (access(cmd_split[0], F_OK) == 0)
+	if (access(cmd_split[0], F_OK | X_OK) == 0)
 		return (cmd_split);
 	while (paths[i])
 	{
 		cmd_path = ft_strjoin(paths[i], cmd_split[0]);
-		if (access(cmd_path, F_OK) == 0)
+		if (access(cmd_path, F_OK | X_OK) == 0)
 		{
 			free(cmd_split[0]);
 			cmd_split[0] = cmd_path;
@@ -78,5 +79,5 @@ char	**get_cmd(char *cmd, char **paths)
 		i++;
 	}
 	free_2d_arr(cmd_split);
-	return (0);
+	return (NULL);
 }

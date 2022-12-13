@@ -44,9 +44,12 @@ typedef struct s_redirections
 	int		tmp_infile;
 	char	*infile;
 	char	*outfile;
+	int		in_filename_len;
 	int		out_filename_len;
 	int		fd_in;
 	int		fd_out;
+	int		old_stdout;
+	int		old_stdin;
 }	t_redirections;
 
 typedef enum error
@@ -125,8 +128,12 @@ int		is_chevron_alone(char **argv, int arg_index, char chevron_type);
 char	*remove_quotes_in_filename(char *filename);
 void	reset_redirections(t_redirections *redirections);
 int		is_chevron(char c);
+int		get_filename_len(char *arg);
+int		save_in_filename(t_redirections *redirections, char *arg, int i, int end);
+int		save_out_filename(t_redirections *redirections, char *arg, int i, int end);
+int		find_chevron(char *arg);
 
-//DECORATION
+	//DECORATION
 void	print_decoration(void);
 
 /***
@@ -142,9 +149,10 @@ void	free_forks(t_pipes_data *pipes_data);
 ERROR
 ****/
 
-void	ft_error_cmd(char *str);
+void	ft_cmd_not_found(char *str);
 void	ft_error(void);
 int		ft_error_return(void);
+void	ft_cmd_error(char *cmd);
 
 /***
 EXEC
@@ -213,7 +221,7 @@ SIGNAL
 void	ft_signal(void);
 
 /*****
-PIPES
+EXECUTION
 *****/
 
 int		pipex(char ***pipes_cmds, t_pipes_data *pipes_data, char **envp);
@@ -229,8 +237,14 @@ void	search_valid_path(t_pipes_data *data, char **cmd_split, int i);
 ////COMMANDS
 t_error	get_cmds(char **argv, int argc, t_pipes_data *data);
 t_error	ft_split_commands(t_pipes_data *data);
-t_error	exec_cmds(t_pipes_data *data, char **envp);
 void	alert_command_error(t_pipes_data *data);
+char	**exec_without_pipes(char **argv, char **envp_l,
+			int argc, t_pipes_data *pipes);
+
+///EXECUTION UTILS
+int		cmd_is_builtin(char *cmd);
+char	**builtins(char **argv, char **envp_l,
+			int argc, t_pipes_data *pipes_data);
 
 ////MEMORY MANAGEMENT
 void	init_data(t_pipes_data *data, char ***pipes_cmds);
