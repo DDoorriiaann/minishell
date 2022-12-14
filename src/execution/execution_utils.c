@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+int	count_cur_fork_args(char **pipe_args)
+{
+	int	i;
+
+	i = 0;
+	while (pipe_args[i])
+		i++;
+	return (i);
+}
+
 char	**builtins(char **argv, char **envp_l,
 			int argc, t_pipes_data *pipes_data)
 {

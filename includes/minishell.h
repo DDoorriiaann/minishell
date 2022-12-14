@@ -223,8 +223,9 @@ void	ft_signal(void);
 /*****
 EXECUTION
 *****/
-
-int		pipex(char ***pipes_cmds, t_pipes_data *pipes_data, char **envp);
+char	**exec_without_pipes(char **argv, char **envp_l,
+			int argc, t_pipes_data *pipes);
+char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l);
 
 ////PATHS
 char	**split_path(char *env_path);
@@ -234,14 +235,8 @@ void	find_cmd_path(t_pipes_data *data);
 int		is_cmd_litteral_path(t_pipes_data *data, char **cmd_split, int i);
 void	search_valid_path(t_pipes_data *data, char **cmd_split, int i);
 
-////COMMANDS
-t_error	get_cmds(char **argv, int argc, t_pipes_data *data);
-t_error	ft_split_commands(t_pipes_data *data);
-void	alert_command_error(t_pipes_data *data);
-char	**exec_without_pipes(char **argv, char **envp_l,
-			int argc, t_pipes_data *pipes);
-
 ///EXECUTION UTILS
+int		count_cur_fork_args(char **pipe_args);
 int		cmd_is_builtin(char *cmd);
 char	**builtins(char **argv, char **envp_l,
 			int argc, t_pipes_data *pipes_data);
