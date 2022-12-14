@@ -2,79 +2,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-int	exec_cmd(char **argv, char **envp_l, t_pipes_data *pipes)
-{
-	int		pid = 0;
-	int		status = 0;
-	char	**paths;
-	char	**cmd;
-	int		status_code;
 
-	status_code = 0;
-	if (!argv[0])
-		return (EXIT_FAILURE);
-	paths = get_path(check_line_path(envp_l));
-	cmd = get_cmd(argv[0], paths);
-	if (!cmd)
-	{
-		free_2d_arr(paths);
-		ft_error_cmd(argv[0]);
-		return (127);
-	}
-	pid = fork();
-	(void)pipes;
-	if (pid == -1)
-		perror("fork error");
-	if (pid == 0)
-	{
-	//	if (pipes->redirections->infile)
-	//	{
-	//		pipes->redirections->fd_in = open(pipes->redirections->infile, O_RDONLY);
-	//		dup2(pipes->redirections->fd_in, STDIN_FILENO);
-	//	}
-	//	if (pipes->redirections->outfile)
-	//	{
-	//		dup2(pipes->redirections->fd_out, STDOUT_FILENO);
-	//	}
-		if (execve(cmd[0], argv, envp_l) == -1)
-		{
-			ft_free_all_arr(paths, cmd);
-			perror("exec error");
-		}
-		exit(EXIT_FAILURE);
-	}
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		status_code = WEXITSTATUS(status);
-//	if (pipes->redirections->fd_out)
-//		pipes->redirections->outfile = NULL;
-//	close(pipes->redirections->fd_out);
-	ft_free_all_arr(paths, cmd);
-	return (status_code);
-}
-
-static char	**builtins(char **argv, char **envp_l, int argc, t_pipes_data *pipes_data)
-{
-	if ((ft_strcmp(argv[0], "echo")) == 0)
-		builtin_echo(argv);
-	else if ((ft_strcmp(argv[0], "pwd")) == 0)
-		builtin_pwd();
-	else if ((ft_strcmp(argv[0], "cd")) == 0)
-		builtin_cd(argv[0], envp_l);
-	else if ((ft_strcmp(argv[0], "export")) == 0)
-		envp_l = builtin_export(envp_l, argv, argc);
-	else if ((ft_strcmp(argv[0], "exit")) == 0)
-		builtin_exit(argv, envp_l, pipes_data);
-	else if ((ft_strcmp(argv[0], "env")) == 0)
-		builtin_env(envp_l);
-	else if ((ft_strcmp(argv[0], "unset")) == 0)
-		envp_l = builtin_unset(envp_l, argv);
-	else if (*argv[0])
-		g_return = exec_cmd(argv, envp_l, pipes_data);
-	return (envp_l);
-}
-
-int	count_cur_pipe_args(char **pipe_args)
+int	count_cur_fork_args(char **pipe_args)
 {
 	int	i;
 
@@ -83,6 +12,7 @@ int	count_cur_pipe_args(char **pipe_args)
 		i++;
 	return (i);
 }
+
 
 char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 {
@@ -95,9 +25,9 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 	//i = 0;
 	if (pipes_data->pipes_count == 0)
 	{
-		argc = count_cur_pipe_args(pipes_data->pipes_cmds[0]);
+		argc = count_cur_fork_args(pipes_data->pipes_cmds[0]);
 		if (argc != 0)
-			envp_l = builtins(pipes_data->pipes_cmds[0], envp_l, argc, pipes_data);
+			envp_l = exec_without_pipes(pipes_data->pipes_cmds[0], envp_l, argc, pipes_data);
 	}
 	else if (pipes_data->pipes_count > 0)
 	{
@@ -123,23 +53,62 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 			}
 			if (cur_fork->pid == 0)
 			{
+				if (cur_fork->redirections->infile)
+				{
+					cur_fork->redirections->fd_in = open(cur_fork->redirections->infile, O_RDONLY);
+					if (cur_fork->redirections->fd_in < 0)
+					{
+						perror("");
+						cur_fork->tmp_infile = 1;
+						cur_fork->redirections->fd_in = open("tmp_infile", O_RDONLY | O_CREAT | O_TRUNC, 0644);
+					}
+					dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
+				}
 				close(cur_fork->pipe_fd[0]);
 				dup2(cur_fork->pipe_fd[1], STDOUT_FILENO);
 				close(cur_fork->pipe_fd[1]);
+				if (cur_fork->redirections->outfile)
+				{
+					if (cur_fork->redirections->out_redir_type == 1)
+						cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+					else if (cur_fork->redirections->out_redir_type == 2)
+						cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+					if (cur_fork->redirections->fd_out < 0)
+					{
+						perror(" ");
+					//	if (!cur_fork->is_builtin)
+					//		free_2d_arr(cur_fork->cmd);
+						exit (EXIT_FAILURE);
+					}
+					
+					dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
+				}
+				cur_fork->is_builtin = cmd_is_builtin(pipes_data->pipes_cmds[0][0]);
+				if (cur_fork->is_builtin)
+				{
+					cur_fork->argc = count_cur_fork_args(pipes_data->pipes_cmds[0]);
+					builtins(pipes_data->pipes_cmds[0], envp_l, cur_fork->argc, pipes_data);
+					exit(g_return);
+				}
 				cur_fork->cmd = get_cmd(pipes_data->pipes_cmds[0][0], paths);
 				if (!cur_fork->cmd)
 				{
-					free_2d_arr(paths);
-					ft_error_cmd(pipes_data->pipes_cmds[0][0]);
-					//free everything needed
+					if (pipes_data->pipes_cmds[0][0][0] == '/' ||(pipes_data->pipes_cmds[0][0][0] == '.' && pipes_data->pipes_cmds[0][0][1] == '/'))
+						ft_cmd_error(pipes_data->pipes_cmds[0][0]);
+					else
+						ft_cmd_not_found(pipes_data->pipes_cmds[0][0]);
 					return (envp_l);
+					//free everything needed
+					exit(EXIT_FAILURE);
 				}
 				if (execve(cur_fork->cmd[0], pipes_data->pipes_cmds[0], envp_l) == -1)
 				{
-					ft_free_all_arr(paths, cur_fork->cmd);
+					free_2d_arr(cur_fork->cmd);
 					perror("exec error");
 				}
 				free_2d_arr(cur_fork->cmd);
+				if (cur_fork->tmp_infile == TRUE)
+					unlink("tmp_infile");
 				exit(EXIT_FAILURE);
 			}
 			else
@@ -153,27 +122,73 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 					perror("fork error\n");
 					//free everything
 					// update status code
-					return (envp_l);
+					exit(EXIT_FAILURE);
 				}
 				if (cur_fork->pid == 0)
 				{
+					if (cur_fork->redirections->infile)
+					{
+						cur_fork->redirections->fd_in = open(cur_fork->redirections->infile, O_RDONLY);
+						if (cur_fork->redirections->fd_in < 0)
+						{
+							perror("");
+							cur_fork->tmp_infile = 1;
+							cur_fork->redirections->fd_in = open("tmp_infile", O_RDONLY | O_CREAT | O_TRUNC, 0644);
+						}
+						dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
+					}
 					close(cur_fork->pipe_fd[1]);
 					dup2(pipes_data->fork[0]->pipe_fd[0], STDIN_FILENO);
 					close(cur_fork->pipe_fd[0]);
+					/*if (cur_fork->redirections->outfile)
+					{
+						cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+						if (cur_fork->redirections->fd_out < 0) 
+							cur_fork->redirections->fd_out = open("/dev/null", O_WRONLY);
+						dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
+					}*/
+					if (cur_fork->redirections->outfile)
+					{
+						if (cur_fork->redirections->out_redir_type == 1)
+							cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+						else if (cur_fork->redirections->out_redir_type == 2)
+							cur_fork->redirections->fd_out = open(cur_fork->redirections->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+						if (cur_fork->redirections->fd_out < 0)
+						{
+							perror(" ");
+						//	if (!cur_fork->is_builtin)
+						//		free_2d_arr(cur_fork->cmd);
+							exit (EXIT_FAILURE);
+						}
+						
+						dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
+					}
+					cur_fork->is_builtin = cmd_is_builtin(pipes_data->pipes_cmds[1][0]);
+					if (cur_fork->is_builtin)
+					{
+						cur_fork->argc = count_cur_fork_args(pipes_data->pipes_cmds[1]);
+						builtins(pipes_data->pipes_cmds[1], envp_l, cur_fork->argc, pipes_data);
+						exit(g_return);
+					}
 					cur_fork->cmd = get_cmd(pipes_data->pipes_cmds[1][0], paths);
 					if (!cur_fork->cmd)
 					{
-						free_2d_arr(paths);
-						ft_error_cmd(pipes_data->pipes_cmds[1][0]);
+						if (pipes_data->pipes_cmds[0][0][0] == '/' ||(pipes_data->pipes_cmds[0][0][0] == '.' && pipes_data->pipes_cmds[0][0][1] == '/'))
+							ft_cmd_error(pipes_data->pipes_cmds[0][0]);
+						else
+							ft_cmd_not_found(pipes_data->pipes_cmds[0][0]);
+					//	ft_error_cmd(pipes_data->pipes_cmds[1][0]);
 						//free everything needed
-						return (envp_l);
+						exit(EXIT_FAILURE);
 					}
 					if (execve(cur_fork->cmd[0], pipes_data->pipes_cmds[1], envp_l) == -1)
 					{
-						ft_free_all_arr(paths, cur_fork->cmd);
+						free_2d_arr(cur_fork->cmd);
 						perror("exec error");
 					}
 					free_2d_arr(cur_fork->cmd);
+					if (cur_fork->tmp_infile == TRUE)
+						unlink("tmp_infile");
 					exit(EXIT_FAILURE);
 				}
 				else

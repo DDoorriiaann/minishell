@@ -39,11 +39,17 @@ typedef struct s_redirections
 {
 	int		in_redirection;
 	int		out_redirection;
+	int		out_redir_type;
+	int		out_error;
+	int		tmp_infile;
 	char	*infile;
 	char	*outfile;
+	int		in_filename_len;
 	int		out_filename_len;
 	int		fd_in;
 	int		fd_out;
+	int		old_stdout;
+	int		old_stdin;
 }	t_redirections;
 
 typedef enum error
@@ -63,6 +69,9 @@ typedef struct s_fork
 	pid_t			pid;
 	int				pipe_fd[2];
 	t_redirections	*redirections;
+	int				tmp_infile;
+	int				is_builtin;
+	int				argc;
 }	t_fork;
 
 typedef struct s_pipes_data
@@ -70,7 +79,6 @@ typedef struct s_pipes_data
 	int				pipes_detected;
 	int				pipes_count;
 	int				cmds_count;
-	int				tmp_infile;
 	char			***pipes_cmds;
 	t_fork			**fork;
 }	t_pipes_data;
@@ -117,10 +125,15 @@ char	*isolate_pipe_symbols(char *input);
 char	**handle_infile_redirection(char **argv, t_redirections *redirections);
 char	**handle_outfile_redirection(char **argv, t_redirections *redirections);
 int		is_chevron_alone(char **argv, int arg_index, char chevron_type);
+char	*remove_quotes_in_filename(char *filename);
 void	reset_redirections(t_redirections *redirections);
 int		is_chevron(char c);
+int		get_filename_len(char *arg);
+int		save_in_filename(t_redirections *redirections, char *arg, int i, int end);
+int		save_out_filename(t_redirections *redirections, char *arg, int i, int end);
+int		find_chevron(char *arg);
 
-//DECORATION
+	//DECORATION
 void	print_decoration(void);
 
 /***
@@ -136,9 +149,10 @@ void	free_forks(t_pipes_data *pipes_data);
 ERROR
 ****/
 
-void	ft_error_cmd(char *str);
+void	ft_cmd_not_found(char *str);
 void	ft_error(void);
 int		ft_error_return(void);
+void	ft_cmd_error(char *cmd);
 
 /***
 EXEC
@@ -152,7 +166,7 @@ BUILTIN
 
 void	builtin_echo(char **argv);
 void	builtin_pwd(void);
-int		builtin_cd(char *argv, char **envp_l);
+int		builtin_cd(char **args, char **envp_l, int argc);
 char	**builtin_export(char **envp_l, char **argv, int argc);
 void	builtin_env( char **envp_l);
 void	builtin_exit(char **argv, char **envp_l,
@@ -207,7 +221,7 @@ SIGNAL
 void	ft_signal(void);
 
 /*****
-PIPES
+EXECUTION
 *****/
 
 int		pipex(char ***pipes_cmds, t_pipes_data *pipes_data, char **envp);
@@ -223,8 +237,14 @@ void	search_valid_path(t_pipes_data *data, char **cmd_split, int i);
 ////COMMANDS
 t_error	get_cmds(char **argv, int argc, t_pipes_data *data);
 t_error	ft_split_commands(t_pipes_data *data);
-t_error	exec_cmds(t_pipes_data *data, char **envp);
 void	alert_command_error(t_pipes_data *data);
+char	**exec_without_pipes(char **argv, char **envp_l,
+			int argc, t_pipes_data *pipes);
+
+///EXECUTION UTILS
+int		cmd_is_builtin(char *cmd);
+char	**builtins(char **argv, char **envp_l,
+			int argc, t_pipes_data *pipes_data);
 
 ////MEMORY MANAGEMENT
 void	init_data(t_pipes_data *data, char ***pipes_cmds);

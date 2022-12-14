@@ -54,6 +54,26 @@ static int	handle_quotes(char **argv, int arg_index, int cur_char)
 		return (cur_char);
 }
 
+char	*remove_quotes_in_filename(char *filename)
+{
+	int		i;
+	char	**wrapper;
+	char	*updated_filename;
+
+	wrapper = malloc(sizeof(char *));
+	wrapper[0] = filename;
+	i = 0;
+	while (wrapper[0][i])
+	{
+		if (ft_is_quote(wrapper[0][i]))
+			i = handle_quotes(wrapper, 0, i) - 1;
+		i++;
+	}
+	updated_filename = wrapper[0];
+	free(wrapper);
+	return (updated_filename);
+}
+
 void	remove_quotes(char **argv)
 {
 	int		i;
