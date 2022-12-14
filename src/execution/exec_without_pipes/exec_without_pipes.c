@@ -40,25 +40,6 @@ int	redirect_stdout(t_pipes_data *pipes)
 	return (0);
 }
 
-void	redirect_fork_stdout(t_pipes_data *pipes)
-{
-	if (pipes->fork[0]->redirections->out_redir_type == 1)
-		pipes->fork[0]->redirections->fd_out = open(
-				pipes->fork[0]->redirections->outfile,
-				O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (pipes->fork[0]->redirections->out_redir_type == 2)
-		pipes->fork[0]->redirections->fd_out = open(
-				pipes->fork[0]->redirections->outfile,
-				O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (pipes->fork[0]->redirections->fd_out < 0)
-	{
-		perror(" ");
-		free_2d_arr(pipes->fork[0]->cmd);
-		exit (EXIT_FAILURE);
-	}
-	dup2(pipes->fork[0]->redirections->fd_out, STDOUT_FILENO);
-}
-
 void	restore_stdout(t_pipes_data *pipes)
 {
 	dup2(pipes->fork[0]->redirections->old_stdout, 1);
@@ -99,7 +80,7 @@ void	exec_fork_cmd(char **paths, t_pipes_data *pipes, char **argv, char **envp_l
 	if (pipes->fork[0]->redirections->infile)
 		redirect_stdin(pipes);
 	if (pipes->fork[0]->redirections->outfile)
-		redirect_fork_stdout(pipes);
+		redirect_fork_stdout(pipes->fork[0]);
 	if (execve(pipes->fork[0]->cmd[0], argv, envp_l) == -1)
 	{
 		ft_cmd_error(pipes->fork[0]->cmd[0]);

@@ -1,5 +1,26 @@
 #include "minishell.h"
 
+void	redirect_fork_stdout(t_fork *cur_fork)
+{
+	if (cur_fork->redirections->outfile)
+	{
+		if (cur_fork->redirections->out_redir_type == 1)
+			cur_fork->redirections->fd_out
+				= open(cur_fork->redirections->outfile,
+					O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else if (cur_fork->redirections->out_redir_type == 2)
+			cur_fork->redirections->fd_out
+				= open(cur_fork->redirections->outfile,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (cur_fork->redirections->fd_out < 0)
+		{
+			perror(" ");
+			exit (EXIT_FAILURE);
+		}
+		dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
+	}
+}
+
 int	count_cur_fork_args(char **pipe_args)
 {
 	int	i;
