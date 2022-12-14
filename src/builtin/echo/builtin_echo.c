@@ -31,12 +31,12 @@ void	builtin_echo(char **argv)
 	}
 	while (argv[i])
 	{
-		printf("%s", argv[i]);
+		ft_putstr_fd(argv[i], 1);
 		i++;
 		if (argv[i])
-			printf(" ");
+			ft_putstr_fd(" ", 1);
 	}
 	if (ret == 0)
-		printf("\n");
+		ft_putstr_fd("\n", 1);
 	g_return = 0;
 }

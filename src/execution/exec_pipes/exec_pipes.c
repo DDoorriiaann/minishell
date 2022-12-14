@@ -1,14 +1,16 @@
 #include "minishell.h"
 
+
+
+
 char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 {
-	//int	i;
+	int		i;
 	int		argc;
 	char	**paths;
 	t_fork	*cur_fork;
 	int		status = 0;
 
-	//i = 0;
 	if (pipes_data->pipes_count == 0)
 	{
 		argc = count_cur_fork_args(pipes_data->pipes_cmds[0]);
@@ -18,17 +20,18 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 	else if (pipes_data->pipes_count > 0)
 	{
 
+		i = 0;
 		paths = get_path(check_line_path(envp_l));
 		if (pipes_data->pipes_count == 1)
 		{
-			if (pipe(pipes_data->fork[0]->pipe_fd) < 0)
+			cur_fork = pipes_data->fork[i];
+			if (pipe(cur_fork->pipe_fd) < 0)
 			{
 				perror("pipe error\n");
 				//free everything
 				// update status code
 				return (envp_l);
 			}
-			cur_fork = pipes_data->fork[0];
 			cur_fork->pid = fork();
 			if (cur_fork->pid < 0)
 			{
@@ -45,8 +48,7 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 					if (cur_fork->redirections->fd_in < 0)
 					{
 						perror("");
-						cur_fork->tmp_infile = 1;
-						cur_fork->redirections->fd_in = open("tmp_infile", O_RDONLY | O_CREAT | O_TRUNC, 0644);
+						cur_fork->redirections->fd_in = open("/dev/null", O_RDONLY);
 					}
 					dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
 				}
@@ -66,7 +68,6 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 					//		free_2d_arr(cur_fork->cmd);
 						exit (EXIT_FAILURE);
 					}
-					
 					dup2(cur_fork->redirections->fd_out, STDOUT_FILENO);
 				}
 				cur_fork->is_builtin = cmd_is_builtin(pipes_data->pipes_cmds[0][0]);
@@ -83,7 +84,6 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 						ft_cmd_error(pipes_data->pipes_cmds[0][0]);
 					else
 						ft_cmd_not_found(pipes_data->pipes_cmds[0][0]);
-					return (envp_l);
 					//free everything needed
 					exit(EXIT_FAILURE);
 				}
@@ -99,7 +99,8 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 			}
 			else
 			{
-				cur_fork = pipes_data->fork[1];
+				i++;
+				cur_fork = pipes_data->fork[i];
 				pipes_data->fork[1]->pipe_fd[0] = pipes_data->fork[0]->pipe_fd[0];
 				pipes_data->fork[1]->pipe_fd[1] = pipes_data->fork[0]->pipe_fd[1];
 				cur_fork->pid = fork();
@@ -118,8 +119,7 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 						if (cur_fork->redirections->fd_in < 0)
 						{
 							perror("");
-							cur_fork->tmp_infile = 1;
-							cur_fork->redirections->fd_in = open("tmp_infile", O_RDONLY | O_CREAT | O_TRUNC, 0644);
+							cur_fork->redirections->fd_in = open("/dev/null", O_RDONLY);
 						}
 						dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
 					}
@@ -142,8 +142,6 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 						if (cur_fork->redirections->fd_out < 0)
 						{
 							perror(" ");
-						//	if (!cur_fork->is_builtin)
-						//		free_2d_arr(cur_fork->cmd);
 							exit (EXIT_FAILURE);
 						}
 						
@@ -173,8 +171,6 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 						perror("exec error");
 					}
 					free_2d_arr(cur_fork->cmd);
-					if (cur_fork->tmp_infile == TRUE)
-						unlink("tmp_infile");
 					exit(EXIT_FAILURE);
 				}
 				else

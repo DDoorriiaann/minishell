@@ -2,10 +2,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-
-
-
-
 int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 {
 	char	*buffer;
