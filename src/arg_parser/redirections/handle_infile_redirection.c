@@ -19,19 +19,18 @@ void	extract_infile_name(char **argv, int arg_index, t_redirections *redirection
 	int		end;	
 	char	*arg;
 	char	*backup;
-	//int		nb_chevrons;
+	int		nb_chevrons;
 
 	arg = argv[arg_index];
 	redirections->in_filename_len = get_filename_len(arg);
 	backup = malloc(ft_strlen(arg) - redirections->in_filename_len + 1);
 	end = find_chevron(arg);
 	i = backup_arg_before_var(backup, arg, end);
-	//nb_chevrons = count_chevrons(arg, end);
+	nb_chevrons = count_chevrons(arg, end);
 	//if (nb_chevron > 2)
 	//	ERROR!!!
-	//(void)nb_chevrons;
-	//redirections->out_redir_type = nb_chevrons;
-	end = end + redirections->in_filename_len + 1;
+	redirections->in_redir_type = nb_chevrons;
+	end = end + redirections->in_filename_len + redirections->in_redir_type;
 	backup_arg_after_var(backup, arg, i, end);
 	save_in_filename(redirections, arg, i, end);
 	free(argv[arg_index]);
@@ -41,10 +40,16 @@ void	extract_infile_name(char **argv, int arg_index, t_redirections *redirection
 static char	**fetch_infile(char **argv, int arg_index,
 		t_redirections *redirections)
 {
-	if (is_chevron_alone(argv, arg_index, '<'))
+	if (is_chevron_alone(argv, arg_index, '<') == 1)
 	{	
 		redirections->infile = ft_strdup(argv[arg_index + 1]);
-	//	if (!argv[arg_index][0])
+		redirections->in_redir_type = 1;
+		argv = delete_argument(argv, arg_index, 2);
+	}
+	else if(is_chevron_alone(argv, arg_index, '<') == 2)
+	{	
+		redirections->delimiter = ft_strdup(argv[arg_index + 1]);
+		redirections->in_redir_type = 2;
 		argv = delete_argument(argv, arg_index, 2);
 	}
 	else
@@ -93,6 +98,8 @@ char	**handle_infile_redirection(char **argv, t_redirections *redirections)
 		{
 			chevron_alone = is_chevron_alone(argv, i, '<');
 			argv = fetch_infile(argv, i, redirections);
+			if (redirections->in_redir_type == 2)
+				create_heredoc_path(redirections);	
 			if (redirections->infile)
 			{	
 				redirections->infile = remove_quotes_in_filename(redirections->infile); 

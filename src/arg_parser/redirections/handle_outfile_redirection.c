@@ -2,18 +2,6 @@
 
 
 
-int	count_chevrons(char *arg, int start)
-{
-	int	i;
-
-	i = 0;
-	while (is_chevron(arg[start]))
-	{
-		i++;
-		start++;
-	}
-	return (i);
-}
 
 static int	extract_outfile_name(char **argv, int arg_index, t_redirections *redirections)
 {
@@ -31,7 +19,6 @@ static int	extract_outfile_name(char **argv, int arg_index, t_redirections *redi
 	nb_chevrons = count_chevrons(arg, end);
 	//if (nb_chevron > 2)
 	//	ERROR!!!
-	(void)nb_chevrons;
 	redirections->out_redir_type = nb_chevrons;
 	end = end + redirections->out_filename_len + redirections->out_redir_type;
 	backup_arg_after_var(backup, arg, i, end);

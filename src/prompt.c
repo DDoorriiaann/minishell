@@ -17,7 +17,7 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 		free(buffer);
 		buffer = NULL;
 		if (argv[0])
-		{	
+		{
 			pipes_data->pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
 			free_2d_arr(argv);
 			envp_l = exec_pipes(pipes_data, envp_l);

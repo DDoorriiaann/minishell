@@ -54,6 +54,7 @@ SRC			=	main.c\
 				execution/exec_without_pipes/exec_without_pipes.c\
 				execution/exec_pipes/exec_pipes.c\
 				execution/execution_utils.c\
+				heredoc/heredoc.c\
 				signal/signal.c\
 				#pipes/commands.c\
 				#pipes/commands_utils.c\

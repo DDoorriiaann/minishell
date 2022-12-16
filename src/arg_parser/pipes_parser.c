@@ -91,7 +91,7 @@ int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
 			return (1);
 		pipes_data->fork[i]->redirections->infile = NULL;
 		pipes_data->fork[i]->redirections->outfile = NULL;
-		pipes_data->fork[i]->redirections->tmp_infile = 0;
+		pipes_data->fork[i]->redirections->here_doc = 0;
 		pipes_data->fork[i]->redirections->fd_in = 0;
 		pipes_data->fork[i]->redirections->fd_out = 0;
 		i++;
@@ -119,7 +119,10 @@ char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 	while (pipes_args[i])
 	{
 		interpret_env_variables(pipes_args[i], envp_l);
+		pipes_data->fork[i]->redirections->fork_index = i;
 		pipes_args[i] = handle_infile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
+		if (pipes_data->fork[i]->redirections->in_redir_type == 2)
+			ft_heredoc(pipes_data->fork[i], envp_l);
 		pipes_args[i] = handle_outfile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
 		remove_quotes(pipes_args[i]);
 		i++;

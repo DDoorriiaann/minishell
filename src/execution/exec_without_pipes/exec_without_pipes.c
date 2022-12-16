@@ -2,16 +2,27 @@
 
 void	redirect_stdin(t_pipes_data *pipes)
 {
-	pipes->fork[0]->redirections->fd_in
-		= open(pipes->fork[0]->redirections->infile, O_RDONLY);
-	if (pipes->fork[0]->redirections->fd_in == -1)
+	if (pipes->fork[0]->redirections->in_redir_type == 1)
 	{
-		perror(" ");
 		pipes->fork[0]->redirections->fd_in
-			= open("dev/null", O_RDONLY);
+			= open(pipes->fork[0]->redirections->infile, O_RDONLY);
+		if (pipes->fork[0]->redirections->fd_in == -1)
+		{
+			perror(" ");
+			pipes->fork[0]->redirections->fd_in
+				= open("dev/null", O_RDONLY);
+		}
+		pipes->fork[0]->redirections->old_stdin = dup(0);
+		dup2(pipes->fork[0]->redirections->fd_in, STDIN_FILENO);
 	}
-	pipes->fork[0]->redirections->old_stdin = dup(0);
-	dup2(pipes->fork[0]->redirections->fd_in, STDIN_FILENO);
+	else if (pipes->fork[0]->redirections->in_redir_type == 2)
+	{	
+		pipes->fork[0]->redirections->here_doc = open(pipes->fork[0]->redirections->here_doc_path, O_RDONLY);
+		if (pipes->fork[0]->redirections->here_doc == -1)
+			perror("heredoc error");
+		pipes->fork[0]->redirections->old_stdin = dup(0);
+		dup2(pipes->fork[0]->redirections->here_doc, STDIN_FILENO);
+	}
 }
 
 int	redirect_stdout(t_pipes_data *pipes)
@@ -54,7 +65,7 @@ void	restore_stdin(t_pipes_data *pipes)
 
 char	**exec_builtin(char **argv, char **envp_l, int argc, t_pipes_data *pipes)
 {
-	if (pipes->fork[0]->redirections->infile)
+	if (pipes->fork[0]->redirections->in_redir_type)
 		redirect_stdin(pipes);
 	if (pipes->fork[0]->redirections->outfile)
 		if (redirect_stdout(pipes) == ERROR)
@@ -77,7 +88,7 @@ int	is_composed_path(char *arg)
 
 void	exec_fork_cmd(char **paths, t_pipes_data *pipes, char **argv, char **envp_l)
 {
-	if (pipes->fork[0]->redirections->infile)
+	if (pipes->fork[0]->redirections->in_redir_type)
 		redirect_stdin(pipes);
 	if (pipes->fork[0]->redirections->outfile)
 		redirect_fork_stdout(pipes->fork[0]);
@@ -138,6 +149,8 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 		exec_fork_cmd(paths, pipes, argv, envp_l);
 	else
 		wait_child(pipes);
+	if (pipes->fork[0]->redirections->here_doc)
+		delete_heredoc(pipes->fork[0]);
 	ft_free_all_arr(paths, pipes->fork[0]->cmd);
 	return (envp_l);
 }
