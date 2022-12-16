@@ -17,6 +17,8 @@
 # define NOT_MULTIPLE 1
 # define TRUE 1
 # define FALSE 0
+# define READ 0
+# define WRITE 1
 
 extern int	g_return;
 
@@ -67,7 +69,6 @@ typedef struct s_fork
 {
 	char			**cmd;
 	pid_t			pid;
-	int				pipe_fd[2];
 	t_redirections	*redirections;
 	int				tmp_infile;
 	int				is_builtin;
@@ -78,6 +79,8 @@ typedef struct s_pipes_data
 {
 	int				pipes_detected;
 	int				pipes_count;
+	int				pipe_a[2];
+	int				pipe_b[2];
 	int				cmds_count;
 	char			***pipes_cmds;
 	t_fork			**fork;
@@ -223,8 +226,9 @@ void	ft_signal(void);
 /*****
 EXECUTION
 *****/
-
-int		pipex(char ***pipes_cmds, t_pipes_data *pipes_data, char **envp);
+char	**exec_without_pipes(char **argv, char **envp_l,
+			int argc, t_pipes_data *pipes);
+char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l);
 
 ////PATHS
 char	**split_path(char *env_path);
@@ -234,17 +238,12 @@ void	find_cmd_path(t_pipes_data *data);
 int		is_cmd_litteral_path(t_pipes_data *data, char **cmd_split, int i);
 void	search_valid_path(t_pipes_data *data, char **cmd_split, int i);
 
-////COMMANDS
-t_error	get_cmds(char **argv, int argc, t_pipes_data *data);
-t_error	ft_split_commands(t_pipes_data *data);
-void	alert_command_error(t_pipes_data *data);
-char	**exec_without_pipes(char **argv, char **envp_l,
-			int argc, t_pipes_data *pipes);
-
 ///EXECUTION UTILS
+int		count_cur_fork_args(char **pipe_args);
 int		cmd_is_builtin(char *cmd);
 char	**builtins(char **argv, char **envp_l,
 			int argc, t_pipes_data *pipes_data);
+void	redirect_fork_stdout(t_fork *cur_fork);
 
 ////MEMORY MANAGEMENT
 void	init_data(t_pipes_data *data, char ***pipes_cmds);
