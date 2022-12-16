@@ -1,5 +1,18 @@
 #include "minishell.h"
 
+int	count_chevrons(char *arg, int start)
+{
+	int	i;
+
+	i = 0;
+	while (is_chevron(arg[start]))
+	{
+		i++;
+		start++;
+	}
+	return (i);
+}
+
 int	is_chevron(char c)
 {
 	if (c == '<' || c == '>')
@@ -80,25 +93,31 @@ int	save_out_filename(t_redirections *redirections, char *arg, int i, int end)
 
 int	save_in_filename(t_redirections *redirections, char *arg, int i, int end)
 {
-	int	j;
-
+	int		j;
+	char	*str;
 //	if (redirections->outfile)
 //		free(redirections->outfile);
-	redirections->infile = malloc(redirections->in_filename_len + 1);
-	if (!redirections->infile)
+
+	str = malloc(redirections->in_filename_len + 1);
+	if (!str)
 		return (-1);
 	j = 0;
 	while (arg[i] && is_chevron(arg[i]))
 		i++;
 	while (i < end)
 	{
-		redirections->infile[j] = arg[i];
+		str[j] = arg[i];
 		i++;
 		j++;
 	}
-	redirections->infile[j] = '\0';
+	str[j] = '\0';
+	if (redirections->in_redir_type == 1)
+		redirections->infile = str;
+	else if (redirections->in_redir_type == 2)
+		redirections->delimiter = str;
 	return (j);
 }
+
 int	find_chevron(char *arg)
 {
 	int	start;

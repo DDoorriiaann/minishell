@@ -40,10 +40,13 @@ typedef struct s_arg_update
 typedef struct s_redirections
 {
 	int		in_redirection;
+	int		in_redir_type;
 	int		out_redirection;
 	int		out_redir_type;
 	int		out_error;
-	int		tmp_infile;
+	int		here_doc;
+	char	*here_doc_path;
+	char	*delimiter;
 	char	*infile;
 	char	*outfile;
 	int		in_filename_len;
@@ -52,6 +55,7 @@ typedef struct s_redirections
 	int		fd_out;
 	int		old_stdout;
 	int		old_stdin;
+	int		fork_index;
 }	t_redirections;
 
 typedef enum error
@@ -70,7 +74,6 @@ typedef struct s_fork
 	char			**cmd;
 	pid_t			pid;
 	t_redirections	*redirections;
-	int				tmp_infile;
 	int				is_builtin;
 	int				argc;
 }	t_fork;
@@ -132,9 +135,17 @@ char	*remove_quotes_in_filename(char *filename);
 void	reset_redirections(t_redirections *redirections);
 int		is_chevron(char c);
 int		get_filename_len(char *arg);
-int		save_in_filename(t_redirections *redirections, char *arg, int i, int end);
-int		save_out_filename(t_redirections *redirections, char *arg, int i, int end);
+int		save_in_filename(t_redirections *redirections,
+			char *arg, int i, int end);
+int		save_out_filename(t_redirections *redirections,
+			char *arg, int i, int end);
 int		find_chevron(char *arg);
+int		count_chevrons(char *arg, int start);
+
+//HERE_DOC
+void	ft_heredoc(t_fork *cur_fork, char **envp_l);
+int		create_heredoc_path(t_redirections *redirections);
+void	delete_heredoc(t_fork *cur_fork);
 
 	//DECORATION
 void	print_decoration(void);

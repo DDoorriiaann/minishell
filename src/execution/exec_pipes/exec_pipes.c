@@ -1,8 +1,9 @@
 #include "minishell.h"
 
+
 void	redirect_fork_stdin(t_fork *cur_fork)
 {
-	if (cur_fork->redirections->infile)
+	if (cur_fork->redirections->in_redir_type == 1)
 	{
 		cur_fork->redirections->fd_in
 			= open(cur_fork->redirections->infile, O_RDONLY);
@@ -12,6 +13,14 @@ void	redirect_fork_stdin(t_fork *cur_fork)
 			cur_fork->redirections->fd_in = open("/dev/null", O_RDONLY);
 		}
 		dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
+	}
+	else if (cur_fork->redirections->in_redir_type == 2)
+	{	
+		cur_fork->redirections->here_doc = open(cur_fork->redirections->here_doc_path, O_RDONLY);
+		if (cur_fork->redirections->here_doc == -1)
+			perror("heredoc error");
+		cur_fork->redirections->old_stdin = dup(0);
+		dup2(cur_fork->redirections->here_doc, STDIN_FILENO);
 	}
 }
 
@@ -141,6 +150,8 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 			child(i, paths, pipes_data, envp_l);
 		else
 			status = parent(i, pipes_data);
+		if (cur_fork->redirections->here_doc)
+			delete_heredoc(cur_fork);
 		i++;
 	}
 	if (WIFEXITED(status))
