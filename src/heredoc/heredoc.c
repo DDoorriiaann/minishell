@@ -49,10 +49,31 @@ static void	set_heredoc(char *delimiter, int heredoc_fd)
 
 ////////////////////////
 
+void	wait_heredoc(int	pid)
+{
+	waitpid(pid, &g_return, 0);
+	if (g_return == 2)
+	{
+		printf("\n");
+		g_return = 130;
+	}
+	else if (g_return == 131)
+		printf("Quit (core dumped)\n");
+	else
+		g_return = WEXITSTATUS(g_return);
+}
+
 void	ft_heredoc(t_fork *cur_fork)
 {
+	int	pid;
+
 	cur_fork->redirections->here_doc = open(cur_fork->redirections->here_doc_path, O_CREAT | O_RDWR | O_APPEND, 0644);
-	set_heredoc(cur_fork->redirections->delimiter, cur_fork->redirections->here_doc);
+	pid = fork();
+	if (pid == -1)
+		perror("fork error");
+	if (pid == 0)
+		set_heredoc(cur_fork->redirections->delimiter, cur_fork->redirections->here_doc);
+	else
+		wait_heredoc(pid);
 	close(cur_fork->redirections->here_doc);
-	//interpret_env_variables();
 }
