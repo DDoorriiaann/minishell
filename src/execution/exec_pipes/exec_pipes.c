@@ -126,6 +126,8 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 		if (argc != 0)
 			envp_l = exec_without_pipes(pipes_data->pipes_cmds[0],
 					envp_l, argc, pipes_data);
+		else if (pipes_data->fork[0]->redirections->here_doc != -1)
+			delete_heredoc(pipes_data->fork[0]);
 		return (envp_l);
 	}
 //EXECUTION WITH PIPES
