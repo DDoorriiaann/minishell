@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 
-void	redirect_fork_stdin(t_fork *cur_fork)
+int	redirect_fork_stdin(t_fork *cur_fork)
 {
 	if (cur_fork->redirections->in_redir_type == 1)
 	{
@@ -11,6 +11,7 @@ void	redirect_fork_stdin(t_fork *cur_fork)
 		{
 			perror("");
 			cur_fork->redirections->fd_in = open("/dev/null", O_RDONLY);
+			return (ERROR);
 		}
 		dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
 	}
@@ -22,6 +23,7 @@ void	redirect_fork_stdin(t_fork *cur_fork)
 		cur_fork->redirections->old_stdin = dup(0);
 		dup2(cur_fork->redirections->here_doc, STDIN_FILENO);
 	}
+	return (0);
 }
 
 void	child(int i, char **paths, t_pipes_data *pipes_data, char ** envp_l)
@@ -29,7 +31,6 @@ void	child(int i, char **paths, t_pipes_data *pipes_data, char ** envp_l)
 	t_fork	*cur_fork;
 
 	cur_fork = pipes_data->fork[i];
-	redirect_fork_stdin(cur_fork);
 	if (i == 0)
 		dup2(pipes_data->pipe_b[WRITE], STDOUT_FILENO);
 	else if (i == pipes_data->pipes_count)
@@ -51,6 +52,11 @@ void	child(int i, char **paths, t_pipes_data *pipes_data, char ** envp_l)
 			dup2(pipes_data->pipe_b[READ], STDIN_FILENO);
 			dup2(pipes_data->pipe_a[WRITE], STDOUT_FILENO);
 		}
+	}
+	if (redirect_fork_stdin(cur_fork) == ERROR)
+	{
+		free_2d_arr(cur_fork->cmd);
+		exit (1);
 	}
 	redirect_fork_stdout(cur_fork);
 	cur_fork->is_builtin = cmd_is_builtin(pipes_data->pipes_cmds[i][0]);

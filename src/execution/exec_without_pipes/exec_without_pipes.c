@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	redirect_stdin(t_pipes_data *pipes)
+int	redirect_stdin(t_pipes_data *pipes)
 {
 	if (pipes->fork[0]->redirections->in_redir_type == 1)
 	{
@@ -11,6 +11,7 @@ void	redirect_stdin(t_pipes_data *pipes)
 			perror(" ");
 			pipes->fork[0]->redirections->fd_in
 				= open("dev/null", O_RDONLY);
+			return (ERROR);
 		}
 		pipes->fork[0]->redirections->old_stdin = dup(0);
 		dup2(pipes->fork[0]->redirections->fd_in, STDIN_FILENO);
@@ -23,6 +24,7 @@ void	redirect_stdin(t_pipes_data *pipes)
 		pipes->fork[0]->redirections->old_stdin = dup(0);
 		dup2(pipes->fork[0]->redirections->here_doc, STDIN_FILENO);
 	}
+	return (0);
 }
 
 int	redirect_stdout(t_pipes_data *pipes)
@@ -66,7 +68,8 @@ void	restore_stdin(t_pipes_data *pipes)
 char	**exec_builtin(char **argv, char **envp_l, int argc, t_pipes_data *pipes)
 {
 	if (pipes->fork[0]->redirections->in_redir_type)
-		redirect_stdin(pipes);
+		if (redirect_stdin(pipes) == ERROR)
+			return (envp_l);
 	if (pipes->fork[0]->redirections->outfile)
 		if (redirect_stdout(pipes) == ERROR)
 			return (envp_l);
@@ -89,7 +92,13 @@ int	is_composed_path(char *arg)
 void	exec_fork_cmd(char **paths, t_pipes_data *pipes, char **argv, char **envp_l)
 {
 	if (pipes->fork[0]->redirections->in_redir_type)
-		redirect_stdin(pipes);
+	{	
+		if (redirect_stdin(pipes) == ERROR)
+		{
+			free_2d_arr(pipes->fork[0]->cmd);
+			exit (1);
+		}
+	}
 	if (pipes->fork[0]->redirections->outfile)
 		redirect_fork_stdout(pipes->fork[0]);
 	if (execve(pipes->fork[0]->cmd[0], argv, envp_l) == -1)
