@@ -88,6 +88,8 @@ int	is_composed_path(char *arg)
 
 void	exec_fork_cmd(char **paths, t_pipes_data *pipes, char **argv, char **envp_l)
 {
+
+	ft_change_signal(SIG_DFL);
 	if (pipes->fork[0]->redirections->in_redir_type)
 		redirect_stdin(pipes);
 	if (pipes->fork[0]->redirections->outfile)
@@ -108,12 +110,18 @@ void	exec_fork_cmd(char **paths, t_pipes_data *pipes, char **argv, char **envp_l
 
 void	wait_child(t_pipes_data *pipes)
 {
-	int		status;
-
-	status = 0;
-	waitpid(pipes->fork[0]->pid, &status, 0);
-	if (WIFEXITED(status))
-		g_return = WEXITSTATUS(status);
+	waitpid(pipes->fork[0]->pid, &g_return, 0);
+	if (g_return == 2)
+	{
+		printf("\n");
+		g_return = 130;
+	}
+	else if (g_return == 131)
+		printf("Quit (core dumped)\n");
+	else
+		g_return = WEXITSTATUS(g_return);
+//	if (WIFEXITED(status))
+//		g_return = WEXITSTATUS(status);
 }
 
 void	handle_cmd_error(char **argv, char **paths)
@@ -133,6 +141,7 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 	if (pipes->fork[0]->is_builtin)
 	{
 		envp_l = exec_builtin(argv, envp_l, argc, pipes);
+		ft_signal();
 		return (envp_l);
 	}
 	paths = get_path(check_line_path(envp_l));
@@ -140,6 +149,7 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 	if (!pipes->fork[0]->cmd)
 	{
 		handle_cmd_error(argv, paths);
+		ft_signal();
 		return (envp_l);
 	}
 	pipes->fork[0]->pid = fork();
@@ -152,5 +162,6 @@ char **exec_without_pipes(char **argv, char **envp_l, int argc, t_pipes_data *pi
 	if (pipes->fork[0]->redirections->here_doc)
 		delete_heredoc(pipes->fork[0]);
 	ft_free_all_arr(paths, pipes->fork[0]->cmd);
+	ft_signal();
 	return (envp_l);
 }

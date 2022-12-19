@@ -28,6 +28,7 @@ void	child(int i, char **paths, t_pipes_data *pipes_data, char ** envp_l)
 {
 	t_fork	*cur_fork;
 
+	ft_change_signal(SIG_DFL);
 	cur_fork = pipes_data->fork[i];
 	redirect_fork_stdin(cur_fork);
 	if (i == 0)
@@ -82,7 +83,7 @@ void	child(int i, char **paths, t_pipes_data *pipes_data, char ** envp_l)
 
 int	parent(int i, t_pipes_data *pipes_data)
 {
-	int		status;
+//	int		status;
 
 	if (i == 0)
 		close (pipes_data->pipe_b[WRITE]);
@@ -106,9 +107,19 @@ int	parent(int i, t_pipes_data *pipes_data)
 			close(pipes_data->pipe_a[WRITE]);
 		}
 	}
-	status = 0;
-	waitpid(pipes_data->fork[i]->pid, &status, 0);
-	return (status);
+//	status = 0;
+	waitpid(pipes_data->fork[i]->pid, &g_return, 0);
+	if (g_return == 2)
+	{
+		printf("\n");
+		g_return = 130;
+	}
+	else if (g_return == 131)
+		printf("Quit (core dumped)\n");
+	else
+		g_return = WEXITSTATUS(g_return);
+	ft_signal();
+	return (g_return);
 }
 
 char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
@@ -120,6 +131,7 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 	int		status;
 
 //EXECUTION WITHOUT PIPES
+	ft_change_signal(SIG_IGN);
 	if (pipes_data->pipes_count == 0)
 	{
 		argc = count_cur_fork_args(pipes_data->pipes_cmds[0]);
@@ -146,6 +158,7 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 			perror("fork error\n");
 			//free everything
 			// update status code
+			ft_signal();
 			return (envp_l);
 		}
 		else if (cur_fork->pid == 0)
@@ -161,5 +174,6 @@ char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l)
 	free_2d_arr(paths);
 	free_2d_arr(pipes_data->pipes_cmds[0]);
 	free_2d_arr(pipes_data->pipes_cmds[1]);
+	ft_signal();
 	return (envp_l);
 }
