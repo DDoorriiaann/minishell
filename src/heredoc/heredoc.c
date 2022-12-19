@@ -20,12 +20,21 @@ void	delete_heredoc(t_fork *cur_fork)
 }
 
 ////GET HEREDOC/////////
-
+void signal_handler(int signum)
+{
+  printf("Received signal %d\n", signum);
+}
 static void	set_heredoc(char *delimiter, int heredoc_fd)
 {
 	char	*line;
-
+	struct sigaction sa;
+	
+	sigemptyset(&sa.sa_mask);	
+	sa.sa_flags = 0;
+ 	sa.sa_handler = signal_handler;	
+	sigaction(SIGINT, &sa, NULL);
 	line = readline("> ");
+	
 	while (line && strcmp(line, delimiter))
 	{
 	//	ft_signal();
