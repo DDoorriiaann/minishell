@@ -17,3 +17,9 @@ void	ft_signal(void)
 	signal(SIGINT, ft_ctrl_c);
 	signal(SIGQUIT, SIG_IGN);
 }
+
+void	ft_change_signal(__sighandler_t sig)
+{
+	signal(SIGINT, sig);
+	signal(SIGQUIT, sig);
+}

@@ -143,7 +143,7 @@ int		find_chevron(char *arg);
 int		count_chevrons(char *arg, int start);
 
 //HERE_DOC
-void	ft_heredoc(t_fork *cur_fork, char **envp_l);
+void	ft_heredoc(t_fork *cur_fork);
 int		create_heredoc_path(t_redirections *redirections);
 void	delete_heredoc(t_fork *cur_fork);
 
@@ -233,6 +233,7 @@ SIGNAL
 *****/
 
 void	ft_signal(void);
+void	ft_change_signal(__sighandler_t sig);
 
 /*****
 EXECUTION

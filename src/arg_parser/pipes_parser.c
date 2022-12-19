@@ -122,7 +122,7 @@ char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 		pipes_data->fork[i]->redirections->fork_index = i;
 		pipes_args[i] = handle_infile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
 		if (pipes_data->fork[i]->redirections->in_redir_type == 2)
-			ft_heredoc(pipes_data->fork[i], envp_l);
+			ft_heredoc(pipes_data->fork[i]);
 		pipes_args[i] = handle_outfile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
 		remove_quotes(pipes_args[i]);
 		i++;
