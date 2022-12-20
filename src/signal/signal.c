@@ -12,9 +12,24 @@ static void	ft_ctrl_c(int sig)
 	}
 }
 
+void	ft_ctrl_c_heredoc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_return = 130;
+		close(0);
+	}
+}
+
 void	ft_signal(void)
 {
 	signal(SIGINT, ft_ctrl_c);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	ft_signal_heredoc(void)
+{
+	signal(SIGINT, ft_ctrl_c_heredoc);
 	signal(SIGQUIT, SIG_IGN);
 }
 

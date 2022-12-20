@@ -233,6 +233,7 @@ SIGNAL
 *****/
 
 void	ft_signal(void);
+void	ft_signal_heredoc(void);
 void	ft_change_signal(__sighandler_t sig);
 
 /*****
