@@ -34,6 +34,7 @@ SRC			=	main.c\
 				builtin/unset/utils_unset.c\
 				builtin/env/builtin_env.c\
 				builtin/exit/builtin_exit.c\
+				builtin/exit/exit_utils.c\
 				free/free.c\
 				utils/utils1.c\
 				utils/utils2.c\

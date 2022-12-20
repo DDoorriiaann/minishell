@@ -195,6 +195,8 @@ char	**builtin_export(char **envp_l, char **argv, int argc);
 void	builtin_env( char **envp_l);
 void	builtin_exit(char **argv, char **envp_l,
 			t_pipes_data *pipes_data);
+int		is_valid_number(const char *nptr);
+int		arg_isdigit(char *arg);
 
 /******
 UTILS
