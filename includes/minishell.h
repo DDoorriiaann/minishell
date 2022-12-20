@@ -144,7 +144,7 @@ char	**handle_infile_redirection(char **argv, t_redirections *redirections);
 char	**handle_outfile_redirection(char **argv, t_redirections *redirections);
 int		is_chevron_alone(char **argv, int arg_index, char chevron_type);
 char	*remove_quotes_in_filename(char *filename);
-void	reset_redirections(t_redirections *redirections);
+void	reset_redirections(t_pipes_data *pipes_data);
 int		is_chevron(char c);
 int		get_filename_len(char *arg);
 int		save_in_filename(t_redirections *redirections,

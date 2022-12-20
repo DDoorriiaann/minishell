@@ -79,6 +79,7 @@ static int	prepare_in_redirection(t_redirections *redirections,
 				| O_CREAT | O_TRUNC, 0644);
 		if (redirections->fd_out < 0)
 			redirections->out_error = 1;
+		close(redirections->fd_out);
 	}
 	if (chevron_alone)
 		i--;

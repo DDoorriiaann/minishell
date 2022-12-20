@@ -35,7 +35,7 @@ int	is_chevron_alone(char **argv, int arg_index, char chevron_type)
 	return (FALSE);
 }
 
-void	reset_redirections(t_redirections *redirections)
+/*void	reset_redirections(t_redirections *redirections)
 {
 	redirections->out_error = FALSE;
 	if (redirections->infile)
@@ -50,7 +50,7 @@ void	reset_redirections(t_redirections *redirections)
 		redirections->outfile = NULL;
 		redirections->out_redirection = FALSE;
 	}
-}
+}*/
 
 int	get_filename_len(char *arg)
 {

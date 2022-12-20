@@ -21,9 +21,22 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 			pipes_data->pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
 			free_2d_arr(argv);
 			envp_l = exec_pipes(pipes_data, envp_l);
+			reset_redirections(pipes_data);
+			int	i = 0;
+			int	j = 0;
+			while (i < pipes_data->pipes_count + 1)
+			{
+				while (pipes_data->pipes_cmds[i][j])
+				{
+					free(pipes_data->pipes_cmds[i][j]);
+					j++;
+				}
+				if (pipes_data->pipes_cmds[i])
+					free(pipes_data->pipes_cmds[i]);
+				i++;
+			}
 			free(pipes_data->pipes_cmds);
 			free_forks(pipes_data);
-			//reset_redirections(pipes->redirections);
 		}
 		else
 			free(argv);

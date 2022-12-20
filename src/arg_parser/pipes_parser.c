@@ -60,6 +60,8 @@ static int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
 			return (1);
 		pipes_data->fork[i]->redirections->infile = NULL;
 		pipes_data->fork[i]->redirections->outfile = NULL;
+		pipes_data->fork[i]->redirections->in_redir_type = 0;
+		pipes_data->fork[i]->redirections->out_redir_type = 0;
 		pipes_data->fork[i]->redirections->here_doc = 0;
 		pipes_data->fork[i]->redirections->fd_in = 0;
 		pipes_data->fork[i]->redirections->fd_out = 0;
