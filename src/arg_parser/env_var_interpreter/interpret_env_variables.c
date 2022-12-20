@@ -7,13 +7,24 @@ static int	skip_lonely_dollars(char *arg, int start)
 	return (start);
 }
 
-static int	skip_single_quoted_content(char *arg, int start)
+static int	interpret_variable(char **argv, int index, int *start, char **envp)
 {
-	if (arg[start] == '\''
-		&& find_closing_quote(arg, start + 1, arg[start]) != ERROR)
-		start = find_closing_quote(arg, start + 1, arg[start]);
-	start++;
-	return (start);
+	char	*arg;
+
+	arg = argv[index];
+	if (arg[*start + 1] == '?')
+		replace_var_by_status_code(argv, *start, index);
+	else if (env_variable_name_exists(arg, *start + 1, envp) != ERROR)
+		*start = interpret_current_env_variable(argv, *start, index, envp);
+	else if (arg[*start] == '$' && (!arg[*start + 1] || arg[*start + 1] == ' '
+			|| ft_is_quote(arg[*start + 1])))
+	{
+		*start = *start + 1;
+		return (TRUE);
+	}
+	else
+		*start = delete_var_inside_arg(argv, *start, index);
+	return (FALSE);
 }
 
 static void	update_argv_with_env_variables(int index, char **argv,
@@ -33,18 +44,8 @@ static void	update_argv_with_env_variables(int index, char **argv,
 			start = skip_single_quoted_content(arg, start);
 			continue ;
 		}
-		if (arg[start + 1] == '?')
-			replace_var_by_status_code(argv, start, index);
-		else if (env_variable_name_exists(arg, start + 1, envp) != ERROR)
-			start = interpret_current_env_variable(argv, start, index, envp);
-		else if (arg[start] == '$' && (!arg[start + 1] || arg[start + 1] == ' '
-				|| ft_is_quote(arg[start + 1])))
-		{
-			start ++;
+		if (interpret_variable(argv, index, &start, envp) == TRUE)
 			continue ;
-		}
-		else
-			start = delete_var_inside_arg(argv, start, index);
 		arg = argv[index];
 		start++;
 	}

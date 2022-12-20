@@ -72,6 +72,26 @@ static void	check_outfile_redirection(char *arg, t_redirections *redirections)
 	redirections->out_redirection = FALSE;
 }
 
+static int	prepare_in_redirection(t_redirections *redirections,
+		int chevron_alone, int i)
+{
+	if (redirections->outfile && !redirections->out_error)
+	{
+		redirections->outfile
+			= remove_quotes_in_filename(redirections->outfile);
+		redirections->fd_out = open(redirections->outfile, O_WRONLY
+				| O_CREAT | O_TRUNC, 0644);
+		if (redirections->fd_out < 0)
+			redirections->out_error = 1;
+	}
+	if (chevron_alone)
+		i--;
+	i--;
+	if (i < 0)
+		i = 0;
+	return (i);
+}
+
 char	**handle_outfile_redirection(char **argv, t_redirections *redirections)
 {
 	int	i;
@@ -86,18 +106,7 @@ char	**handle_outfile_redirection(char **argv, t_redirections *redirections)
 		{
 			chevron_alone = is_chevron_alone(argv, i, '>');
 			argv = fetch_outfile(argv, i, redirections);
-			if (redirections->outfile && !redirections->out_error)
-			{
-				redirections->outfile = remove_quotes_in_filename(redirections->outfile); 
-				redirections->fd_out = open(redirections->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (redirections->fd_out < 0)
-					redirections->out_error = 1;
-			}
-			if (chevron_alone)
-				i--;
-			i--;
-			if (i < 0)
-				i = 0;
+			prepare_in_redirection(redirections, chevron_alone, i);
 		}
 		else if (argv[i])
 			i++;

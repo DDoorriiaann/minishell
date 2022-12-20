@@ -1,20 +1,8 @@
 #include "minishell.h"
 
-void	extract_infile_name(char **argv, int arg_index, t_redirections *redirections)
+void	extract_infile_name(char **argv, int arg_index,
+			t_redirections *redirections)
 {
-	/*int		i;
-
-	redirections->infile = malloc(ft_strlen(arg));
-	if (!redirections->infile)
-		return ;
-	i = 0;
-	while (arg[i + 1])
-	{
-		redirections->infile[i] = arg[i + 1];
-		i++;
-	}
-	redirections->infile[i] = '\0';
-	*/
 	int		i;
 	int		end;	
 	char	*arg;
@@ -46,7 +34,7 @@ static char	**fetch_infile(char **argv, int arg_index,
 		redirections->in_redir_type = 1;
 		argv = delete_argument(argv, arg_index, 2);
 	}
-	else if(is_chevron_alone(argv, arg_index, '<') == 2)
+	else if (is_chevron_alone(argv, arg_index, '<') == 2)
 	{	
 		redirections->delimiter = ft_strdup(argv[arg_index + 1]);
 		redirections->in_redir_type = 2;
@@ -85,6 +73,24 @@ static void	check_infile_redirection(char *arg, t_redirections *redirections)
 	redirections->in_redirection = FALSE;
 }
 
+static int	prepare_in_redirection(t_redirections *redirections,
+		int chevron_alone, int i)
+{
+	if (redirections->in_redir_type == 2)
+		create_heredoc_path(redirections);
+	if (redirections->infile)
+	{	
+		redirections->infile = remove_quotes_in_filename(redirections->infile);
+		redirections->fd_in = open(redirections->infile, O_RDONLY, 0644);
+	}
+	if (chevron_alone)
+		i--;
+	i--;
+	if (i < 0)
+		i = 0;
+	return (i);
+}
+
 char	**handle_infile_redirection(char **argv, t_redirections *redirections)
 {
 	int	i;
@@ -98,18 +104,7 @@ char	**handle_infile_redirection(char **argv, t_redirections *redirections)
 		{
 			chevron_alone = is_chevron_alone(argv, i, '<');
 			argv = fetch_infile(argv, i, redirections);
-			if (redirections->in_redir_type == 2)
-				create_heredoc_path(redirections);	
-			if (redirections->infile)
-			{	
-				redirections->infile = remove_quotes_in_filename(redirections->infile); 
-				redirections->fd_in = open(redirections->infile, O_RDONLY, 0644);
-			}
-			if (chevron_alone)
-				i--;
-			i--;
-			if (i < 0)
-				i = 0;
+			i = prepare_in_redirection(redirections, chevron_alone, i);
 		}
 		else if (argv[i])
 			i++;

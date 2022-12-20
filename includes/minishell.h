@@ -116,6 +116,7 @@ char	**copy_envp(char **envp);
 void	interpret_env_variables(char **argv, char **envp);
 int		interpret_current_env_variable(char **argv, int start,
 			int arg_index, char **envp);
+int		skip_single_quoted_content(char *arg, int start);
 char	*extract_env_variable_name(char *arg, int start);
 int		variable_found_inside_env(char *env_variable_name, char **envp);
 int		delete_var_inside_arg(char **argv, int start, int index);

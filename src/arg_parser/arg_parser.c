@@ -1,51 +1,5 @@
 #include "minishell.h"
 
-/*
-void	echap_last_quote(char *input, char quote_type, int count)
-{
-	int		i;
-
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] == quote_type)
-		{
-			count--;
-			if (count == 0)
-			{	
-				input[i] = quote_type;
-			}
-		}
-		i++;
-	}
-}
-
-int	count_quote_pairs(char *input, char quote_type)
-{
-	int	i;
-	int	count;
-
-	count = 0;
-	i = 0;
-	while (input [i])
-	{
-		if (input[i] == quote_type)
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-void	check_quotes_pairs(char *input, char quote_type)
-{
-	int	count;
-
-	count = count_quote_pairs(input, quote_type);
-	if (count % 2 != 0)
-		echap_last_quote(input, quote_type, count);
-}
-*/
-
 int	count_arguments(char *input, int argc)
 {
 	int	end;

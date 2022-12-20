@@ -50,6 +50,7 @@ SRC			=	main.c\
 				arg_parser/redirections/handle_infile_redirection.c\
 				arg_parser/redirections/handle_outfile_redirection.c\
 				arg_parser/redirections/redirections_utils.c\
+				arg_parser/redirections/redirections_utils2.c\
 				arg_parser/pipe_detection/isolate_pipe_symbols.c\
 				execution/exec_without_pipes/exec_without_pipes.c\
 				execution/exec_pipes/exec_pipes.c\

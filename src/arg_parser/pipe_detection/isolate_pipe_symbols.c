@@ -26,6 +26,25 @@ static int	pipe_found_inside(char *arg)
 	return (input_len_dif);
 }
 
+void	handle_pipe_symbol(char *input, char *updated_input, int *i, int *j)
+{
+	if (input[*i] == '|' && input[*i + 1] == '|')
+		while (input[*i] == '|')
+			*i += 1;
+	if (input[*i] == '|')
+	{
+		updated_input[*j] = ' ';
+		*j += 1;
+		updated_input[*j] = '|';
+		*j += 1;
+		updated_input[*j] = ' ';
+	}
+	else
+		updated_input[*j] = input[*i];
+	*i += 1;
+	*j += 1;
+}
+
 static char	*separate_pipes(char *input, int input_len_dif)
 {
 	char	*updated_input;
@@ -48,21 +67,7 @@ static char	*separate_pipes(char *input, int input_len_dif)
 				j++;
 			}
 		}
-		if (input[i] == '|' && input[i + 1] == '|')
-			while (input[i] == '|')
-				i++;
-		if (input[i] == '|')
-		{
-			updated_input[j] = ' ';
-			j++;
-			updated_input[j] = '|';
-			j++;
-			updated_input[j] = ' ';
-		}
-		else
-			updated_input[j] = input[i];
-		i++;
-		j++;
+		handle_pipe_symbol(input, updated_input, &i, &j);
 	}
 	updated_input[j] = '\0';
 	return (updated_input);

@@ -38,12 +38,13 @@ int	duplicate_args(char **argv, int i, t_pipes_init *pipes_init,
 	pipes_args[pipes_init->pipe_nb][pipes_init->args_count] = NULL;
 	while (argv[i])
 	{
-		if  (ft_strlen(argv[i]) == 1 && argv[i][0] == '|')
+		if (ft_strlen(argv[i]) == 1 && argv[i][0] == '|')
 		{
 			i++;
 			return (i);
 		}
-		pipes_args[pipes_init->pipe_nb][pipes_init->pipe_arg] = ft_strdup(argv[i]);
+		pipes_args[pipes_init->pipe_nb][pipes_init->pipe_arg]
+			= ft_strdup(argv[i]);
 		pipes_init->pipe_arg++;
 		i++;
 	}
@@ -120,10 +121,12 @@ char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 	{
 		interpret_env_variables(pipes_args[i], envp_l);
 		pipes_data->fork[i]->redirections->fork_index = i;
-		pipes_args[i] = handle_infile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
+		pipes_args[i] = handle_infile_redirection(pipes_args[i],
+				pipes_data->fork[i]->redirections);
 		if (pipes_data->fork[i]->redirections->in_redir_type == 2)
 			ft_heredoc(pipes_data->fork[i]);
-		pipes_args[i] = handle_outfile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
+		pipes_args[i] = handle_outfile_redirection(pipes_args[i],
+				pipes_data->fork[i]->redirections);
 		remove_quotes(pipes_args[i]);
 		i++;
 	}

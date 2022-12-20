@@ -1,5 +1,14 @@
 #include "minishell.h"
 
+int	skip_single_quoted_content(char *arg, int start)
+{
+	if (arg[start] == '\''
+		&& find_closing_quote(arg, start + 1, arg[start]) != ERROR)
+		start = find_closing_quote(arg, start + 1, arg[start]);
+	start++;
+	return (start);
+}
+
 int	variable_found_inside_env(char *env_variable_name, char **envp)
 {
 	int	i;
