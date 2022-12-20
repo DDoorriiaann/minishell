@@ -1,5 +1,28 @@
 #include "minishell.h"
 
+void	reset_redirections(t_pipes_data *pipes_data)
+{
+	int	i;
+
+	i = 0;
+	while (i < pipes_data->pipes_count + 1)
+	{
+		if (pipes_data->fork[i]->redirections->infile)
+		{
+			if (pipes_data->fork[i]->redirections->fd_in > 0)
+				close(pipes_data->fork[i]->redirections->fd_in);
+			free(pipes_data->fork[i]->redirections->infile);
+		}
+		if (pipes_data->fork[i]->redirections->outfile)
+		{
+			if (pipes_data->fork[i]->redirections->fd_out > 0)
+				close(pipes_data->fork[i]->redirections->fd_out);
+			free(pipes_data->fork[i]->redirections->outfile);
+		}
+		i++;
+	}
+}
+
 int	save_out_filename(t_redirections *redirections, char *arg, int i, int end)
 {
 	int	j;

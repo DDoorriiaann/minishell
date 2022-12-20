@@ -28,8 +28,19 @@ static int	check_number_of_arg(char **argv)
 
 static void	ft_exit(char **argv, char **envp_l, t_pipes_data *pipes_data)
 {
+	int	i;
+	
+	i = 0;
 	free_2d_arr(argv);
 	free_2d_arr(envp_l);
+	while (i < 2)
+	{
+		if (pipes_data->pipe_a[i] > 0)
+			close(pipes_data->pipe_a[i]);
+		if (pipes_data->pipe_b[i] > 0)
+			close(pipes_data->pipe_b[i]);
+		i++;
+	}
 	free_forks(pipes_data);
 	free(pipes_data->pipes_cmds);
 	exit(g_return);
