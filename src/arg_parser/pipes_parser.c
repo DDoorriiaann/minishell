@@ -70,10 +70,9 @@ static int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
 	return (0);
 }
 
-static void	parse_argument(char ***pipes_args, char **envp_l,
+static void	parse_argument(char ***pipes_args,
 		t_pipes_data *pipes_data, int i)
 {
-	interpret_env_variables(pipes_args[i], envp_l);
 	pipes_data->fork[i]->redirections->fork_index = i;
 	pipes_args[i] = handle_infile_redirection(pipes_args[i],
 			pipes_data->fork[i]->redirections);
@@ -84,7 +83,7 @@ static void	parse_argument(char ***pipes_args, char **envp_l,
 	remove_quotes(pipes_args[i]);
 }
 
-char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
+char	***pipes_parser(char **argv, t_pipes_data *pipes_data)
 {
 	char	***pipes_args;
 	int		pipes_count;
@@ -93,7 +92,6 @@ char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 	pipes_count = count_pipes(argv);
 	if (pipes_count)
 		pipes_data->pipes_detected = TRUE;
-	(void)envp_l;
 	pipes_args = malloc (sizeof(char **) * (pipes_count + 2));
 	if (!pipes_args)
 		return (NULL);
@@ -103,7 +101,7 @@ char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 	i = 0;
 	while (pipes_args[i])
 	{
-		parse_argument(pipes_args, envp_l, pipes_data, i);
+		parse_argument(pipes_args, pipes_data, i);
 		i++;
 	}
 	return (pipes_args);

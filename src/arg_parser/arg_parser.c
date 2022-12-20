@@ -68,7 +68,7 @@ static char	**split_input(char *input, int argc)
 	return (argv);
 }
 
-char	**raw_input_parser(char *input)
+char	**raw_input_parser(char *input, char **envp_l)
 {
 	int		argc;
 	char	**argv;
@@ -77,6 +77,7 @@ char	**raw_input_parser(char *input)
 	updated_input = isolate_pipe_symbols(input);
 	argc = count_arguments(updated_input, 0);
 	argv = split_input(updated_input, argc);
+	interpret_env_variables(argv, envp_l);
 	free(updated_input);
 	return (argv);
 }

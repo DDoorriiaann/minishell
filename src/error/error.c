@@ -1,4 +1,4 @@
-# include "minishell.h"
+#include "minishell.h"
 
 void	ft_cmd_error(char *cmd)
 {	

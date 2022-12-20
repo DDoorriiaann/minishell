@@ -26,6 +26,11 @@ void	extract_infile_name(char **argv, int arg_index,
 static char	**fetch_infile(char **argv, int arg_index,
 		t_redirections *redirections)
 {
+//	if (redirections->infile)
+//	{
+//		free(redirections->infile);
+//		redirections->infile = NULL;
+//	}
 	if (is_chevron_alone(argv, arg_index, '<') == 1)
 	{	
 		redirections->infile = ft_strdup(argv[arg_index + 1]);
@@ -74,6 +79,7 @@ static void	check_infile_redirection(char *arg, t_redirections *redirections)
 static int	prepare_in_redirection(t_redirections *redirections,
 		int chevron_alone, int i)
 {
+	redirections->fd_in = -1;
 	if (redirections->in_redir_type == 2)
 		create_heredoc_path(redirections);
 	if (redirections->infile)
@@ -81,6 +87,8 @@ static int	prepare_in_redirection(t_redirections *redirections,
 		redirections->infile = remove_quotes_in_filename(redirections->infile);
 		redirections->fd_in = open(redirections->infile, O_RDONLY, 0644);
 	}
+	if (redirections->fd_in > 0)
+		close(redirections->fd_in);
 	if (chevron_alone)
 		i--;
 	i--;

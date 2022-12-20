@@ -26,12 +26,11 @@ static int	check_number_of_arg(char **argv)
 	return (i - 1);
 }
 
-static void	ft_exit(char **argv, char **envp_l, t_pipes_data *pipes_data)
+static void	ft_exit(char **envp_l, t_pipes_data *pipes_data)
 {
 	int	i;
-	
+
 	i = 0;
-	free_2d_arr(argv);
 	free_2d_arr(envp_l);
 	while (i < 2)
 	{
@@ -41,8 +40,12 @@ static void	ft_exit(char **argv, char **envp_l, t_pipes_data *pipes_data)
 			close(pipes_data->pipe_b[i]);
 		i++;
 	}
+	reset_redirections(pipes_data);
 	free_forks(pipes_data);
-	free(pipes_data->pipes_cmds);
+	i = 0;
+	free_2d_arr(pipes_data->argv);
+	if (pipes_data->pipes_cmds)
+		free_pipes_cmds_arr(pipes_data->pipes_cmds);
 	exit(g_return);
 }
 
@@ -57,20 +60,20 @@ void	builtin_exit(char **argv, char **envp_l, t_pipes_data *pipes_data)
 	{	
 		ft_putstr_fd("exit\n", 2);
 		g_return = 0;
-		ft_exit(argv, envp_l, pipes_data);
+		ft_exit(envp_l, pipes_data);
 	}
 	if ((!arg_isdigit(argv[i]) || !is_valid_number(argv[i])) && number_arg >= 1)
 	{
 		numeric_argument_required(argv[i]);
 		g_return = 2;
-		ft_exit(argv, envp_l, pipes_data);
+		ft_exit(envp_l, pipes_data);
 	}
 	if (arg_isdigit(argv[i]) && number_arg == 1)
 	{
 		g_return = ft_atoi(argv[i]) % 256;
 		ft_putstr_fd("exit\n", 1);
-		ft_exit(argv, envp_l, pipes_data);
+		ft_exit(envp_l, pipes_data);
 	}
 	too_many_arguments();
-	ft_exit(argv, envp_l, pipes_data);
+	ft_exit(envp_l, pipes_data);
 }

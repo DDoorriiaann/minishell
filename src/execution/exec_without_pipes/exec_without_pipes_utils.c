@@ -65,4 +65,3 @@ void	restore_stdin(t_pipes_data *pipes)
 	dup2(pipes->fork[0]->redirections->old_stdin, 0);
 	close(pipes->fork[0]->redirections->old_stdin);
 }
-

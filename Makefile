@@ -38,7 +38,7 @@ SRC			=	main.c\
 				free/free.c\
 				utils/utils1.c\
 				utils/utils2.c\
-				utils/utils4.c\
+				utils/utils3.c\
 				prompt.c\
 				arg_parser/arg_parser.c\
 				arg_parser/arg_parser_utils.c\
@@ -64,12 +64,6 @@ SRC			=	main.c\
 				execution/execution_utils2.c\
 				heredoc/heredoc.c\
 				signal/signal.c\
-				#pipes/commands.c\
-				#pipes/commands_utils.c\
-				#pipes/memory.c\
-				#pipes/paths.c\
-				#pipes/paths_utils.c\
-				#pipes/pipex.c\
 
 SRCDIR 		= ./src/
 
@@ -79,9 +73,11 @@ SRCS 		= $(addprefix $(SRCDIR), $(SRC))
 
 OBJS		= $(SRCS:.c=.o)
 
-CFLAGS 		= -Wall -Werror -Wextra -g -Llibft -lft -I$(INCDIR) -Ilibft -L/usr/local/lib -I/usr/local/include -lreadline 
+CFLAGS 		= -Wall -Werror -Wextra -g  -I$(INCDIR) -Ilibft -I/usr/local/include 
 
-CC			= gcc
+LFLAGS		= -Llibft -lft -L/usr/local/lib -lreadline
+
+CC			= clang
 
 .c.o:
 			@$(CC) $(CFLAGS) -c $< -o $@
@@ -90,7 +86,7 @@ all :		$(NAME)
 
 $(NAME):	$(OBJS)
 			@make -sC libft
-			@$(CC) $(OBJS) -o $(NAME) $(CFLAGS)
+			@$(CC) $(OBJS) -o $(NAME) $(CFLAGS) $(LFLAGS)
 			@echo $(_GREEN)
 			@echo "*************************"
 			@echo "*                       *"

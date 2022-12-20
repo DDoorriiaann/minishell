@@ -28,6 +28,11 @@ static int	extract_outfile_name(char **argv,
 static char	**fetch_outfile(char **argv, int arg_index,
 		t_redirections *redirections)
 {
+//	if (redirections->outfile)
+//	{
+//		free(redirections->outfile);
+//		redirections->outfile = NULL;
+//	}
 	if (is_chevron_alone(argv, arg_index, '>'))
 	{	
 		redirections->out_redir_type = is_chevron_alone(argv, arg_index, '>');
@@ -71,6 +76,7 @@ static void	check_outfile_redirection(char *arg, t_redirections *redirections)
 static int	prepare_in_redirection(t_redirections *redirections,
 		int chevron_alone, int i)
 {
+	redirections->fd_out = -1;
 	if (redirections->outfile && !redirections->out_error)
 	{
 		redirections->outfile
@@ -79,7 +85,8 @@ static int	prepare_in_redirection(t_redirections *redirections,
 				| O_CREAT | O_TRUNC, 0644);
 		if (redirections->fd_out < 0)
 			redirections->out_error = 1;
-		close(redirections->fd_out);
+		else if (redirections->fd_out > 0)
+			close(redirections->fd_out);
 	}
 	if (chevron_alone)
 		i--;

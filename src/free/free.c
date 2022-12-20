@@ -1,4 +1,4 @@
-# include "minishell.h"
+#include "minishell.h"
 
 void	free_forks(t_pipes_data *pipes_data)
 {
@@ -17,19 +17,24 @@ void	free_forks(t_pipes_data *pipes_data)
 void	free_pipes_cmds_arr(char ***arr)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	while (arr[i])
 	{
+		j = 0;
+		while (arr[i][j])
+		{
+			free(arr[i][j]);
+			arr[i][j] = NULL;
+			j++;
+		}
 		free(arr[i]);
 		arr[i] = NULL;
 		i++;
 	}
-	if (arr)
-	{
-		free(arr);
-		arr = NULL;
-	}
+	free(arr);
+	arr = NULL;
 }
 
 void	free_2d_arr(char **arr)

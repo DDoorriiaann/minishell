@@ -1,6 +1,31 @@
 #include "minishell.h"
-#include <stdio.h>
-#include <unistd.h>
+
+void	reset_pipes(t_pipes_data *pipes_data)
+{
+	int	i;
+
+	i = 0;
+	while (i < 2)
+	{
+		pipes_data->pipe_a[i] = -1;
+		pipes_data->pipe_b[i] = -1;
+		i++;
+	}
+}
+
+char	**execute_commands(t_pipes_data *pipes_data, char **argv, char **envp_l)
+{
+	reset_pipes(pipes_data);
+	pipes_data->pipes_cmds = pipes_parser(argv, pipes_data);
+	pipes_data->argv = argv;
+	envp_l = exec_pipes(pipes_data, envp_l);
+	reset_redirections(pipes_data);
+	free_2d_arr(argv);
+	free_forks(pipes_data);
+	if (pipes_data->pipes_cmds)
+		free_pipes_cmds_arr(pipes_data->pipes_cmds);
+	return (envp_l);
+}
 
 int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 {
@@ -13,32 +38,11 @@ int	prompt_shell(char **envp_l, t_pipes_data *pipes_data)
 	while (buffer != NULL)
 	{
 		add_history(buffer);
-		argv = raw_input_parser(buffer);
+		argv = raw_input_parser(buffer, envp_l);
 		free(buffer);
 		buffer = NULL;
 		if (argv[0])
-		{
-			pipes_data->pipes_cmds = pipes_parser(argv, envp_l, pipes_data);
-			envp_l = exec_pipes(pipes_data, envp_l);
-			reset_redirections(pipes_data);
-			int	i = 0;
-			int j = 0;
-			while (i < pipes_data->pipes_count + 1)
-			{
-				j = 0;
-				while (pipes_data->pipes_cmds[i][j])
-				{
-					free(pipes_data->pipes_cmds[i][j]);
-					j++;
-				}
-				if (pipes_data->pipes_cmds[i])
-					free(pipes_data->pipes_cmds[i]);
-				i++;
-			}
-			free_2d_arr(argv);
-			free(pipes_data->pipes_cmds);
-			free_forks(pipes_data);
-		}
+			envp_l = execute_commands(pipes_data, argv, envp_l);
 		else
 			free(argv);
 		ft_signal();

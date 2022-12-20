@@ -86,6 +86,7 @@ typedef struct s_pipes_data
 	int				pipe_b[2];
 	int				cmds_count;
 	char			***pipes_cmds;
+	char			**argv;
 	t_fork			**fork;
 }	t_pipes_data;
 
@@ -117,8 +118,8 @@ char	**get_path(char *envp_path);
 char	**get_cmd(char *cmd, char **paths);
 
 //PARSER
-char	**raw_input_parser(char *input);
-char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes);
+char	**raw_input_parser(char *input, char **envp_l);
+char	***pipes_parser(char **argv, t_pipes_data *pipes);
 char	**copy_envp(char **envp);
 void	interpret_env_variables(char **argv, char **envp);
 int		interpret_current_env_variable(char **argv, int start,
@@ -277,6 +278,12 @@ void	restore_stdout(t_pipes_data *pipes);
 void	restore_stdin(t_pipes_data *pipes);
 int		is_composed_path(char *arg);
 void	handle_cmd_error(char **argv, char **paths);
+int		redirect_fork_stdin(t_fork *cur_fork);
+void	duplicate_fds(int i, t_pipes_data *pipes_data);
+void	quit_child(t_pipes_data *pipes_data, int i);
+void	child(int i, char **paths,
+			t_pipes_data *pipes_data, char **envp_l);
+void	close_fds(int i, t_pipes_data *pipes_data);
 
 ////MEMORY MANAGEMENT
 void	init_data(t_pipes_data *data, char ***pipes_cmds);
