@@ -1,52 +1,6 @@
 #include "minishell.h"
 
-/*
-void	echap_last_quote(char *input, char quote_type, int count)
-{
-	int		i;
-
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] == quote_type)
-		{
-			count--;
-			if (count == 0)
-			{	
-				input[i] = quote_type;
-			}
-		}
-		i++;
-	}
-}
-
-int	count_quote_pairs(char *input, char quote_type)
-{
-	int	i;
-	int	count;
-
-	count = 0;
-	i = 0;
-	while (input [i])
-	{
-		if (input[i] == quote_type)
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-void	check_quotes_pairs(char *input, char quote_type)
-{
-	int	count;
-
-	count = count_quote_pairs(input, quote_type);
-	if (count % 2 != 0)
-		echap_last_quote(input, quote_type, count);
-}
-*/
-
-int	count_arguments(char *input, int argc)
+static int	count_arguments(char *input, int argc)
 {
 	int	end;
 	int	input_len;
@@ -69,7 +23,7 @@ int	count_arguments(char *input, int argc)
 	return (argc);
 }
 
-char	**init_argv(int argc)
+static char	**init_argv(int argc)
 {
 	char	**argv;
 
@@ -80,42 +34,32 @@ char	**init_argv(int argc)
 	return (argv);
 }
 
-void	put_args_into_argv(char **argv, char *input)
+static void	put_args_into_argv(char **argv, char *input)
 {
-	int	i;
-	int	start;	
-	int	end;
+	int			i;
+	t_arg_init	arg;
 
 	i = 0;
-	start = 0;
-	start = skip_spaces(input, start);
-	while (start < (int)ft_strlen(input))
+	arg.input = input;
+	arg.start = 0;
+	arg.start = skip_spaces(input, arg.start);
+	while (arg.start < (int)ft_strlen(input))
 	{
-		end = go_to_word_end(input, start, &i);
-		if (end != start)
+		arg.end = go_to_word_end(arg.input, arg.start, &i);
+		store_arg(argv, &arg, i);
+		if (ft_isspace(arg.input[arg.start]))
 		{
-			argv[i - 1] = ft_substr(input, start, (end - start));
-			start = end;
-		}
-		else if (end == start)
-			argv[i - 1] = ft_substr(input, start, start + 1);
-		if (ft_isspace(input[start]))
-		{
-			end = skip_spaces(input, start);
-			start = end;
+			arg.end = skip_spaces(arg.input, arg.start);
+			arg.start = arg.end;
 			continue ;
 		}
-		else if (ft_is_quote(input[start]))
-		{
-			end = go_to_quote_end(input, start, &i);
-			argv[i - 1] = ft_substr(input, start + 1, (end - (start + 1)));
-			start = end;
-		}
-		start++;
+		else if (ft_is_quote(arg.input[arg.start]))
+			store_quoted_arg(argv, &arg, i);
+		arg.start++;
 	}
 }
 
-char	**split_input(char *input, int argc)
+static char	**split_input(char *input, int argc)
 {
 	char	**argv;
 

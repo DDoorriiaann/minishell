@@ -31,6 +31,23 @@ int	count_cur_fork_args(char **pipe_args)
 	return (i);
 }
 
+char	**exec_builtin(char **argv, char **envp_l,
+		int argc, t_pipes_data *pipes)
+{
+	if (pipes->fork[0]->redirections->in_redir_type)
+		if (redirect_stdin(pipes) == ERROR)
+			return (envp_l);
+	if (pipes->fork[0]->redirections->outfile)
+		if (redirect_stdout(pipes) == ERROR)
+			return (envp_l);
+	envp_l = builtins(argv, envp_l, argc, pipes);
+	if (pipes->fork[0]->redirections->out_redirection)
+		restore_stdout(pipes);
+	if (pipes->fork[0]->redirections->in_redirection)
+		restore_stdin(pipes);
+	return (envp_l);
+}
+
 char	**builtins(char **argv, char **envp_l,
 			int argc, t_pipes_data *pipes_data)
 {

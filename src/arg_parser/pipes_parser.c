@@ -1,56 +1,25 @@
 #include "minishell.h"
-#include <sys/types.h>
 
-int	count_pipes(char **argv)
-{
-	int	i;
-	int	pipes_count;
-
-	pipes_count = 0;
-	i = 0;
-	while (argv[i])
-	{
-		if (ft_strlen(argv[i]) == 1 && argv[i][0] == '|')
-			pipes_count++;
-		i++;
-	}
-	return (pipes_count);
-}
-
-int	count_pipe_args(char **argv, int i)
-{
-	int	args_count;
-
-	args_count = 0;
-	while (argv[i])
-	{
-		if (ft_strlen(argv[i]) == 1 && argv[i][0] == '|')
-			return (args_count);
-		args_count++;
-		i++;
-	}
-	return (args_count);
-}
-
-int	duplicate_args(char **argv, int i, t_pipes_init *pipes_init,
+static int	duplicate_args(char **argv, int i, t_pipes_init *pipes_init,
 		char ***pipes_args)
 {
 	pipes_args[pipes_init->pipe_nb][pipes_init->args_count] = NULL;
 	while (argv[i])
 	{
-		if  (ft_strlen(argv[i]) == 1 && argv[i][0] == '|')
+		if (ft_strlen(argv[i]) == 1 && argv[i][0] == '|')
 		{
 			i++;
 			return (i);
 		}
-		pipes_args[pipes_init->pipe_nb][pipes_init->pipe_arg] = ft_strdup(argv[i]);
+		pipes_args[pipes_init->pipe_nb][pipes_init->pipe_arg]
+			= ft_strdup(argv[i]);
 		pipes_init->pipe_arg++;
 		i++;
 	}
 	return (i);
 }
 
-int	fill_pipes_args(char ***pipes_args, char **argv)
+static	int	fill_pipes_args(char ***pipes_args, char **argv)
 {
 	int				i;
 	t_pipes_init	pipes_init;
@@ -72,22 +41,22 @@ int	fill_pipes_args(char ***pipes_args, char **argv)
 	return (0);
 }
 
-int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
+static int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
 {
 	int		i;
 
 	pipes_data->pipes_count = pipes_count;
 	pipes_data->fork = malloc(sizeof(t_fork *) * (pipes_count + 1));
-	if (!pipes_data->fork)//free
+	if (!pipes_data->fork)
 		return (1);
 	i = 0;
 	while (i <= pipes_count)
 	{
 		pipes_data->fork[i] = malloc(sizeof(t_fork));
-		if (!pipes_data->fork[i])//free
+		if (!pipes_data->fork[i])
 			return (1);
 		pipes_data->fork[i]->redirections = malloc(sizeof(t_redirections));
-		if (!pipes_data->fork[i]->redirections)//free
+		if (!pipes_data->fork[i]->redirections)
 			return (1);
 		pipes_data->fork[i]->redirections->infile = NULL;
 		pipes_data->fork[i]->redirections->outfile = NULL;
@@ -97,6 +66,20 @@ int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
 		i++;
 	}	
 	return (0);
+}
+
+static void	parse_argument(char ***pipes_args, char **envp_l,
+		t_pipes_data *pipes_data, int i)
+{
+	interpret_env_variables(pipes_args[i], envp_l);
+	pipes_data->fork[i]->redirections->fork_index = i;
+	pipes_args[i] = handle_infile_redirection(pipes_args[i],
+			pipes_data->fork[i]->redirections);
+	if (pipes_data->fork[i]->redirections->in_redir_type == 2)
+		ft_heredoc(pipes_data->fork[i]);
+	pipes_args[i] = handle_outfile_redirection(pipes_args[i],
+			pipes_data->fork[i]->redirections);
+	remove_quotes(pipes_args[i]);
 }
 
 char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
@@ -110,7 +93,7 @@ char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 		pipes_data->pipes_detected = TRUE;
 	(void)envp_l;
 	pipes_args = malloc (sizeof(char **) * (pipes_count + 2));
-	if (!pipes_args)//free
+	if (!pipes_args)
 		return (NULL);
 	pipes_args[pipes_count + 1] = NULL;
 	fill_pipes_args(pipes_args, argv);
@@ -118,13 +101,7 @@ char	***pipes_parser(char **argv, char **envp_l, t_pipes_data *pipes_data)
 	i = 0;
 	while (pipes_args[i])
 	{
-		interpret_env_variables(pipes_args[i], envp_l);
-		pipes_data->fork[i]->redirections->fork_index = i;
-		pipes_args[i] = handle_infile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
-		if (pipes_data->fork[i]->redirections->in_redir_type == 2)
-			ft_heredoc(pipes_data->fork[i]);
-		pipes_args[i] = handle_outfile_redirection(pipes_args[i], pipes_data->fork[i]->redirections);
-		remove_quotes(pipes_args[i]);
+		parse_argument(pipes_args, envp_l, pipes_data, i);
 		i++;
 	}
 	return (pipes_args);
