@@ -15,8 +15,6 @@ void	extract_infile_name(char **argv, int arg_index,
 	end = find_chevron(arg);
 	i = backup_arg_before_var(backup, arg, end);
 	nb_chevrons = count_chevrons(arg, end);
-	//if (nb_chevron > 2)
-	//	ERROR!!!
 	redirections->in_redir_type = nb_chevrons;
 	end = end + redirections->in_filename_len + redirections->in_redir_type;
 	backup_arg_after_var(backup, arg, i, end);

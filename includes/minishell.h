@@ -96,6 +96,13 @@ typedef struct s_pipes_init
 	int		args_count;
 }	t_pipes_init;
 
+typedef struct s_arg_init
+{
+	int		start;
+	int		end;
+	char	*input;
+}	t_arg_init;
+
 ////////FUNCTIONS
 //PROMPT
 void	ft_free_all_arr(char **paths, char **cmd);
@@ -127,6 +134,10 @@ void	replace_var_by_status_code(char **argv, int start, int index);
 int		env_variable_name_exists(char *arg, int start, char **envp);
 void	remove_quotes(char **argv);
 char	*isolate_pipe_symbols(char *input);
+int		count_pipes(char **argv);
+int		count_pipe_args(char **argv, int i);
+void	store_arg(char **argv, t_arg_init *arg, int i);
+void	store_quoted_arg(char **argv, t_arg_init *arg, int i);
 
 //REDIRECTIONS
 char	**handle_infile_redirection(char **argv, t_redirections *redirections);
@@ -168,12 +179,10 @@ void	ft_cmd_not_found(char *str);
 void	ft_error(void);
 int		ft_error_return(void);
 void	ft_cmd_error(char *cmd);
-
-/***
-EXEC
-***/
-
-int		exec_cmd(char **argv, char **envp, t_pipes_data *pipes);
+void	cmd_not_found(char *cmd);
+void	is_a_directory(char *cmd);
+void	no_such_file_or_directory(char *cmd);
+void	permission_denied(char *cmd);
 
 /******
 BUILTIN
@@ -242,6 +251,8 @@ EXECUTION
 char	**exec_without_pipes(char **argv, char **envp_l,
 			int argc, t_pipes_data *pipes);
 char	**exec_pipes(t_pipes_data *pipes_data, char **envp_l);
+char	**exec_builtin(char **argv, char **envp_l,
+			int argc, t_pipes_data *pipes);
 
 ////PATHS
 char	**split_path(char *env_path);
@@ -257,6 +268,12 @@ int		cmd_is_builtin(char *cmd);
 char	**builtins(char **argv, char **envp_l,
 			int argc, t_pipes_data *pipes_data);
 void	redirect_fork_stdout(t_fork *cur_fork);
+int		redirect_stdin(t_pipes_data *pipes);
+int		redirect_stdout(t_pipes_data *pipes);
+void	restore_stdout(t_pipes_data *pipes);
+void	restore_stdin(t_pipes_data *pipes);
+int		is_composed_path(char *arg);
+void	handle_cmd_error(char **argv, char **paths);
 
 ////MEMORY MANAGEMENT
 void	init_data(t_pipes_data *data, char ***pipes_cmds);

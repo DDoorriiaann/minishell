@@ -1,9 +1,7 @@
 #include "minishell.h"
 
-
-
-
-static int	extract_outfile_name(char **argv, int arg_index, t_redirections *redirections)
+static int	extract_outfile_name(char **argv,
+		int arg_index, t_redirections *redirections)
 {
 	int		i;
 	int		end;	
@@ -17,8 +15,6 @@ static int	extract_outfile_name(char **argv, int arg_index, t_redirections *redi
 	end = find_chevron(arg);
 	i = backup_arg_before_var(backup, arg, end);
 	nb_chevrons = count_chevrons(arg, end);
-	//if (nb_chevron > 2)
-	//	ERROR!!!
 	redirections->out_redir_type = nb_chevrons;
 	end = end + redirections->out_filename_len + redirections->out_redir_type;
 	backup_arg_after_var(backup, arg, i, end);

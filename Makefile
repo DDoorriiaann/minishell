@@ -8,6 +8,7 @@ SRC			=	main.c\
 				decoration/decoration.c\
 				path/path.c\
 				error/error.c\
+				error/error_utils.c\
 				builtin/pwd/builtin_pwd.c\
 				builtin/echo/builtin_echo.c\
 				builtin/cd/builtin_cd.c\
@@ -39,7 +40,9 @@ SRC			=	main.c\
 				utils/utils4.c\
 				prompt.c\
 				arg_parser/arg_parser.c\
+				arg_parser/arg_parser_utils.c\
 				arg_parser/pipes_parser.c\
+				arg_parser/pipes_parser_utils.c\
 				arg_parser/env_var_interpreter/interpret_env_variables.c\
 				arg_parser/env_var_interpreter/utils_env_var_interpreter.c\
 				arg_parser/env_var_interpreter/extract_env_var_name.c\
@@ -53,8 +56,11 @@ SRC			=	main.c\
 				arg_parser/redirections/redirections_utils2.c\
 				arg_parser/pipe_detection/isolate_pipe_symbols.c\
 				execution/exec_without_pipes/exec_without_pipes.c\
+				execution/exec_without_pipes/exec_without_pipes_utils.c\
 				execution/exec_pipes/exec_pipes.c\
+				execution/exec_pipes/exec_pipes_utils.c\
 				execution/execution_utils.c\
+				execution/execution_utils2.c\
 				heredoc/heredoc.c\
 				signal/signal.c\
 				#pipes/commands.c\

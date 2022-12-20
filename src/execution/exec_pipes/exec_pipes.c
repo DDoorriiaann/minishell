@@ -75,7 +75,7 @@ void	child(int i, char **paths, t_pipes_data *pipes_data, char ** envp_l)
 					&& pipes_data->pipes_cmds[i][0][1] == '/'))
 			ft_cmd_error(pipes_data->pipes_cmds[i][0]);
 		else
-			ft_cmd_not_found(pipes_data->pipes_cmds[i][0]);
+			cmd_not_found(pipes_data->pipes_cmds[i][0]);
 		//free everything needed
 		exit(EXIT_FAILURE);
 	}
