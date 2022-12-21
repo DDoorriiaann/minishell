@@ -3,7 +3,7 @@
 int	parent(int i, t_pipes_data *pipes_data)
 {
 	close_fds(i, pipes_data);
-	waitpid(pipes_data->fork[i]->pid, &g_return, 0);
+//	waitpid(pipes_data->fork[i]->pid, &g_return, 0);
 	if (g_return == 2)
 	{
 		printf("\n");
@@ -66,7 +66,11 @@ int	multiple_forks(t_pipes_data *pipes_data, char **envp_l, char **paths)
 		else if (cur_fork->pid == 0)
 			child(i, paths, pipes_data, envp_l);
 		else
+		{
+			if (i == pipes_data->pipes_count)
+				waitpid(pipes_data->fork[i]->pid, &g_return, 0);
 			status = parent(i, pipes_data);
+		}
 		if (cur_fork->redirections->here_doc)
 			delete_heredoc(cur_fork);
 		i++;

@@ -28,16 +28,15 @@ static int	extract_outfile_name(char **argv,
 static char	**fetch_outfile(char **argv, int arg_index,
 		t_redirections *redirections)
 {
-//	if (redirections->outfile)
-//	{
-//		free(redirections->outfile);
-//		redirections->outfile = NULL;
-//	}
 	if (is_chevron_alone(argv, arg_index, '>'))
 	{	
 		redirections->out_redir_type = is_chevron_alone(argv, arg_index, '>');
 		if (!redirections->out_error)
+		{
+			if (redirections->outfile)
+				free(redirections->outfile);
 			redirections->outfile = ft_strdup(argv[arg_index + 1]);
+		}
 		argv = delete_argument(argv, arg_index, 2);
 	}
 	else

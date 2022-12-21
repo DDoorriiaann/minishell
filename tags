@@ -1,0 +1,428 @@
+$(NAME	Makefile	/^$(NAME):	$(OBJS)$/
+$(NAME	libft/Makefile	/^$(NAME):	${OBJS}$/
+$HOME	README.md	7
+.PHONY	Makefile	/^.PHONY: all clean fclean re$/
+.c.o	Makefile	/^.c.o:$/
+.c.o	libft/Makefile	/^.c.o:$/
+@	minishell	284
+@	src/signal/signal.o	3
+BUFFER_SIZE	libft/get_next_line.h	21
+CC	Makefile	/^CC			= clang$/
+CC	libft/Makefile	/^CC		= gcc$/
+CFLAGS	Makefile	/^CFLAGS 		= -Wall -Werror -Wextra -g  -I$(INCDIR) -/
+CFLAGS	libft/Makefile	/^CFLAGS	= -Wall -Werror -Wextra$/
+COMMAND_ERROR	includes/minishell.h	65
+E	libft/ft_tolower.o	2
+E	libft/ft_toupper.o	2
+ELF	src/arg_parser/arg_parser.o	1
+ELF	src/arg_parser/env_var_interpreter/interpret_current_env_variable.o	1
+ELF	src/arg_parser/env_var_interpreter/utils_env_var_interpreter.o	1
+ELF	src/arg_parser/pipe_detection/isolate_pipe_symbols.o	1
+ELF	src/arg_parser/pipes_parser.o	1
+ELF	src/arg_parser/redirections/handle_outfile_redirection.o	1
+ELF	src/builtin/exit/builtin_exit.o	1
+ELF	src/execution/exec_pipes/exec_pipes.o	1
+ELF	src/prompt.o	1
+ERROR	includes/minishell.h	15
+FALSE	includes/minishell.h	19
+FILE_ERROR	includes/minishell.h	68
+FORK_ERROR	includes/minishell.h	67
+FT_PRINTF_H	libft/ft_printf.h	14
+GET_NEXT_LINE_H	libft/get_next_line.h	14
+H‹E	libft/ft_strtrim.o	3
+I	minishell	269
+I	minishell	279
+INCDIR	Makefile	/^INCDIR 		= .\/includes\/$/
+J	minishell	443
+J	src/arg_parser/quotes_remover/remove_quotes.o	5
+J	src/arg_parser/redirections/redirections_utils2.o	33
+J	src/arg_parser/redirections/redirections_utils2.o	33
+J	src/error/error_utils.o	3
+J	src/execution/exec_pipes/exec_pipes_utils.o	5
+J	src/arg_parser/arg_parser.o	4
+J	src/arg_parser/pipes_parser.o	8
+J	src/builtin/cd/builtin_cd.o	5
+J	src/builtin/export/builtin_export.o	5
+J	src/builtin/export/extract_arg/extract_arg_after_equal.o	3
+J	src/builtin/export/extract_arg/extract_arg_with_equal.o	3
+J	src/builtin/export/sort_export/sort_after_first_char.o	2
+J	src/builtin/export/sort_export/sort_ascii.o	2
+J	src/builtin/unset/builtin_unset.o	2
+J	src/execution/exec_pipes/exec_pipes_utils.o	5
+J	src/execution/execution_utils.o	34
+J	src/utils/utils3.o	3
+JY	minishell	481
+JY	src/arg_parser/env_var_interpreter/interpret_current_env_variable.o	4
+K	minishell	288
+K	src/execution/exec_without_pipes/exec_without_pipes_utils.o	5
+K	src/path/path.o	2
+K	src/signal/signal.o	7
+K	src/arg_parser/env_var_interpreter/delete_var_inside_arg.o	2
+K	src/error/error.o	4
+LFLAGS	Makefile	/^LFLAGS		= -Llibft -lft -L\/usr\/local\/lib -lreadline/
+LIBFT_H	libft/libft.h	14
+MALLOC_ERROR	includes/minishell.h	64
+MINISHELL_H	includes/minishell.h	2
+MISSING_ARGS	includes/minishell.h	66
+MULTIPLE_N	includes/minishell.h	16
+Mmain	src/main.c	/^int	main(int argc, char **argv, char **envp)$/
+NAME	Makefile	/^NAME		= minishell $/
+NAME	libft/Makefile	/^NAME	= libft.a$/
+NOT_MULTIPLE	includes/minishell.h	17
+NO_ERROR	includes/minishell.h	63
+OBJS	Makefile	/^OBJS		= $(SRCS:.c=.o)$/
+OBJS	libft/Makefile	/^OBJS	= ${SRCS:.c=.o}$/
+PIPE_ERROR	includes/minishell.h	69
+READ	includes/minishell.h	20
+SRC	Makefile	/^SRC			=	main.c\\$/
+SRCDIR	Makefile	/^SRCDIR 		= .\/src\/$/
+SRCS	Makefile	/^SRCS 		= $(addprefix $(SRCDIR), $(SRC))$/
+SRCS	libft/Makefile	/^SRCS	= ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_i/
+TRUE	includes/minishell.h	18
+WRITE	includes/minishell.h	21
+X	minishell	478
+X	src/arg_parser/env_var_interpreter/replace_var_by_status_code.o	2
+X	src/arg_parser/redirections/redirections_utils.o	6
+X	src/builtin/exit/builtin_exit.o	11
+X	src/builtin/export/check_arg/check_dollars.o	2
+X	src/builtin/export/check_arg/compare_arg_envp_l.o	2
+X	src/execution/exec_pipes/exec_pipes.o	12
+X	src/heredoc/heredoc.o	10
+X	src/utils/utils2.o	5
+X	minishell	478
+X	src/arg_parser/env_var_interpreter/replace_var_by_status_code.o	2
+_	src/builtin/echo/builtin_echo.o	4
+_GREEN	Makefile	/^_GREEN="\\e[38;5;10m" $/
+_RED	Makefile	/^_RED="\\e[38;5;9m"$/
+_YELLOW	Makefile	/^_YELLOW="\\e[38;5;226m"$/
+absolute	README.md	3
+add_arg_export	src/builtin/export/builtin_export.c	/^static char	**add_arg_export(char **envp_l, char */
+all	Makefile	/^all :		$(NAME)$/
+all	libft/Makefile	/^all :	${NAME}$/
+arg_isdigit	src/builtin/exit/exit_utils.c	/^int	arg_isdigit(char *arg)$/
+argc	includes/minishell.h	78
+args_count	includes/minishell.h	97
+argv	includes/minishell.h	89
+backup_arg_after_var	src/arg_parser/env_var_interpreter/utils_env_var_interpreter.c	/^void	backup_arg_after_var(char *backup, char *orig/
+backup_arg_before_var	src/arg_parser/env_var_interpreter/utils_env_var_interpreter.c	/^int	backup_arg_before_var(char *backup, char *orig/
+backup_arg_part	src/arg_parser/quotes_remover/remove_quotes.c	/^static int	backup_arg_part(t_arg_update *update, i/
+builtin_cd	src/builtin/cd/builtin_cd.c	/^int	builtin_cd(char **args, char **envp_l, int arg/
+builtin_echo	src/builtin/echo/builtin_echo.c	/^void	builtin_echo(char **argv)$/
+builtin_env	src/builtin/env/builtin_env.c	/^void	builtin_env( char **envp_l)$/
+builtin_exit	src/builtin/exit/builtin_exit.c	/^void	builtin_exit(char **argv, char **envp_l, t_pi/
+builtin_export	src/builtin/export/builtin_export.c	/^char	**builtin_export(char **envp_l, char **argv, /
+builtin_pwd	src/builtin/pwd/builtin_pwd.c	/^void	builtin_pwd(void)$/
+builtin_unset	src/builtin/unset/builtin_unset.c	/^char	**builtin_unset(char **envp_l, char **argv)$/
+builtins	src/execution/execution_utils.c	/^char	**builtins(char **argv, char **envp_l,$/
+check_arg	src/builtin/export/check_arg/compare_arg_envp_l.c	/^int	check_arg(char **envp_l, char *argv)$/
+check_arg_unset	src/builtin/unset/builtin_unset.c	/^static int	check_arg_unset(char **envp_l, char *ar/
+check_char_equal	src/builtin/export/check_arg/check_char_equal.c	/^int	check_char_equal(char *argv)$/
+check_dollars	src/builtin/export/check_arg/check_dollars.c	/^char	**check_dollars(char **argv)$/
+check_echo	src/builtin/echo/builtin_echo.c	/^static int	check_echo(char *echo)$/
+check_if_new_variables	src/builtin/export/check_arg/check_if_new_variables.c	/^int	check_if_new_variables(char **argv, char **env/
+check_if_old_variables	src/builtin/unset/builtin_unset.c	/^static int	check_if_old_variables(char **argv, cha/
+check_infile_redirection	src/arg_parser/redirections/handle_infile_redirection.c	/^static void	check_infile_redirection(char *arg, t_/
+check_line_path	src/path/path.c	/^char	*check_line_path(char **envp_l)$/
+check_number_of_arg	src/builtin/exit/builtin_exit.c	/^static int	check_number_of_arg(char **argv)$/
+check_outfile_redirection	src/arg_parser/redirections/handle_outfile_redirection.c	/^static void	check_outfile_redirection(char *arg, t/
+check_plus	src/builtin/export/check_arg/check_plus.c	/^int	check_plus(char *argv)$/
+check_syntax	src/builtin/export/utils_export.c	/^int	check_syntax(char *arg)$/
+check_syntax_unset	src/builtin/unset/utils_unset.c	/^int	check_syntax_unset(char *argv)$/
+child	src/execution/exec_pipes/exec_pipes_utils.c	/^void	child(int i, char **paths,$/
+clean	Makefile	/^clean : 	clean_1$/
+clean	libft/Makefile	/^clean : $/
+clean_1	Makefile	/^clean_1 : $/
+close_fds	src/execution/exec_pipes/exec_pipes_utils.c	/^void	close_fds(int i, t_pipes_data *pipes_data)$/
+cmd	includes/minishell.h	74
+cmd_is_builtin	src/execution/execution_utils.c	/^int	cmd_is_builtin(char *cmd)$/
+cmd_not_found	src/error/error_utils.c	/^void	cmd_not_found(char *cmd)$/
+cmds_count	includes/minishell.h	87
+content	libft/ft_printf.h	21
+content	libft/libft.h	22
+copy_envp	src/path/path.c	/^char	**copy_envp(char **envp)$/
+count_arguments	src/arg_parser/arg_parser.c	/^static int	count_arguments(char *input, int argc)$/
+count_chevrons	src/arg_parser/redirections/redirections_utils.c	/^int	count_chevrons(char *arg, int start)$/
+count_cur_fork_args	src/execution/execution_utils.c	/^int	count_cur_fork_args(char **pipe_args)$/
+count_dollars	src/builtin/export/check_arg/check_dollars.c	/^static int	count_dollars(char *arg)$/
+count_pipe_args	src/arg_parser/pipes_parser_utils.c	/^int	count_pipe_args(char **argv, int i)$/
+count_pipes	src/arg_parser/pipes_parser_utils.c	/^int	count_pipes(char **argv)$/
+count_splitted_arguments	src/utils/utils1.c	/^int	count_splitted_arguments(char **argv)$/
+count_words	libft/ft_split.c	/^static unsigned int	count_words(char const *s, cha/
+create_heredoc_path	src/heredoc/heredoc.c	/^int	create_heredoc_path(t_redirections *redirectio/
+delete_argument	src/utils/utils3.c	/^char	**delete_argument(char **argv, int arg_index,/
+delete_heredoc	src/heredoc/heredoc.c	/^void	delete_heredoc(t_fork *cur_fork)$/
+delete_quotes_from_arg	src/arg_parser/quotes_remover/remove_quotes.c	/^static void	delete_quotes_from_arg(char **argv, in/
+delete_var_inside_arg	src/arg_parser/env_var_interpreter/delete_var_inside_arg.c	/^int	delete_var_inside_arg(char **argv, int start, /
+delimiter	includes/minishell.h	49
+dup_arr	src/utils/utils3.c	/^void	dup_arr(char **src, char **dst)$/
+duplicate_args	src/arg_parser/pipes_parser.c	/^static int	duplicate_args(char **argv, int i, t_pi/
+duplicate_fds	src/execution/exec_pipes/exec_pipes_utils.c	/^void	duplicate_fds(int i, t_pipes_data *pipes_data/
+end	includes/minishell.h	103
+env_variable_name_exists	src/arg_parser/env_var_interpreter/utils_env_var_interpreter.c	/^int	env_variable_name_exists(char *arg, int start,/
+error	includes/minishell.h	61
+exec_builtin	src/execution/execution_utils.c	/^char	**exec_builtin(char **argv, char **envp_l,$/
+exec_fork_cmd	src/execution/exec_without_pipes/exec_without_pipes.c	/^void	exec_fork_cmd(char **paths, t_pipes_data *pip/
+exec_pipes	src/execution/exec_pipes/exec_pipes.c	/^char	**exec_pipes(t_pipes_data *pipes_data, char */
+exec_without_pipes	src/execution/exec_without_pipes/exec_without_pipes.c	/^char	**exec_without_pipes(char **argv, char **envp/
+execute_commands	src/prompt.c	/^char	**execute_commands(t_pipes_data *pipes_data, /
+existing_export	src/builtin/export/update_envp_l/update_envp_l.c	/^static void	existing_export(char **argv, char **en/
+extract_arg_after_equal	src/builtin/export/extract_arg/extract_arg_after_equal.c	/^char	*extract_arg_after_equal(char *argv)$/
+extract_arg_with_equal	src/builtin/export/extract_arg/extract_arg_with_equal.c	/^char	*extract_arg_with_equal(char *argv)$/
+extract_env_variable_name	src/arg_parser/env_var_interpreter/extract_env_var_name.c	/^char	*extract_env_variable_name(char *arg, int sta/
+extract_infile_name	src/arg_parser/redirections/handle_infile_redirection.c	/^void	extract_infile_name(char **argv, int arg_inde/
+extract_outfile_name	src/arg_parser/redirections/handle_outfile_redirection.c	/^static int	extract_outfile_name(char **argv,$/
+f	src/builtin/export/update_envp_l/update_envp_l.o	4
+fJ	minishell	379
+fJ	src/builtin/exit/builtin_exit.o	11
+fclean	Makefile	/^fclean : 	clean fclean_1$/
+fclean	libft/Makefile	/^fclean : clean$/
+fclean_1	Makefile	/^fclean_1 :$/
+fd_in	includes/minishell.h	54
+fd_out	includes/minishell.h	55
+fetch_infile	src/arg_parser/redirections/handle_infile_redirection.c	/^static char	**fetch_infile(char **argv, int arg_in/
+fetch_outfile	src/arg_parser/redirections/handle_outfile_redirection.c	/^static char	**fetch_outfile(char **argv, int arg_i/
+fill_arr	libft/ft_split.c	/^static void	fill_arr(char const *s, char c, char */
+fill_pipes_args	src/arg_parser/pipes_parser.c	/^static	int	fill_pipes_args(char ***pipes_args, cha/
+find_chevron	src/arg_parser/redirections/redirections_utils2.c	/^int	find_chevron(char *arg)$/
+find_closing_quote	src/utils/utils2.c	/^int	find_closing_quote(char *input, int end, char /
+find_next_corresponding_quote	src/utils/utils3.c	/^int	find_next_corresponding_quote(char *input, int/
+find_word_end	src/utils/utils2.c	/^int	find_word_end(char *input, int index)$/
+fork	includes/minishell.h	90
+fork_index	includes/minishell.h	58
+fork_without_pipe	src/execution/exec_without_pipes/exec_without_pipes.c	/^static void	fork_without_pipe(t_pipes_data *pipes,/
+free_2d_arr	src/free/free.c	/^void	free_2d_arr(char **arr)$/
+free_forks	src/free/free.c	/^void	free_forks(t_pipes_data *pipes_data)$/
+free_pipes_cmds_arr	src/free/free.c	/^void	free_pipes_cmds_arr(char ***arr)$/
+ft_atoi	libft/ft_atoi.c	/^int	ft_atoi(const char *nptr)$/
+ft_bzero	libft/ft_bzero.c	/^void	ft_bzero(void *s, size_t n)$/
+ft_calloc	libft/ft_calloc.c	/^void	*ft_calloc(size_t nmemb, size_t size)$/
+ft_change_signal	src/signal/signal.c	/^void	ft_change_signal(__sighandler_t sig)$/
+ft_cmd_error	src/error/error.c	/^void	ft_cmd_error(char *cmd)$/
+ft_ctrl_c	src/signal/signal.c	/^static void	ft_ctrl_c(int sig)$/
+ft_ctrl_c_heredoc	src/signal/signal.c	/^void	ft_ctrl_c_heredoc(int sig)$/
+ft_error	src/error/error.c	/^void	ft_error(void)$/
+ft_error_return	src/error/error.c	/^int	ft_error_return(void)$/
+ft_exit	src/builtin/exit/builtin_exit.c	/^static void	ft_exit(char **envp_l, t_pipes_data *p/
+ft_free_all_arr	src/free/free.c	/^void	ft_free_all_arr(char **paths, char **cmd)$/
+ft_getline	libft/get_next_line.c	/^char	*ft_getline(char *save)$/
+ft_heredoc	src/heredoc/heredoc.c	/^void	ft_heredoc(t_fork *cur_fork)$/
+ft_is_quote	src/utils/utils1.c	/^int	ft_is_quote(char c)$/
+ft_isalnum	libft/ft_isalnum.c	/^int	ft_isalnum(int i)$/
+ft_isalpha	libft/ft_isalpha.c	/^int	ft_isalpha(int i)$/
+ft_isascii	libft/ft_isascii.c	/^int	ft_isascii(int i)$/
+ft_isdigit	libft/ft_isdigit.c	/^int	ft_isdigit(int i)$/
+ft_isprint	libft/ft_isprint.c	/^int	ft_isprint(int i)$/
+ft_isspace	src/utils/utils1.c	/^int	ft_isspace(char c)$/
+ft_itoa	libft/ft_itoa.c	/^char	*ft_itoa(int n)$/
+ft_len	libft/ft_itoa.c	/^static size_t	ft_len(int n)$/
+ft_lstadd_back	libft/ft_lstadd_back.c	/^void	ft_lstadd_back(t_list **lst, t_list *new)$/
+ft_lstadd_front	libft/ft_lstadd_front.c	/^void	ft_lstadd_front(t_list **lst, t_list *new)$/
+ft_lstclear	libft/ft_lstclear.c	/^void	ft_lstclear(t_list **lst, void (*del)(void*))/
+ft_lstdelone	libft/ft_lstdelone.c	/^void	ft_lstdelone(t_list *lst, void (*del)(void*))/
+ft_lstiter	libft/ft_lstiter.c	/^void	ft_lstiter(t_list *lst, void (*f)(void *))$/
+ft_lstlast	libft/ft_lstlast.c	/^t_list	*ft_lstlast(t_list *lst)$/
+ft_lstmap	libft/ft_lstmap.c	/^t_list	*ft_lstmap(t_list *lst, void *(*f)(void *),/
+ft_lstnew	libft/ft_lstnew.c	/^t_list	*ft_lstnew(void *content)$/
+ft_lstsize	libft/ft_lstsize.c	/^int	ft_lstsize(t_list *lst)$/
+ft_memchr	libft/ft_memchr.c	/^void	*ft_memchr(const void *s, int c, size_t n)$/
+ft_memcmp	libft/ft_memcmp.c	/^int	ft_memcmp(const void *s1, const void *s2, size/
+ft_memcpy	libft/ft_memcpy.c	/^void	*ft_memcpy(void *dest, const void *src, size_/
+ft_memmove	libft/ft_memmove.c	/^void	*ft_memmove(void *dest, const void *src, size/
+ft_memset	libft/ft_memset.c	/^void	*ft_memset(void *s, int c, size_t n)$/
+ft_printf	libft/ft_printf.c	/^int	ft_printf(const char *format, ...)$/
+ft_putchar	libft/ft_putchar.c	/^int	ft_putchar(const char c)$/
+ft_putchar_fd	libft/ft_putchar_fd.c	/^void	ft_putchar_fd(char c, int fd)$/
+ft_putendl_fd	libft/ft_putendl_fd.c	/^void	ft_putendl_fd(char *s, int fd)$/
+ft_puthexa_low	libft/ft_puthexa_low.c	/^int	ft_puthexa_low(unsigned long long nb)$/
+ft_puthexa_upp	libft/ft_puthexa_upp.c	/^int	ft_puthexa_upp(unsigned int nb)$/
+ft_putnbr	libft/ft_putnbr.c	/^int	ft_putnbr(int nb)$/
+ft_putnbr_fd	libft/ft_putnbr_fd.c	/^void	ft_putnbr_fd(int n, int fd)$/
+ft_putnbr_u	libft/ft_putnbr_u.c	/^int	ft_putnbr_u(unsigned int nb)$/
+ft_putptr	libft/ft_putptr.c	/^int	ft_putptr(unsigned long long nb)$/
+ft_putstr	libft/ft_putstr.c	/^int	ft_putstr(const char *str)$/
+ft_putstr_fd	libft/ft_putstr_fd.c	/^void	ft_putstr_fd(char *s, int fd)$/
+ft_read	libft/get_next_line.c	/^char	*ft_read(int fd, char *save)$/
+ft_save	libft/get_next_line.c	/^char	*ft_save(char *save)$/
+ft_signal	src/signal/signal.c	/^void	ft_signal(void)$/
+ft_signal_heredoc	src/signal/signal.c	/^void	ft_signal_heredoc(void)$/
+ft_split	libft/ft_split.c	/^char	**ft_split(char const *s, char c)$/
+ft_strchr	libft/ft_strchr.c	/^char	*ft_strchr(const char *s, int c)$/
+ft_strcmp	libft/ft_strcmp.c	/^int	ft_strcmp(const char *s1, const char *s2)$/
+ft_strdup	libft/ft_strdup.c	/^char	*ft_strdup(const char *s)$/
+ft_striteri	libft/ft_striteri.c	/^void	ft_striteri(char *s, void (*f)(unsigned int, /
+ft_strjoin	libft/ft_strjoin.c	/^char	*ft_strjoin(char const *s1, char const *s2)$/
+ft_strjoin_char	libft/ft_strjoin_char.c	/^char	*ft_strjoin_char(char const *s1, char const */
+ft_strjoins	libft/get_next_line_utils.c	/^char	*ft_strjoins(char *s1, char *s2)$/
+ft_strlcat	libft/ft_strlcat.c	/^size_t	ft_strlcat(char *dst, const char *src, size/
+ft_strlcpy	libft/ft_strlcpy.c	/^size_t	ft_strlcpy(char *dst, const char *src, size/
+ft_strlen	libft/ft_strlen.c	/^size_t	ft_strlen(const char *str)$/
+ft_strmapi	libft/ft_strmapi.c	/^char	*ft_strmapi(char const *s, char (*f)(unsigned/
+ft_strncmp	libft/ft_strncmp.c	/^int	ft_strncmp(const char *s1, const char *s2, siz/
+ft_strnstr	libft/ft_strnstr.c	/^char	*ft_strnstr(const char *big, const char *litt/
+ft_strrchr	libft/ft_strrchr.c	/^char	*ft_strrchr(const char *s, int c)$/
+ft_strtrim	libft/ft_strtrim.c	/^char	*ft_strtrim(char const *s1, char const *set)$/
+ft_substr	libft/ft_substr.c	/^char	*ft_substr(char const *s, unsigned int start,/
+ft_tolower	libft/ft_tolower.c	/^int	ft_tolower(int c)$/
+ft_toupper	libft/ft_toupper.c	/^int	ft_toupper(int c)$/
+ft_type	libft/ft_printf.c	/^static int	ft_type(const char c, va_list params)$/
+g_return	src/main.c	3
+get_cmd	src/path/path.c	/^char	**get_cmd(char *cmd, char **paths)$/
+get_filename_len	src/arg_parser/redirections/redirections_utils.c	/^int	get_filename_len(char *arg)$/
+get_next_line	libft/get_next_line.c	/^char	*get_next_line(int fd)$/
+get_path	src/path/path.c	/^char	**get_path(char *envp_path)$/
+get_word	libft/ft_split.c	/^static char	*get_word(char const *s, char c, unsig/
+go_to_quote_end	src/utils/utils2.c	/^int	go_to_quote_end(char *input, int index, int *a/
+go_to_word_end	src/utils/utils2.c	/^int	go_to_word_end(char *input, int start, int *ar/
+g»	src/builtin/unset/utils_unset.o	3
+h	minishell	263
+h	minishell	469
+h	src/arg_parser/env_var_interpreter/utils_env_var_interpreter.o	5
+ht	minishell	294
+ht	src/path/path.o	8
+handle_cmd_error	src/execution/execution_utils2.c	/^void	handle_cmd_error(char **argv, char **paths)$/
+handle_infile_redirection	src/arg_parser/redirections/handle_infile_redirection.c	/^char	**handle_infile_redirection(char **argv, t_re/
+handle_outfile_redirection	src/arg_parser/redirections/handle_outfile_redirection.c	/^char	**handle_outfile_redirection(char **argv, t_r/
+handle_pipe_symbol	src/arg_parser/pipe_detection/isolate_pipe_symbols.c	/^void	handle_pipe_symbol(char *input, char *updated/
+handle_quotes	src/arg_parser/quotes_remover/remove_quotes.c	/^static int	handle_quotes(char **argv, int arg_inde/
+handled	README.md	7
+here_doc	includes/minishell.h	47
+here_doc_path	includes/minishell.h	48
+in_filename_len	includes/minishell.h	52
+in_redir_type	includes/minishell.h	43
+in_redirection	includes/minishell.h	42
+index	includes/minishell.h	27
+infile	includes/minishell.h	50
+init_argv	src/arg_parser/arg_parser.c	/^static char	**init_argv(int argc)$/
+init_pipes	src/execution/exec_pipes/exec_pipes.c	/^int	init_pipes(t_pipes_data *pipes_data, int i)$/
+init_pipes_data	src/arg_parser/pipes_parser.c	/^static int	init_pipes_data(t_pipes_data *pipes_dat/
+input	includes/minishell.h	104
+insert_backslash	src/builtin/export/check_arg/check_dollars.c	/^static char	*insert_backslash(char *new_arg, char /
+insert_status_code_value	src/arg_parser/env_var_interpreter/replace_var_by_status_code.c	/^static int	insert_status_code_value(char *updated_/
+insert_var_value	src/arg_parser/env_var_interpreter/interpret_current_env_variable.c	/^static int	insert_var_value(char *updated_arg, t_e/
+interpret_current_env_variable	src/arg_parser/env_var_interpreter/interpret_current_env_variable.c	/^int	interpret_current_env_variable(char **argv, in/
+interpret_env_variables	src/arg_parser/env_var_interpreter/interpret_env_variables.c	/^void	interpret_env_variables(char **argv, char **e/
+interpret_variable	src/arg_parser/env_var_interpreter/interpret_env_variables.c	/^static int	interpret_variable(char **argv, int ind/
+is_a_directory	src/error/error_utils.c	/^void	is_a_directory(char *cmd)$/
+is_builtin	includes/minishell.h	77
+is_chevron	src/arg_parser/redirections/redirections_utils.c	/^int	is_chevron(char c)$/
+is_chevron_alone	src/arg_parser/redirections/redirections_utils.c	/^int	is_chevron_alone(char **argv, int arg_index, c/
+is_composed_path	src/execution/execution_utils2.c	/^int	is_composed_path(char *arg)$/
+is_valid_number	src/builtin/exit/exit_utils.c	/^int	is_valid_number(const char *nptr)$/
+isolate_pipe_symbols	src/arg_parser/pipe_detection/isolate_pipe_symbols.c	/^char	*isolate_pipe_symbols(char *input)$/
+join_variable	src/builtin/export/update_envp_l/update_envp_l.c	/^static void	join_variable(char **envp_l, char *var/
+len	includes/minishell.h	31
+len_arg	src/builtin/export/size_env_or_arg/len_arg.c	/^int	len_arg(char *argv)$/
+len_arg_unset	src/builtin/unset/builtin_unset.c	/^static int	len_arg_unset(char *argv)$/
+ls	README.md	3
+multiple_forks	src/execution/exec_pipes/exec_pipes.c	/^int	multiple_forks(t_pipes_data *pipes_data, char /
+name	includes/minishell.h	28
+name_len	includes/minishell.h	29
+next	libft/ft_printf.h	22
+next	libft/libft.h	23
+no_such_file_or_directory	src/error/error_utils.c	/^void	no_such_file_or_directory(char *cmd)$/
+numeric_argument_required	src/builtin/exit/builtin_exit.c	/^static void	numeric_argument_required(char *arg)$/
+old_stdin	includes/minishell.h	57
+old_stdout	includes/minishell.h	56
+original_arg	includes/minishell.h	36
+out_error	includes/minishell.h	46
+out_filename_len	includes/minishell.h	53
+out_redir_type	includes/minishell.h	45
+out_redirection	includes/minishell.h	44
+outfile	includes/minishell.h	51
+parent	src/execution/exec_pipes/exec_pipes.c	/^int	parent(int i, t_pipes_data *pipes_data)$/
+parse_argument	src/arg_parser/pipes_parser.c	/^static void	parse_argument(char ***pipes_args,$/
+permission_denied	src/error/error_utils.c	/^void	permission_denied(char *cmd)$/
+pid	includes/minishell.h	75
+pipe_a	includes/minishell.h	85
+pipe_arg	includes/minishell.h	96
+pipe_b	includes/minishell.h	86
+pipe_found_inside	src/arg_parser/pipe_detection/isolate_pipe_symbols.c	/^static int	pipe_found_inside(char *arg)$/
+pipe_nb	includes/minishell.h	95
+pipes_cmds	includes/minishell.h	88
+pipes_count	includes/minishell.h	84
+pipes_detected	includes/minishell.h	83
+pipes_parser	src/arg_parser/pipes_parser.c	/^char	***pipes_parser(char **argv, t_pipes_data *pi/
+prepare_in_redirection	src/arg_parser/redirections/handle_infile_redirection.c	/^static int	prepare_in_redirection(t_redirections */
+prepare_in_redirection	src/arg_parser/redirections/handle_outfile_redirection.c	/^static int	prepare_in_redirection(t_redirections */
+print_decoration	src/decoration/decoration.c	/^void	print_decoration(void)$/
+print_error	src/builtin/export/utils_export.c	/^void	print_error(char *argv)$/
+print_error_unset	src/builtin/unset/utils_unset.c	/^void	print_error_unset(char *argv)$/
+print_export	src/builtin/export/print_export/print_export.c	/^void	print_export(char **export_envp_l)$/
+print_quotes_export	src/builtin/export/print_export/print_export.c	/^static void	print_quotes_export(char **export_envp/
+prompt_shell	src/prompt.c	/^int	prompt_shell(char **envp_l, t_pipes_data *pipe/
+put_args_into_argv	src/arg_parser/arg_parser.c	/^static void	put_args_into_argv(char **argv, char */
+quit_child	src/execution/exec_pipes/exec_pipes_utils.c	/^void	quit_child(t_pipes_data *pipes_data, int i)$/
+raw_input_parser	src/arg_parser/arg_parser.c	/^char	**raw_input_parser(char *input, char **envp_l/
+re	Makefile	/^re : 		fclean all $/
+re	libft/Makefile	/^re : fclean all $/
+redirect_fork_stdin	src/execution/exec_pipes/exec_pipes_utils.c	/^int	redirect_fork_stdin(t_fork *cur_fork)$/
+redirect_fork_stdout	src/execution/execution_utils.c	/^void	redirect_fork_stdout(t_fork *cur_fork)$/
+redirect_stdin	src/execution/exec_without_pipes/exec_without_pipes_utils.c	/^int	redirect_stdin(t_pipes_data *pipes)$/
+redirect_stdout	src/execution/exec_without_pipes/exec_without_pipes_utils.c	/^int	redirect_stdout(t_pipes_data *pipes)$/
+redirections	includes/minishell.h	76
+remove_arg	src/arg_parser/env_var_interpreter/interpret_env_variables.c	/^static void	remove_arg(char **argv, int i)$/
+remove_old_variables	src/builtin/unset/builtin_unset.c	/^static void	remove_old_variables(char **argv, char/
+remove_plus	src/builtin/export/update_envp_l/update_envp_l.c	/^static char	*remove_plus(char*argv)$/
+remove_quotes	src/arg_parser/quotes_remover/remove_quotes.c	/^void	remove_quotes(char **argv)$/
+remove_quotes_in_filename	src/arg_parser/quotes_remover/remove_quotes.c	/^char	*remove_quotes_in_filename(char *filename)$/
+replace_old_pwd	src/builtin/cd/builtin_cd.c	/^static void	replace_old_pwd(char **envp_l, char *o/
+replace_pwd	src/builtin/cd/builtin_cd.c	/^static void	replace_pwd(char **envp_l, char **old_/
+replace_var_by_content	src/arg_parser/env_var_interpreter/interpret_current_env_variable.c	/^static void	replace_var_by_content(char **argv, in/
+replace_var_by_status_code	src/arg_parser/env_var_interpreter/replace_var_by_status_code.c	/^void	replace_var_by_status_code(char **argv, int s/
+reset_pipes	src/prompt.c	/^void	reset_pipes(t_pipes_data *pipes_data)$/
+reset_redirections	src/arg_parser/redirections/redirections_utils2.c	/^void	reset_redirections(t_pipes_data *pipes_data)$/
+restore_stdin	src/execution/exec_without_pipes/exec_without_pipes_utils.c	/^void	restore_stdin(t_pipes_data *pipes)$/
+restore_stdout	src/execution/exec_without_pipes/exec_without_pipes_utils.c	/^void	restore_stdout(t_pipes_data *pipes)$/
+s_arg_init	includes/minishell.h	100
+s_arg_update	includes/minishell.h	34
+s_env_var	includes/minishell.h	25
+s_fork	includes/minishell.h	72
+s_list	libft/ft_printf.h	19
+s_list	libft/libft.h	20
+s_pipes_data	includes/minishell.h	81
+s_pipes_init	includes/minishell.h	93
+s_redirections	includes/minishell.h	40
+save_in_filename	src/arg_parser/redirections/redirections_utils2.c	/^int	save_in_filename(t_redirections *redirections,/
+save_out_filename	src/arg_parser/redirections/redirections_utils2.c	/^int	save_out_filename(t_redirections *redirections/
+separate_pipes	src/arg_parser/pipe_detection/isolate_pipe_symbols.c	/^static char	*separate_pipes(char *input, int input/
+set_heredoc	src/heredoc/heredoc.c	/^static void	set_heredoc(char *delimiter, int hered/
+single_fork	src/execution/exec_pipes/exec_pipes.c	/^char	**single_fork(t_pipes_data *pipes_data, char /
+size_arg	src/builtin/export/size_env_or_arg/size_arg.c	/^int	size_arg(char *argv)$/
+size_arg_before_equal	src/builtin/export/size_env_or_arg/size_arg_before_equal.c	/^int	size_arg_before_equal(char *argv)$/
+size_env	src/builtin/export/size_env_or_arg/size_env.c	/^int	size_env(char **envp_l)$/
+skip_char_before_equal	src/builtin/export/check_arg/check_dollars.c	/^static int	skip_char_before_equal(char *argv)$/
+skip_lonely_dollars	src/arg_parser/env_var_interpreter/interpret_env_variables.c	/^static int	skip_lonely_dollars(char *arg, int star/
+skip_single_quoted_content	src/arg_parser/env_var_interpreter/utils_env_var_interpreter.c	/^int	skip_single_quoted_content(char *arg, int star/
+skip_spaces	src/utils/utils1.c	/^int	skip_spaces(char *input, int index)$/
+sort_after_first_char	src/builtin/export/sort_export/sort_after_first_char.c	/^void	sort_after_first_char(char **envp_l)$/
+sort_ascii	src/builtin/export/sort_export/sort_ascii.c	/^int	sort_ascii(char **envp_l, int ret, int i)$/
+sort_first_char	src/builtin/export/sort_export/sort_first_char.c	/^void	sort_first_char(char **envp_l)$/
+split_input	src/arg_parser/arg_parser.c	/^static char	**split_input(char *input, int argc)$/
+start	includes/minishell.h	102
+store_arg	src/arg_parser/arg_parser_utils.c	/^void	store_arg(char **argv, t_arg_init *arg, int i/
+store_quoted_arg	src/arg_parser/arg_parser_utils.c	/^void	store_quoted_arg(char **argv, t_arg_init *arg/
+t_arg_init	includes/minishell.h	105
+t_arg_update	includes/minishell.h	38
+t_env_var	includes/minishell.h	32
+t_error	includes/minishell.h	70
+t_fork	includes/minishell.h	79
+t_list	libft/ft_printf.h	23
+t_list	libft/libft.h	24
+t_pipes_data	includes/minishell.h	91
+t_pipes_init	includes/minishell.h	98
+t_redirections	includes/minishell.h	59
+too_many_arguments	src/builtin/exit/builtin_exit.c	/^static void	too_many_arguments(void)$/
+u	src/arg_parser/redirections/redirections_utils.o	2
+u	minishell	333
+u	src/builtin/export/check_arg/check_dollars.o	4
+u	src/builtin/export/sort_export/sort_first_char.o	2
+update_argv_with_env_variables	src/arg_parser/env_var_interpreter/interpret_env_variables.c	/^static void	update_argv_with_env_variables(int ind/
+update_envp_l	src/builtin/export/update_envp_l/update_envp_l.c	/^void	update_envp_l(char **argv, char **envp_l)$/
+update_variable	src/builtin/export/update_envp_l/update_envp_l.c	/^static void	update_variable(char **envp_l, char *v/
+updated_arg	includes/minishell.h	37
+value	includes/minishell.h	30
+variable_found_inside_env	src/arg_parser/env_var_interpreter/utils_env_var_interpreter.c	/^int	variable_found_inside_env(char *env_variable_n/
+wait_child	src/execution/exec_without_pipes/exec_without_pipes.c	/^void	wait_child(t_pipes_data *pipes)$/
+wait_heredoc	src/heredoc/heredoc.c	/^void	wait_heredoc(int pid)$/
+with	README.md	5
+x	minishell	86
