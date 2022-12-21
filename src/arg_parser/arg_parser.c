@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arg_parser.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:24:48 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 16:45:01 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	count_arguments(char *input, int argc)
@@ -75,6 +87,7 @@ char	**raw_input_parser(char *input, char **envp_l)
 	char	*updated_input;
 
 	updated_input = isolate_pipe_symbols(input);
+	updated_input = isolate_chevrons_symbols(updated_input);
 	argc = count_arguments(updated_input, 0);
 	argv = split_input(updated_input, argc);
 	interpret_env_variables(argv, envp_l);

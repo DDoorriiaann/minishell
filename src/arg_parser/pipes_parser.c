@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipes_parser.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:25:03 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 15:28:19 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	duplicate_args(char **argv, int i, t_pipes_init *pipes_init,
@@ -58,13 +70,7 @@ static int	init_pipes_data(t_pipes_data *pipes_data, int pipes_count)
 		pipes_data->fork[i]->redirections = malloc(sizeof(t_redirections));
 		if (!pipes_data->fork[i]->redirections)
 			return (1);
-		pipes_data->fork[i]->redirections->infile = NULL;
-		pipes_data->fork[i]->redirections->outfile = NULL;
-		pipes_data->fork[i]->redirections->in_redir_type = 0;
-		pipes_data->fork[i]->redirections->out_redir_type = 0;
-		pipes_data->fork[i]->redirections->here_doc = 0;
-		pipes_data->fork[i]->redirections->fd_in = 0;
-		pipes_data->fork[i]->redirections->fd_out = 0;
+		set_default_redirections(pipes_data->fork[i]);
 		i++;
 	}	
 	return (0);

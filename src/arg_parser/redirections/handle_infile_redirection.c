@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_infile_redirection.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:24:16 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 15:39:03 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	extract_infile_name(char **argv, int arg_index,
@@ -18,7 +30,8 @@ void	extract_infile_name(char **argv, int arg_index,
 	redirections->in_redir_type = nb_chevrons;
 	end = end + redirections->in_filename_len + redirections->in_redir_type;
 	backup_arg_after_var(backup, arg, i, end);
-	save_in_filename(redirections, arg, i, end);
+	if (!redirections->in_error)
+		save_in_filename(redirections, arg, i, end);
 	free(argv[arg_index]);
 	argv[arg_index] = backup;
 }
@@ -28,10 +41,13 @@ static char	**fetch_infile(char **argv, int arg_index,
 {
 	if (is_chevron_alone(argv, arg_index, '<') == 1)
 	{
-		if (redirections->infile)
-			free(redirections->infile);
-		redirections->infile = ft_strdup(argv[arg_index + 1]);
-		redirections->in_redir_type = 1;
+		if (!redirections->in_error)
+		{
+			if (redirections->infile)
+				free(redirections->infile);
+			redirections->infile = ft_strdup(argv[arg_index + 1]);
+			redirections->in_redir_type = 1;
+		}
 		argv = delete_argument(argv, arg_index, 2);
 	}
 	else if (is_chevron_alone(argv, arg_index, '<') == 2)
@@ -43,17 +59,7 @@ static char	**fetch_infile(char **argv, int arg_index,
 		argv = delete_argument(argv, arg_index, 2);
 	}
 	else
-	{
-		if (redirections->infile)
-			free(redirections->infile);
-		redirections->infile = NULL;
-		if (redirections->delimiter)
-			free(redirections->delimiter);
-		redirections->delimiter = NULL;
-		extract_infile_name(argv, arg_index, redirections);
-		if (!argv[arg_index][0])
-			argv = delete_argument(argv, arg_index, 1);
-	}
+		argv = handle_joined_chevron(argv, arg_index, redirections);
 	return (argv);
 }
 
@@ -87,18 +93,15 @@ static int	prepare_in_redirection(t_redirections *redirections,
 	redirections->fd_in = -1;
 	if (redirections->in_redir_type == 2)
 		create_heredoc_path(redirections);
-	if (redirections->infile)
+	if (redirections->infile && !redirections->in_error)
 	{	
 		redirections->infile = remove_quotes_in_filename(redirections->infile);
 		redirections->fd_in = open(redirections->infile, O_RDONLY, 0644);
+		if (redirections->fd_in < 0)
+			redirections->in_error = 1;
+		if (redirections->fd_in > 0)
+			close(redirections->fd_in);
 	}
-	if (redirections->fd_in > 0)
-		close(redirections->fd_in);
-//	else
-//	{
-//		g_return = 1;
-//		ft_putstr_fd(" No such file or directory", 2);
-//	}
 	if (chevron_alone)
 		i--;
 	i--;

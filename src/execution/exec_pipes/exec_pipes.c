@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_pipes.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:25:28 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 15:22:24 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	parent(int i, t_pipes_data *pipes_data)
 {
 	close_fds(i, pipes_data);
-//	waitpid(pipes_data->fork[i]->pid, &g_return, 0);
 	if (g_return == 2)
 	{
 		printf("\n");
@@ -30,19 +41,14 @@ char	**single_fork(t_pipes_data *pipes_data, char **envp_l)
 	return (envp_l);
 }
 
-int	init_pipes(t_pipes_data *pipes_data, int i)
+int	get_status(int i, t_pipes_data *pipes_data)
 {
-	if (i % 2 == 0)
-	{
-		if (pipe(pipes_data->pipe_b) == -1)
-			return (ERROR);
-	}
-	else
-	{
-		if (pipe(pipes_data->pipe_a) == -1)
-			return (ERROR);
-	}
-	return (0);
+	int	status;
+
+	if (i == pipes_data->pipes_count)
+		waitpid(pipes_data->fork[i]->pid, &g_return, 0);
+	status = parent(i, pipes_data);
+	return (status);
 }
 
 int	multiple_forks(t_pipes_data *pipes_data, char **envp_l, char **paths)
@@ -66,11 +72,7 @@ int	multiple_forks(t_pipes_data *pipes_data, char **envp_l, char **paths)
 		else if (cur_fork->pid == 0)
 			child(i, paths, pipes_data, envp_l);
 		else
-		{
-			if (i == pipes_data->pipes_count)
-				waitpid(pipes_data->fork[i]->pid, &g_return, 0);
-			status = parent(i, pipes_data);
-		}
+			status = get_status(i, pipes_data);
 		if (cur_fork->redirections->here_doc)
 			delete_heredoc(cur_fork);
 		i++;

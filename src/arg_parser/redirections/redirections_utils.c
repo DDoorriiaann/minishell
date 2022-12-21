@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirections_utils.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:24:24 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 14:24:37 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	count_chevrons(char *arg, int start)
@@ -34,23 +46,6 @@ int	is_chevron_alone(char **argv, int arg_index, char chevron_type)
 		return (2);
 	return (FALSE);
 }
-
-/*void	reset_redirections(t_redirections *redirections)
-{
-	redirections->out_error = FALSE;
-	if (redirections->infile)
-	{
-		free(redirections->infile);
-		redirections->infile = NULL;
-		redirections->in_redirection = FALSE;
-	}
-	if (redirections->outfile)
-	{
-		free(redirections->outfile);
-		redirections->outfile = NULL;
-		redirections->out_redirection = FALSE;
-	}
-}*/
 
 int	get_filename_len(char *arg)
 {

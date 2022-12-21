@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirections_utils2.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:24:40 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 15:38:35 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
 
 void	reset_redirections(t_pipes_data *pipes_data)
@@ -76,4 +87,22 @@ int	find_chevron(char *arg)
 	while (arg[start] && !is_chevron(arg[start]))
 		start++;
 	return (start);
+}
+
+char	**handle_joined_chevron(char **argv, int arg_index,
+		t_redirections *redirections)
+{
+	if (!redirections->in_error)
+	{
+		if (redirections->infile)
+			free(redirections->infile);
+		redirections->infile = NULL;
+	}
+	if (redirections->delimiter)
+		free(redirections->delimiter);
+	redirections->delimiter = NULL;
+	extract_infile_name(argv, arg_index, redirections);
+	if (!argv[arg_index][0])
+		argv = delete_argument(argv, arg_index, 1);
+	return (argv);
 }

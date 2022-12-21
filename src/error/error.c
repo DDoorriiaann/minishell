@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:29:33 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 14:29:33 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_cmd_error(char *cmd)
@@ -23,6 +35,7 @@ void	ft_cmd_error(char *cmd)
 
 void	ft_error(void)
 {
+	ft_putstr_fd(" ", 2);
 	ft_putstr_fd(strerror(errno), 2);
 	ft_putstr_fd("\n", 2);
 	exit(1);
@@ -30,6 +43,7 @@ void	ft_error(void)
 
 int	ft_error_return(void)
 {
+	ft_putstr_fd(" ", 2);
 	ft_putstr_fd(strerror(errno), 2);
 	ft_putstr_fd("\n", 2);
 	return (1);

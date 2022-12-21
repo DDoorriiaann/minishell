@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_pipes_utils.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:25:54 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 14:47:08 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	redirect_fork_stdin(t_fork *cur_fork)
@@ -8,8 +20,7 @@ int	redirect_fork_stdin(t_fork *cur_fork)
 			= open(cur_fork->redirections->infile, O_RDONLY);
 		if (cur_fork->redirections->fd_in < 0)
 		{
-			perror("");
-			cur_fork->redirections->fd_in = open("/dev/null", O_RDONLY);
+			perror(" ");
 			return (ERROR);
 		}
 		dup2(cur_fork->redirections->fd_in, STDIN_FILENO);
@@ -19,7 +30,7 @@ int	redirect_fork_stdin(t_fork *cur_fork)
 		cur_fork->redirections->here_doc
 			= open(cur_fork->redirections->here_doc_path, O_RDONLY);
 		if (cur_fork->redirections->here_doc == -1)
-			perror("heredoc error");
+			return (1);
 		cur_fork->redirections->old_stdin = dup(0);
 		dup2(cur_fork->redirections->here_doc, STDIN_FILENO);
 	}

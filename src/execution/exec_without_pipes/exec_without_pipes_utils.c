@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_without_pipes_utils.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:26:07 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 14:26:08 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	redirect_stdin(t_pipes_data *pipes)
@@ -9,8 +21,7 @@ int	redirect_stdin(t_pipes_data *pipes)
 		if (pipes->fork[0]->redirections->fd_in == -1)
 		{
 			perror(" ");
-			pipes->fork[0]->redirections->fd_in
-				= open("dev/null", O_RDONLY);
+			g_return = 1;
 			return (ERROR);
 		}
 		pipes->fork[0]->redirections->old_stdin = dup(0);

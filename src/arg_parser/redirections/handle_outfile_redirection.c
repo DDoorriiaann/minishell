@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_outfile_redirection.c                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:24:18 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 17:20:41 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	extract_outfile_name(char **argv,
@@ -18,7 +30,7 @@ static int	extract_outfile_name(char **argv,
 	redirections->out_redir_type = nb_chevrons;
 	end = end + redirections->out_filename_len + redirections->out_redir_type;
 	backup_arg_after_var(backup, arg, i, end);
-	if (!redirections->out_error)
+	if (!redirections->out_error && !redirections->in_error)
 		save_out_filename(redirections, arg, i, end);
 	free(argv[arg_index]);
 	argv[arg_index] = backup;
@@ -31,7 +43,7 @@ static char	**fetch_outfile(char **argv, int arg_index,
 	if (is_chevron_alone(argv, arg_index, '>'))
 	{	
 		redirections->out_redir_type = is_chevron_alone(argv, arg_index, '>');
-		if (!redirections->out_error)
+		if (!redirections->out_error && !redirections->in_error)
 		{
 			if (redirections->outfile)
 				free(redirections->outfile);
@@ -80,8 +92,9 @@ static int	prepare_in_redirection(t_redirections *redirections,
 	{
 		redirections->outfile
 			= remove_quotes_in_filename(redirections->outfile);
-		redirections->fd_out = open(redirections->outfile, O_WRONLY
-				| O_CREAT | O_TRUNC, 0644);
+		if (open(redirections->outfile, O_RDONLY) == -1)
+			redirections->fd_out = open(redirections->outfile, O_WRONLY
+					| O_CREAT | O_TRUNC, 0644);
 		if (redirections->fd_out < 0)
 			redirections->out_error = 1;
 		else if (redirections->fd_out > 0)

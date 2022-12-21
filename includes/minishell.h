@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dguet <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 14:30:26 by dguet             #+#    #+#             */
+/*   Updated: 2022/12/21 16:15:42 by dguet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -44,6 +56,7 @@ typedef struct s_redirections
 	int		out_redirection;
 	int		out_redir_type;
 	int		out_error;
+	int		in_error;
 	int		here_doc;
 	char	*here_doc_path;
 	char	*delimiter;
@@ -139,6 +152,8 @@ int		count_pipes(char **argv);
 int		count_pipe_args(char **argv, int i);
 void	store_arg(char **argv, t_arg_init *arg, int i);
 void	store_quoted_arg(char **argv, t_arg_init *arg, int i);
+void	set_default_redirections(t_fork *cur_fork);
+char	*isolate_chevrons_symbols(char *input);
 
 //REDIRECTIONS
 char	**handle_infile_redirection(char **argv, t_redirections *redirections);
@@ -154,6 +169,10 @@ int		save_out_filename(t_redirections *redirections,
 			char *arg, int i, int end);
 int		find_chevron(char *arg);
 int		count_chevrons(char *arg, int start);
+char	**handle_joined_chevron(char **argv, int arg_index,
+			t_redirections *redirections);
+void	extract_infile_name(char **argv, int arg_index,
+			t_redirections *redirections);
 
 //HERE_DOC
 void	ft_heredoc(t_fork *cur_fork);
@@ -284,6 +303,7 @@ void	quit_child(t_pipes_data *pipes_data, int i);
 void	child(int i, char **paths,
 			t_pipes_data *pipes_data, char **envp_l);
 void	close_fds(int i, t_pipes_data *pipes_data);
+int		init_pipes(t_pipes_data *pipes_data, int i);
 
 ////MEMORY MANAGEMENT
 void	init_data(t_pipes_data *data, char ***pipes_cmds);

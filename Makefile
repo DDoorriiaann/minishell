@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dguet <marvin@42.fr>                       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/12/21 14:30:02 by dguet             #+#    #+#              #
+#    Updated: 2022/12/21 16:04:12 by dguet            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 _YELLOW="\e[38;5;226m"
 _RED="\e[38;5;9m"
 _GREEN="\e[38;5;10m" 
@@ -42,6 +54,7 @@ SRC			=	main.c\
 				prompt.c\
 				arg_parser/arg_parser.c\
 				arg_parser/arg_parser_utils.c\
+				arg_parser/isolate_chevrons.c\
 				arg_parser/pipes_parser.c\
 				arg_parser/pipes_parser_utils.c\
 				arg_parser/env_var_interpreter/interpret_env_variables.c\
@@ -60,6 +73,7 @@ SRC			=	main.c\
 				execution/exec_without_pipes/exec_without_pipes_utils.c\
 				execution/exec_pipes/exec_pipes.c\
 				execution/exec_pipes/exec_pipes_utils.c\
+				execution/exec_pipes/exec_pipes_utils2.c\
 				execution/execution_utils.c\
 				execution/execution_utils2.c\
 				heredoc/heredoc.c\
